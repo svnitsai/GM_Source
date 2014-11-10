@@ -1,0 +1,89 @@
+<project name="GM" default="all" basedir=".">
+
+	<property name="srcPath" value="src" />
+	<property name="jspPath" value="jsp" />
+	<property name="jasperPath" value="jrxml" />
+	<property name="distPath" value="dist" />
+	<property name="libPath" value="lib" />
+	<property name="buildPath" value="bin" />
+	<property name="webappPath" value="${srcPath}/webapp" />
+	<property name="jarfile" value="${libPath}/gm.jar" />
+	<property name="warfile" value="${distPath}/gm.war" />
+	
+	<path id="project.classpath">
+		<pathelement path="${buildPath}" />
+		<pathelement path="${srcPath}" />
+		<fileset dir="${libPath}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<target name="clean">
+		<delete quiet="true" file="${jarfile}" />
+		<delete quiet="true" includeEmptyDirs="true" dir="${buildPath}" />
+		<delete quiet="true" includeEmptyDirs="true" dir="${distPath}" />
+	</target>
+
+	<target name="init">
+		<mkdir dir="${distPath}" />
+		<mkdir dir="${buildPath}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac sourcepath="${srcPath}" srcdir="${srcPath}" destdir="${buildPath}">
+			<include name="**/*.java" />
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<echo>Building the JAR file</echo>
+		<delete quiet="true" file="${jarfile}" />
+		<jar destfile="${jarfile}" basedir="${buildPath}" includes="**/*.class">
+			<fileset dir="${srcPath}" includes="**/*.properties" />
+		</jar>
+		<copy todir="${libPath}" file="${jarfile}" />
+	</target>
+
+	<target name="dist" depends="clean,jar">
+		<echo>Building the war file</echo>
+		<war destfile="${warfile}" webxml="${webappPath}/WEB-INF/web.xml">
+			<metainf dir="${webappPath}/META-INF" />
+			<webinf dir="${webappPath}/WEB-INF" excludes="web.xml" />
+			<lib dir="${libPath}" />
+			<zipfileset dir="${jspPath}" prefix="jsp"/>
+			<zipfileset dir="${webappPath}" prefix="" includes="index.html"/>
+			<zipfileset dir="${jasperPath}" prefix="jrxml" includes="*.jasper"/>
+		</war>
+	</target>
+	
+	<target name="all" depends="clean,jar" />
+	
+	<!--
+	<target name="compileReport"
+		         description="Compiles the JXML file and produces the .jasper file.">
+			<taskdef name="jrc"
+		         	 classname="net.sf.jasperreports.ant.JRAntCompileTask">
+		     	<classpath refid="project.classpath" />
+		 	</taskdef>
+		  	<jrc destdir="${jasperPath}">
+		    	<src>
+		            <fileset dir="${jasperPath}">
+		               <include name="*.jrxml" />
+		            </fileset>
+		     	</src>
+		 		<classpath refid="project.classpath" />
+			</jrc>
+	    </target>
+		
+	
+	<target name="runReport" depends="jar">
+	      <echo message="Running class : ${main-class}"/>
+	      <java fork="true" classname="${main-class}">
+	         <classpath>
+	            <path refid="project.classpath" />
+	         </classpath>
+	      </java>
+	   </target>
+	   -->
+</project>

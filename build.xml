@@ -1,7 +1,7 @@
 <project name="GM" default="all" basedir=".">
 
 	<property name="srcPath" value="src" />
-	<property name="jspPath" value="jsp" />
+	<property name="webPath" value="web" />
 	<property name="jasperPath" value="jrxml" />
 	<property name="distPath" value="dist" />
 	<property name="libPath" value="lib" />
@@ -51,8 +51,8 @@
 			<metainf dir="${webappPath}/META-INF" />
 			<webinf dir="${webappPath}/WEB-INF" excludes="web.xml" />
 			<lib dir="${libPath}" />
-			<zipfileset dir="${jspPath}" prefix="jsp"/>
-			<zipfileset dir="${webappPath}" prefix="" includes="index.html"/>
+			<zipfileset dir="${webPath}" prefix="web" excludes="index.jsp"/>
+			<zipfileset dir="${webPath}" prefix="" includes="index.jsp"/>
 			<zipfileset dir="${jasperPath}" prefix="jrxml" includes="*.jasper"/>
 		</war>
 	</target>

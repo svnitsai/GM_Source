@@ -8,7 +8,7 @@ GO
 SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[DailyPayC](
-	[PayCRefereneNumber] 		[int] IDENTITY(1,1) NOT NULL,
+	[PayCReferenceNumber] 		[int] IDENTITY(1,1) NOT NULL,
 	[PayCDueDate] 			[datetime] NOT NULL,
 	[CustCode] 			[numeric](9, 0) NOT NULL,
 	[InvoiceAmount] 		[numeric](14, 2) NULL,
@@ -43,7 +43,7 @@ GO
 SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[DailyPayCDetails](
-	[PayCRefereneNumber] 		[numeric](10,0) NOT NULL,
+	[PayCReferenceNumber] 		[numeric](10,0) NOT NULL,
 	[PayCReferenceSubNumber] 	[numeric](3,0) NOT NULL,
 	[PayCDate] 			[datetime] NULL,
 	[CustBankId] 			[numeric](10,0) NULL,

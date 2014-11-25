@@ -21,7 +21,8 @@ public class DBHandler
 	   
 	   try 
 	   {
-		   String sql = "SELECT PartyId, PartyName FROM OriginalBill ORDER BY PartyName";
+		   String sql = "select CustId, CustName FROM Customer WHERE CustType='Merchant' "  + 
+				   		"ORDER BY CustName";
 		   conn = getConnection();
            stmt = conn.createStatement();
 		   rs = stmt.executeQuery(sql);
@@ -30,8 +31,8 @@ public class DBHandler
 		   while(rs.next())
 		   {
 			   //Retrieve by column name
-			   int id  = rs.getInt("PartyId");
-			   String name = rs.getString("PartyName");
+			   int id  = rs.getInt("CustId");
+			   String name = rs.getString("CustName");
 			   resultMap.put(id, name);
 		   }
 	   } 
@@ -48,20 +49,28 @@ public class DBHandler
 	   return resultMap;
    }
    
-   public static LinkedHashMap<Integer, SupplierBean> getSuppliers() 
+   public static LinkedHashMap<Integer, CustomerBean> getSuppliers() 
+   {
+	   return getCustomers("Supplier");
+   }
+   
+   public static LinkedHashMap<Integer, CustomerBean> getCustomers(String type) 
    {
 	   Connection conn = null;
 	   Statement stmt = null;
 	   ResultSet rs = null;
 	   
 	   // Preserves the sorted order in which data was added to the map
-	   LinkedHashMap<Integer, SupplierBean> resultMap = new LinkedHashMap<Integer, SupplierBean>();
+	   LinkedHashMap<Integer, CustomerBean> resultMap = new LinkedHashMap<Integer, CustomerBean>();
 	   
 	   try 
 	   {
 		   // TODO: Change to read the bank data
-		   String sql = "SELECT SupplierId, SupplierName, SupplierAddress1, SupplierAddress2, SupplierLocation, SupplierContactNumber " + 
-				   		"FROM Supplier ORDER BY SupplierName";
+		   String sql = "select C.CustId, CustName, CustAddress1, CustAddress2, CustCity, CustState, CustCountry, CustContactNumber, "
+				   		+ "CustBankId, CustBank, CustBankBranch, CustBankAccountType, CustBankAccountNumber " 
+				   		+ "FROM Customer C, CustomerBanks CB "
+				   		+ "WHERE CustType='" + type + "' AND C.CustId = CB.CustId "
+				   		+ "ORDER BY CustName";
 		   conn = getConnection();
            stmt = conn.createStatement();
 		   rs = stmt.executeQuery(sql);
@@ -69,17 +78,52 @@ public class DBHandler
 		   //STEP 5: Extract data from result set
 		   while(rs.next())
 		   {
-			   SupplierBean bean = new SupplierBean();
+			   CustomerBean bean = null;
 			   
-			   //Retrieve by column name
-			   bean.setId(rs.getInt("SupplierId"));
-			   bean.setName(rs.getString("SupplierName"));
-			   bean.setAddress1(rs.getString("SupplierAddress1"));
-			   bean.setAddress2(rs.getString("SupplierAddress2"));
-			   bean.setLocation(rs.getString("SupplierLocation"));
-			   bean.setPhoneNumber(rs.getInt("SupplierContactNumber"));
+			   int id = rs.getInt(0);
+			   if(resultMap.containsKey(id) == false)
+			   {
+				   bean = new CustomerBean();
+				   bean.setId(id);
+				   bean.setName(rs.getString("CustName"));
+				   bean.setAddress1(rs.getString("CustAddress1"));
+				   bean.setAddress2(rs.getString("CustAddress2"));
+				   bean.setPhoneNumber(rs.getInt("CustContactNumber"));
+				   
+				   String city = rs.getString("SupplierLocation");
+				   String state = rs.getString("SupplierLocation");
+				   String country = rs.getString("SupplierLocation");
+				   String location = city;
+				   if(location.length() > 0 && state.length() > 0)
+				   {
+					   location += ", " + state;
+				   }
+				   else if(state.length() > 0)
+				   {
+					   location = state;
+				   }
+				   
+				   if(location.length() > 0 && country.length() > 0)
+				   {
+					   location += ", " + country;
+				   }
+				   else if(country.length() > 0)
+				   {
+					   location = country;
+				   }
+				   bean.setLocation(location);
+				   resultMap.put(id, bean);
+			   }
+			   bean = resultMap.get(id);
 			   
-			   // TODO: Read the bank data
+			   // Read the bank data
+			   CustomerBankBean bankBean = new CustomerBankBean();
+			   bankBean.setBankId(rs.getInt("CustBankId"));
+			   bankBean.setBankName(rs.getString("CustBank"));
+			   bankBean.setBranchName(rs.getString("CustBankBranch"));
+			   bankBean.setAccountType(rs.getInt("CustBankAccountType"));
+			   bankBean.setAccountNumber(rs.getString("CustBankAccountNumber"));
+			   bean.getBankAccountList().add(bankBean);
 			   
 			   resultMap.put(bean.getId(), bean);
 		   }
@@ -107,20 +151,24 @@ public class DBHandler
 			bean1.setDueDate(Calendar.getInstance().getTime());
 			bean1.setInvoiceAmount(150000);
 			bean1.setInvoiceNumber(1);
-			bean1.setPartyContact("1111111111");
-			bean1.setPartyId(1);
-			bean1.setPartyName("Merchant 1");
+			bean1.setPartyInfo("Trichy", "4567890123");
+			bean1.setPartyId(31);
+			bean1.setPartyName("Merchant 140000000");
 			bean1.setStatus("Closed");
 			
 			CollectionDetailBean detailBean1 = new CollectionDetailBean();
-			detailBean1.setCollectionAmount(150000);
+			detailBean1.setCompanyId(101);
+			detailBean1.setCompanyName("Garment Mantra");
+			detailBean1.setPaidAmount(150000);
 			detailBean1.setCollectionDate(Calendar.getInstance().getTime());
 			detailBean1.setLedgerNumber(1);
-			detailBean1.setPartyBank("IndusInd Bank");
-			detailBean1.setPartyBankBranch("Bangalore");
-			detailBean1.setSupplierAccountNum("234234234234");
-			detailBean1.setSupplierBank("State Bank of India");
-			detailBean1.setSupplierName("Gomathi Textiles");
+			detailBean1.setPartyBankInfo("IndusInd Bank", "Bangalore");
+			detailBean1.setSupplierId(51);
+			detailBean1.setSupplierName("Supplier 200000000");
+			detailBean1.setSupplierBankId(29);
+			detailBean1.setSupplierBankName("State Bank of India");
+			detailBean1.setSupplierBankBranch("Tiruppur Main");
+			detailBean1.setSupplierAccountNumber("1111222233334444");
 			bean1.getDetailsList().add(detailBean1);
 			
 			return bean1;
@@ -132,31 +180,39 @@ public class DBHandler
 			bean2.setDueDate(Calendar.getInstance().getTime());
 			bean2.setInvoiceAmount(500000);
 			bean2.setInvoiceNumber(2);
-			bean2.setPartyContact("222-222-2222");
-			bean2.setPartyId(2);
-			bean2.setPartyName("Merchant 2");
+			bean2.setPartyInfo("Bangalore", "080-22752345");
+			bean2.setPartyId(41);
+			bean2.setPartyName("Merchant 150000000");
 			bean2.setStatus("Payment Deferred");
 			
 			CollectionDetailBean detailBean2 = new CollectionDetailBean();
-			detailBean2.setCollectionAmount(150000);
+			detailBean2.setPaidAmount(150000);
 			detailBean2.setCollectionDate(Calendar.getInstance().getTime());
 			detailBean2.setLedgerNumber(2);
-			detailBean2.setPartyBank("CitiBank");
-			detailBean2.setPartyBankBranch("Delhi");
-			detailBean2.setSupplierAccountNum("4523223");
-			detailBean2.setSupplierBank("Bank of India");
-			detailBean2.setSupplierName("ABC Traders");
+			detailBean2.setCompanyId(102);
+			detailBean2.setCompanyName("SP Tex");
+			detailBean2.setPartyBankInfo("Bank of India", "Bangalore");
+			detailBean2.setSupplierId(51);
+			detailBean2.setSupplierName("Supplier 200000000");
+			detailBean2.setSupplierBankId(30);
+			detailBean2.setSupplierBankName("HDFC Bank");
+			detailBean2.setSupplierBankBranch("Tiruppur Main");
+			detailBean2.setSupplierAccountNumber("1111222233334444");
 			bean2.getDetailsList().add(detailBean2);
 			
 			CollectionDetailBean detailBean3 = new CollectionDetailBean();
-			detailBean3.setCollectionAmount(150000);
+			detailBean3.setPaidAmount(150000);
 			detailBean3.setCollectionDate(Calendar.getInstance().getTime());
 			detailBean3.setLedgerNumber(2);
-			detailBean3.setPartyBank("CitiBank");
-			detailBean3.setPartyBankBranch("Delhi");
-			detailBean3.setSupplierAccountNum("234234234234");
-			detailBean3.setSupplierBank("State Bank of India");
-			detailBean3.setSupplierName("Gomathi Textiles");
+			detailBean3.setCompanyId(101);
+			detailBean3.setCompanyName("Garment Mantra");
+			detailBean3.setPartyBankInfo("State Bank of India", "Bangalore");
+			detailBean3.setSupplierId(51);
+			detailBean3.setSupplierName("Supplier 200000000");
+			detailBean3.setSupplierBankId(29);
+			detailBean3.setSupplierBankName("State Bank of India");
+			detailBean3.setSupplierBankBranch("Tiruppur Main");
+			detailBean3.setSupplierAccountNumber("1111222233334444");
 			bean2.getDetailsList().add(detailBean3);
 			
 			return bean2;
@@ -168,9 +224,9 @@ public class DBHandler
 			bean3.setDueDate(Calendar.getInstance().getTime());
 			bean3.setInvoiceAmount(50000);
 			bean3.setInvoiceNumber(3);
-			bean3.setPartyContact("33333333");
-			bean3.setPartyId(3);
-			bean3.setPartyName("Merchant 3");
+			bean3.setPartyInfo("Chennai", "044-456444544");
+			bean3.setPartyId(11);
+			bean3.setPartyName("Merchant 120000000");
 			bean3.setStatus("Open");
 			return bean3;
 	   }
@@ -189,7 +245,7 @@ public class DBHandler
 		   String username="admin";
 		   String password="svnadmin";
 		   Class.forName(driver).newInstance();
-		   String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=Local1";
+		   String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=PayC";
 		   conn = DriverManager.getConnection(dbURL, username, password);
 	   }
 	   catch(Exception e)

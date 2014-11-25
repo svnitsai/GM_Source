@@ -7,7 +7,8 @@
 <%@ page import="com.svnitsai.gm.DBHandler" %>
 <%@ page import="com.svnitsai.gm.CollectionBean" %>
 <%@ page import="com.svnitsai.gm.CollectionDetailBean" %>
-
+<%@ page import="com.svnitsai.gm.CustomerBean" %>
+<%@ page import="com.svnitsai.gm.CustomerBankBean" %>
 <jsp:include page="header.jsp?hideHeader=all" />
 
 <%
@@ -20,6 +21,7 @@
 		bean.getDetailsList().add(0, new CollectionDetailBean());
 	}
 	
+	LinkedHashMap<Integer, CustomerBean> supplierMap = DBHandler.getSuppliers();
 %>
 
 <script>
@@ -63,7 +65,7 @@
 		</tr>
 		<tr>
 			<td>Phone Number:</td>
-			<td><%= bean.getPartyContact() %></td>
+			<td><%=bean.getPartyInfo()%></td>
 		</tr>
 		<tr>
 			<td>Invoice Number:</td>
@@ -95,6 +97,8 @@
 		{
 			hideStr = "style=\"display:none\"";
 		}
+		
+		CustomerBean supplierBean = supplierMap.get(detailBean.getS)
 %>
 <div id="detailPanel<%=i %>" <%=hideStr%>>
 	<input type="hidden" name="detailRefID_<%= i %>" value="<%= detailBean.getCollectionDetailId() %>" />

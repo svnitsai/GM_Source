@@ -14,9 +14,10 @@ public class CollectionBean implements Serializable
 	private long invoiceNumber;
 	private double invoiceAmount;
 	private String partyName;
-	private String partyContact;
+	private String partyInfo;
 	private String status;
 	private Date dueDate;
+	private Date deferredDate;
 	private ArrayList<CollectionDetailBean> detailsList;
 	
 	public CollectionBean()
@@ -54,7 +55,7 @@ public class CollectionBean implements Serializable
 		{
 			if(detailBean.getCollectionDate() != null)
 			{
-				totalCollectionAmount += detailBean.getCollectionAmount();
+				totalCollectionAmount += detailBean.getPaidAmount();
 			}
 		}
 		
@@ -66,11 +67,29 @@ public class CollectionBean implements Serializable
 	public void setPartyName(String partyName) {
 		this.partyName = partyName;
 	}
-	public String getPartyContact() {
-		return partyContact;
+	public String getPartyInfo() {
+		return partyInfo;
 	}
-	public void setPartyContact(String partyContact) {
-		this.partyContact = partyContact;
+	public void setPartyInfo(String info) {
+		this.partyInfo = info;
+	}
+	public void setPartyInfo(String city, String contactNumber)
+	{
+		String info = city;
+		if(info == null)
+		{
+			info = "";
+		}
+		if(contactNumber == null)
+		{
+			contactNumber = "";
+		}
+		if(info.length() > 0 && contactNumber.length() > 0)
+		{
+			info += "<br/>Phone: ";
+		}
+		info += contactNumber;
+		setPartyInfo(info);
 	}
 	public String getStatus() {
 		return status;
@@ -86,6 +105,15 @@ public class CollectionBean implements Serializable
 	}
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+	}
+	public String getDeferredDateStr() {
+		return CollectionBean.getFormattedDate(deferredDate);
+	}
+	public Date getDeferredDate() {
+		return deferredDate;
+	}
+	public void setDeferredDate(Date deferedDate) {
+		this.deferredDate = deferedDate;
 	}
 	public ArrayList<CollectionDetailBean> getDetailsList() {
 		return detailsList;

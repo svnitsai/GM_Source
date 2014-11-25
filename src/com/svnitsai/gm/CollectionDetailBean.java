@@ -1,22 +1,49 @@
 package com.svnitsai.gm;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CollectionDetailBean implements Serializable
 {
 	private int collectionDetailId;
-	private int ledgerNumber;
-	private double collectionAmount;
-	private String partyBank;
-	private String partyBankBranch;
+	private int companyId;
+	private int	partyBankId;
+	private int	supplierId;
+	private int supplierBankId;
+	private String companyName;
+	private String partyBankInfo;
 	private String supplierName;
-	private String supplierBank;
-	private String supplierAccountNum;
+	private String supplierBankName;
+	private String supplierBankBranch;
+	private String supplierAccountNumber;
+	private int ledgerNumber;
+	private double paidAmount;
 	private Date collectionDate;
-	private Date deferedDate;
 	
+	public String getSupplierName() {
+		return supplierName;
+	}
+	public void setSupplierName(String supplierName) {
+		this.supplierName = supplierName;
+	}
+	public String getSupplierBankName() {
+		return supplierBankName;
+	}
+	public void setSupplierBankName(String supplierBankName) {
+		this.supplierBankName = supplierBankName;
+	}
+	public String getSupplierBankBranch() {
+		return supplierBankBranch;
+	}
+	public void setSupplierBankBranch(String supplierBankBranch) {
+		this.supplierBankBranch = supplierBankBranch;
+	}
+	public String getSupplierAccountNumber() {
+		return supplierAccountNumber;
+	}
+	public void setSupplierAccountNumber(String supplierAccountNumber) {
+		this.supplierAccountNumber = supplierAccountNumber;
+	}
 	public int getCollectionDetailId() {
 		return collectionDetailId;
 	}
@@ -29,41 +56,29 @@ public class CollectionDetailBean implements Serializable
 	public void setLedgerNumber(int ledgerNumber) {
 		this.ledgerNumber = ledgerNumber;
 	}
-	public double getCollectionAmount() {
-		return collectionAmount;
+	public int getPartyBankId() {
+		return partyBankId;
 	}
-	public void setCollectionAmount(double collectionAmount) {
-		this.collectionAmount = collectionAmount;
+	public void setPartyBankId(int partyBankId) {
+		this.partyBankId = partyBankId;
 	}
-	public String getPartyBank() {
-		return (partyBank != null) ? partyBank : "";
+	public int getSupplierId() {
+		return supplierId;
 	}
-	public void setPartyBank(String partyBank) {
-		this.partyBank = partyBank;
+	public void setSupplierId(int supplierId) {
+		this.supplierId = supplierId;
 	}
-	public String getPartyBankBranch() {
-		return (partyBankBranch != null) ? partyBankBranch : "";
+	public int getSupplierBankId() {
+		return supplierBankId;
 	}
-	public void setPartyBankBranch(String partyBankBranch) {
-		this.partyBankBranch = partyBankBranch;
+	public void setSupplierBankId(int supplierBankId) {
+		this.supplierBankId = supplierBankId;
 	}
-	public String getSupplierName() {
-		return (supplierName != null)? supplierName : "";
+	public double getPaidAmount() {
+		return paidAmount;
 	}
-	public void setSupplierName(String supplierName) {
-		this.supplierName = supplierName;
-	}
-	public String getSupplierBank() {
-		return (supplierBank != null) ? supplierBank : "";
-	}
-	public void setSupplierBank(String supplierBank) {
-		this.supplierBank = supplierBank;
-	}
-	public String getSupplierAccountNum() {
-		return (supplierAccountNum != null) ? supplierAccountNum : "";
-	}
-	public void setSupplierAccountNum(String supplierAccountNum) {
-		this.supplierAccountNum = supplierAccountNum;
+	public void setPaidAmount(double paidAmount) {
+		this.paidAmount = paidAmount;
 	}
 	public String getCollectionDateStr() {
 		return CollectionBean.getFormattedDate(collectionDate);
@@ -74,40 +89,28 @@ public class CollectionDetailBean implements Serializable
 	public void setCollectionDate(Date collectionDate) {
 		this.collectionDate = collectionDate;
 	}
-	public String getDeferedDateStr() {
-		return CollectionBean.getFormattedDate(deferedDate);
+	public int getCompanyId() {
+		return companyId;
 	}
-	public Date getDeferedDate() {
-		return deferedDate;
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
 	}
-	public void setDeferedDate(Date deferedDate) {
-		this.deferedDate = deferedDate;
+	public String getPartyBankInfo() {
+		return partyBankInfo;
 	}
-	
-	public String getPartyAccountInfo()
+	public void setPartyBankInfo(String info) {
+		this.partyBankInfo = info;
+	}
+	public void setPartyBankInfo(String bankName, String branch)
 	{
-		if(getPartyBank().length() > 0)
-		{
-			return (this.getPartyBank() + "<br/>" + this.getPartyBankBranch());
-		}
-		else
-		{
-			return "";
-		}
+		String info = bankName + ", " + branch;
+		setPartyBankInfo(info);
 	}
-	
-	public String getSupplierAccountInfo()
-	{
-		if(getSupplierName().length() > 0)
-		{
-			return (this.getSupplierName() + "<br/>" + 
-					this.getSupplierBank() + "<br/>" + 
-					"A/C " + this.getSupplierAccountNum());
-		}
-		else
-		{
-			return "";
-		}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 	
 }

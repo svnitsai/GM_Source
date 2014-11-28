@@ -78,12 +78,12 @@ SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[DailyPayable](
 	[PayableReferenceNumber] 	[int] IDENTITY(1,1) NOT NULL,
-	[PayableDate] 			[datetime] NULL,
-	[PayableAmount] 		[numeric](10, 2) NULL,
+	[PayableDate] 			[datetime] NOT NULL,
+	[PayableAmount] 		[numeric](10, 2) Not NULL,
 	[PaidAmount]			[numeric](10,2) Null,
 	[PayableStatus]			[Char] (20) Null,
 	[SupplierCode] 			[numeric](9, 0) NOT NULL,
-	[SupplierBankId] 			[numeric](3,0) NOT NULL,
+	[SupplierBankId] 		[numeric](9,0) NULL,
 	[CreatedDate] 			[datetime] NOT NULL,
 	[CreatedBy] 			[varchar] (50) NOT NULL,
 	[UpdatedDate] 			[datetime] NOT NULL,

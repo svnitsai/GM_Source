@@ -21,7 +21,7 @@ public class DBHandler
 	   
 	   try 
 	   {
-		   String sql = "select CustId, CustName FROM Customer WHERE CustType='Merchant' "  + 
+		   String sql = "select CustCode, CustName FROM Customer WHERE CustType='Merchant' "  + 
 				   		"ORDER BY CustName";
 		   conn = getConnection();
            stmt = conn.createStatement();
@@ -31,7 +31,7 @@ public class DBHandler
 		   while(rs.next())
 		   {
 			   //Retrieve by column name
-			   int id  = rs.getInt("CustId");
+			   int id  = rs.getInt("CustCode");
 			   String name = rs.getString("CustName");
 			   resultMap.put(id, name);
 		   }
@@ -146,8 +146,107 @@ public class DBHandler
 	   return resultMap;
    }
    
-   public static CollectionBean getCollectionInfo(String invoiceId) 
+   public static CollectionBean getCollectionInfo(Int invoiceId) 
    {
+	   Connection conn = null;
+	   Statement stmt = null;
+	   ResultSet rs = null;
+	   
+	   // Preserves the sorted order in which data was added to the map
+	   LinkedHashMap<Integer, CustomerBean> resultMap = new LinkedHashMap<Integer, CustomerBean>();
+	   
+	   
+	   try 
+	   {
+		   // select and read collection data
+		   String sql = "SELECT DC.PayCDueDate, DC.CustCode, DC.InvoiceAmount, DC.PayCStatus, DC.InvoiceReferenceNumber,"
+				        +"DC.DeferredDate, DCD.PayCDate, DCD.CustBankId, DCD.SupplierCode, DCD.SupplierBankId,'"
+				        +"DCD.PaidAmount, DCD.AccountLocationCode, DCD.LedgerPageNumber, c.CustName, C.CustContactNumber,"
+				        +"CB.CustBank, SupplierBank = CB1.CustBank "
+				        +"FROM DailyPayC DC join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber "
+    			        +"join Customer c on c.custcode = dc.custcode and c.custtype = 'Merchant' "
+				        +"left join CustomerBanks CB on CB.CustBankId = DCD.CustBankId and c.CustCode = cb.CustCode "
+				        +"left join Customer s on s.custcode = dcd.suppliercode and s.custtype = 'Supplier' "
+				        +"left join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId and s.custcode = cb1.custcode "
+				        +"left join Customer CO on CO.custcode = dcd.accountlocationcode and CO.custtype = 'Company' " 
+				        +"where (DC.DeferredDate is not null and DC.DeferredDate <= '" + date + "'"
+				        +"(DC.DeferredDate is null and DC.PayCDueDate <= '" + date + "' "
+				   		+ "ORDER BY PayCDueDate";
+		   
+		   
+		   System.out.println(sql);
+		   conn = getConnection();
+           stmt = conn.createStatement();
+		   rs = stmt.executeQuery(sql);
+
+		   //STEP 5: Extract data from result set
+		   while(rs.next())
+		   {
+			   
+			   CollectionBean bean = null;
+			   
+			   int id = rs.getInt("InvoiceReferenceNumber");
+			   System.out.println("ID: " + id);
+			   if(resultMap.containsKey(id) == false)
+			   {
+				   CollectionBean DailyCollection = new CollectionBean();
+				   DailyCollection.setId(id);
+				   DailyCollection.setName(rs.getString("CustName"));
+				   DailyCollection.setAddress1(rs.getString("CustAddress1"));
+				   DailyCollection.setAddress2(rs.getString("CustAddress2"));
+				   DailyCollection.setPhoneNumber(rs.getInt("CustContactNumber"));
+				   
+				   
+				   String city = rs.getString("CustCity");
+				   String state = rs.getString("CustState");
+				   String country = rs.getString("CustCountry");
+				   String location = city;
+				   if(location.length() > 0 && state.length() > 0)
+				   {
+					   location += ", " + state;
+				   }
+				   else if(state.length() > 0)
+				   {
+					   location = state;
+				   }
+				   
+				   if(location.length() > 0 && country.length() > 0)
+				   {
+					   location += ", " + country;
+				   }
+				   else if(country.length() > 0)
+				   {
+					   location = country;
+				   }
+				   bean.setLocation(location);
+				   resultMap.put(id, bean);
+			   }
+			   bean = resultMap.get(id);
+			   
+			   // Read the bank data
+			   CustomerBankBean bankBean = new CustomerBankBean();
+			   bankBean.setBankId(rs.getInt("CustBankId"));
+			   bankBean.setBankName(rs.getString("CustBank"));
+			   bankBean.setBranchName(rs.getString("CustBankBranch"));
+			   bankBean.setAccountType(rs.getString("CustBankAccountType"));
+			   bankBean.setAccountNumber(rs.getString("CustBankAccountNumber"));
+			   bean.getBankAccountList().add(bankBean);
+			   
+			   resultMap.put(bean.getId(), bean);
+		   }
+	   } 
+	   catch (Exception e) 
+	   {
+		   // TODO Auto-generated catch block
+		   e.printStackTrace();
+	   } 
+	   finally 
+	   {
+		   closeDBObjects(conn, stmt, rs);
+	   }
+	   
+	   return resultMap;
+
 	   // TODO: Replace it to read from DB
 	   if("1".equals(invoiceId))
 	   {

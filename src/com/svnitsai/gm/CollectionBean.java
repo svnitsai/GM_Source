@@ -18,6 +18,10 @@ public class CollectionBean implements Serializable
 	private String status;
 	private Date dueDate;
 	private Date deferredDate;
+	private String updatedBy;
+	private Date updatedDate;
+	
+
 	private ArrayList<CollectionDetailBean> detailsList;
 	
 	public CollectionBean()
@@ -112,8 +116,23 @@ public class CollectionBean implements Serializable
 	public Date getDeferredDate() {
 		return deferredDate;
 	}
-	public void setDeferredDate(Date deferedDate) {
-		this.deferredDate = deferedDate;
+	public void setDeferredDate(Date deferredDate) {
+		this.deferredDate = deferredDate;
+	}
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	public String getUpdatedDateStr() {
+		return getFormattedDate(updatedDate);
+	}
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 	public ArrayList<CollectionDetailBean> getDetailsList() {
 		return detailsList;

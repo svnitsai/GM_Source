@@ -8,7 +8,7 @@ public class CustomerBankBean implements Serializable
 	private String bankName;
 	private String branchName;
 	private String accountNumber;
-	private int accountType;
+	private String accountType;
 	
 	public int getBankId() {
 		return bankId;
@@ -34,10 +34,10 @@ public class CustomerBankBean implements Serializable
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
 	}
-	public int getAccountType() {
+	public String getAccountType() {
 		return accountType;
 	}
-	public void setAccountType(int accountType) {
+	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
 	

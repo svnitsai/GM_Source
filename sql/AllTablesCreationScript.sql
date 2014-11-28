@@ -47,10 +47,10 @@ CREATE TABLE [dbo].[DailyPayCDetails](
 	[PayCReferenceSubNumber] 	[numeric](3,0) NOT NULL,
 	[PayCDate] 			[datetime] NULL,
 	[CustBankId] 			[numeric](10,0) NULL,
-	[SupplierId] 			[numeric](10,0) NULL,
+	[SupplierCode] 			[numeric](9,0) NULL,
 	[SupplierBankId] 		[numeric](10,0) NULL,
 	[PaidAmount] 			[numeric](10, 2) NULL,
-	[AccountLocationId] 		[numeric](10,0) NULL,
+	[AccountLocationCode] 		[numeric](9,0) NULL,
 	[LedgerPageNumber] 		[numeric](9, 0) NULL,
 	[CreatedDate] 			[datetime] NOT NULL,
 	[CreatedBy] 			[varchar] (50) NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE [dbo].[DailyPayable](
 	[PayableAmount] 		[numeric](10, 2) NULL,
 	[PaidAmount]			[numeric](10,2) Null,
 	[PayableStatus]			[Char] (20) Null,
-	[SupplierId] 			[numeric](9, 0) NOT NULL,
+	[SupplierCode] 			[numeric](9, 0) NOT NULL,
 	[SupplierBankId] 			[numeric](3,0) NOT NULL,
 	[CreatedDate] 			[datetime] NOT NULL,
 	[CreatedBy] 			[varchar] (50) NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE [dbo].[DailyPayable](
  CONSTRAINT [UQ_DailyPayable] UNIQUE NONCLUSTERED 
 (
 	[PayableDate] ASC,
-	[SupplierId] ASC,
+	[SupplierCode] ASC,
         [PayableReferenceNumber] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
@@ -156,7 +156,7 @@ SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[CustomerBanks](
 	[CustBankId] 		[int] IDENTITY(1,1) NOT NULL,
-	[CustId] 		[numeric](9, 0) NOT NULL,
+	[CustCode] 		[numeric](9, 0) NOT NULL,
 	[CustBank] 		[varchar] (50) NOT NULL,
 	[CustBankBranch] 	[varchar] (50) NOT NULL,
 	[CustBankAccountType] 	[Varchar] (15) NOT NULL,
@@ -167,7 +167,7 @@ CREATE TABLE [dbo].[CustomerBanks](
 	[UpdatedBy] 		[varchar] (50) NOT NULL,
  CONSTRAINT [PK_CustomerBanks] PRIMARY KEY CLUSTERED 
 (
-	[CustId] ASC,
+	[CustCode] ASC,
 	[CustBankId] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 )

@@ -66,21 +66,25 @@ public class DBHandler
 	   try 
 	   {
 		   // TODO: Change to read the bank data
-		   String sql = "select C.CustId, CustName, CustAddress1, CustAddress2, CustCity, CustState, CustCountry, CustContactNumber, "
+		   String sql = "select C.CustCode, CustName, CustAddress1, CustAddress2, CustCity, CustState, CustCountry, CustContactNumber, "
 				   		+ "CustBankId, CustBank, CustBankBranch, CustBankAccountType, CustBankAccountNumber " 
 				   		+ "FROM Customer C, CustomerBanks CB "
-				   		+ "WHERE CustType='" + type + "' AND C.CustId = CB.CustId "
+				   		+ "WHERE CustType='" + type + "' AND C.CustCode = CB.CustCode "
 				   		+ "ORDER BY CustName";
+		   System.out.println(sql);
 		   conn = getConnection();
            stmt = conn.createStatement();
 		   rs = stmt.executeQuery(sql);
 
+		   
 		   //STEP 5: Extract data from result set
 		   while(rs.next())
 		   {
+			   
 			   CustomerBean bean = null;
 			   
-			   int id = rs.getInt(0);
+			   int id = rs.getInt("CustCode");
+			   System.out.println("ID: " + id);
 			   if(resultMap.containsKey(id) == false)
 			   {
 				   bean = new CustomerBean();
@@ -90,9 +94,10 @@ public class DBHandler
 				   bean.setAddress2(rs.getString("CustAddress2"));
 				   bean.setPhoneNumber(rs.getInt("CustContactNumber"));
 				   
-				   String city = rs.getString("SupplierLocation");
-				   String state = rs.getString("SupplierLocation");
-				   String country = rs.getString("SupplierLocation");
+				   
+				   String city = rs.getString("CustCity");
+				   String state = rs.getString("CustState");
+				   String country = rs.getString("CustCountry");
 				   String location = city;
 				   if(location.length() > 0 && state.length() > 0)
 				   {
@@ -121,7 +126,7 @@ public class DBHandler
 			   bankBean.setBankId(rs.getInt("CustBankId"));
 			   bankBean.setBankName(rs.getString("CustBank"));
 			   bankBean.setBranchName(rs.getString("CustBankBranch"));
-			   bankBean.setAccountType(rs.getInt("CustBankAccountType"));
+			   bankBean.setAccountType(rs.getString("CustBankAccountType"));
 			   bankBean.setAccountNumber(rs.getString("CustBankAccountNumber"));
 			   bean.getBankAccountList().add(bankBean);
 			   
@@ -152,7 +157,7 @@ public class DBHandler
 			bean1.setInvoiceAmount(150000);
 			bean1.setInvoiceNumber(1);
 			bean1.setPartyInfo("Trichy", "4567890123");
-			bean1.setPartyId(31);
+			bean1.setCustCode(31);
 			bean1.setPartyName("Merchant 140000000");
 			bean1.setStatus("Closed");
 			
@@ -163,7 +168,7 @@ public class DBHandler
 			detailBean1.setCollectionDate(Calendar.getInstance().getTime());
 			detailBean1.setLedgerNumber(1);
 			detailBean1.setPartyBankInfo("IndusInd Bank", "Bangalore");
-			detailBean1.setSupplierId(51);
+			detailBean1.setSupplierId(200000000);
 			detailBean1.setSupplierName("Supplier 200000000");
 			detailBean1.setSupplierBankId(29);
 			detailBean1.setSupplierBankName("State Bank of India");
@@ -181,7 +186,7 @@ public class DBHandler
 			bean2.setInvoiceAmount(500000);
 			bean2.setInvoiceNumber(2);
 			bean2.setPartyInfo("Bangalore", "080-22752345");
-			bean2.setPartyId(41);
+			bean2.setCustCode(41);
 			bean2.setPartyName("Merchant 150000000");
 			bean2.setStatus("Payment Deferred");
 			
@@ -192,7 +197,7 @@ public class DBHandler
 			detailBean2.setCompanyId(102);
 			detailBean2.setCompanyName("SP Tex");
 			detailBean2.setPartyBankInfo("Bank of India", "Bangalore");
-			detailBean2.setSupplierId(51);
+			detailBean2.setSupplierId(200000000);
 			detailBean2.setSupplierName("Supplier 200000000");
 			detailBean2.setSupplierBankId(30);
 			detailBean2.setSupplierBankName("HDFC Bank");
@@ -225,7 +230,7 @@ public class DBHandler
 			bean3.setInvoiceAmount(50000);
 			bean3.setInvoiceNumber(3);
 			bean3.setPartyInfo("Chennai", "044-456444544");
-			bean3.setPartyId(11);
+			bean3.setCustCode(11);
 			bean3.setPartyName("Merchant 120000000");
 			bean3.setStatus("Open");
 			return bean3;
@@ -282,5 +287,10 @@ public class DBHandler
 	    catch (SQLException ex) {
             ex.printStackTrace();
         }
+   }
+   
+   public static void main(String[] args)
+   {
+	   DBHandler.getSuppliers();
    }
 } 

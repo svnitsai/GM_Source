@@ -11,7 +11,8 @@ public class CollectionDetailBean implements Serializable
 	private int	supplierId;
 	private int supplierBankId;
 	private String companyName;
-	private String partyBankInfo;
+	private String partyBankName;
+	private String partyBankBranch;
 	private String supplierName;
 	private String supplierBankName;
 	private String supplierBankBranch;
@@ -96,15 +97,12 @@ public class CollectionDetailBean implements Serializable
 		this.companyId = companyId;
 	}
 	public String getPartyBankInfo() {
-		return partyBankInfo;
-	}
-	public void setPartyBankInfo(String info) {
-		this.partyBankInfo = info;
+		return partyBankName + ", " + partyBankBranch;
 	}
 	public void setPartyBankInfo(String bankName, String branch)
 	{
-		String info = bankName + ", " + branch;
-		setPartyBankInfo(info);
+		setPartyBankName(bankName);
+		setPartyBankBranch(branch);
 	}
 	public String getCompanyName() {
 		return companyName;
@@ -112,5 +110,23 @@ public class CollectionDetailBean implements Serializable
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-	
+	public String getSupplierAccountInfo()
+	{
+		String info = 	getSupplierName() + 
+						"<br>" + 
+						getSupplierBankName();
+		return info;
+	}
+	public String getPartyBankName() {
+		return partyBankName;
+	}
+	public void setPartyBankName(String partyBankName) {
+		this.partyBankName = partyBankName;
+	}
+	public String getPartyBankBranch() {
+		return partyBankBranch;
+	}
+	public void setPartyBankBranch(String partyBankBranch) {
+		this.partyBankBranch = partyBankBranch;
+	}
 }

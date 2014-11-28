@@ -1,58 +1,3 @@
-INSERT INTO [PayC].[dbo].[CustomerBanks]
-           ([CustId]         ,[CustBank]
-           ,[CustBankBranch]           ,[CustBankAccountType]
-           ,[CustBankAccountNumber]           ,[CreatedDate]
-           ,[CreatedBy]           ,[UpdatedDate]
-           ,[UpdatedBy])
-Select 1,
-N'State Bank of India',
-N'Coimbatore Main',
-N'Current',
-N'1111222233334444',
-convert(varchar, getdate(), 113),
-N'ManualLoad',
-convert(varchar, getdate(), 113),
-N'ManualLoad'
-union all
-Select 1,
-N'HDFC Bank',
-N'Coimbatore Main',
-N'Current',
-N'1111222233334444',
-convert(varchar, getdate(), 113),
-N'ManualLoad',
-convert(varchar, getdate(), 113),
-N'ManualLoad'
-union all
-Select 1,
-N'ICICI Bank',
-N'Coimbatore Main',
-N'Current',
-N'1111222233334444',
-convert(varchar, getdate(), 113),
-N'ManualLoad',
-convert(varchar, getdate(), 113),
-N'ManualLoad'
-union all
-Select 1,
-N'Indian Bank',
-N'Coimbatore Main',
-N'Current',
-N'1111222233334444',
-convert(varchar, getdate(), 113),
-N'ManualLoad',
-convert(varchar, getdate(), 113),
-N'ManualLoad'
-union all
-Select 1,
-N'Indian Overseas Bank',
-N'Coimbatore Main',
-N'Current',
-N'1111222233334444',
-convert(varchar, getdate(), 113),
-N'ManualLoad',
-convert(varchar, getdate(), 113),
-N'ManualLoad'
 
 
 
@@ -230,8 +175,8 @@ N'ManualLoad'
 INSERT INTO [PayC].[dbo].[DailyPayCDetails]
            ([PayCRefereneNumber]            ,[PayCReferenceSubNumber]
            ,[PayCDate]           ,[CustBankId]
-           ,[SupplierId]           ,[SupplierBankId]
-           ,[PaidAmount]           ,[AccountLocationId]
+           ,[SupplierCode]           ,[SupplierBankId]
+           ,[PaidAmount]           ,[AccountLocationCode]
            ,[LedgerPageNumber]           ,[CreatedDate]
            ,[CreatedBy]           ,[UpdatedDate]
            ,[UpdatedBy])
@@ -306,15 +251,70 @@ convert(varchar, getdate(), 113),
 N'ManualLoad'
 
 
-
-
 INSERT INTO [PayC].[dbo].[CustomerBanks]
-           ([CustId]         ,[CustBank]
+           ([CustCode]         ,[CustBank]
            ,[CustBankBranch]           ,[CustBankAccountType]
            ,[CustBankAccountNumber]           ,[CreatedDate]
            ,[CreatedBy]           ,[UpdatedDate]
            ,[UpdatedBy])
-Select 11,
+Select 100000000,
+N'State Bank of India',
+N'Coimbatore Main',
+N'Current',,
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 100000000,
+N'HDFC Bank',
+N'Coimbatore Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 100000000,
+N'ICICI Bank',
+N'Coimbatore Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 100000000,
+N'Indian Bank',
+N'Coimbatore Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 100000000,
+N'Indian Overseas Bank',
+N'Coimbatore Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+
+
+INSERT INTO [PayC].[dbo].[CustomerBanks]
+           ([CustCode]         ,[CustBank]
+           ,[CustBankBranch]           ,[CustBankAccountType]
+           ,[CustBankAccountNumber]           ,[CreatedDate]
+           ,[CreatedBy]           ,[UpdatedDate]
+           ,[UpdatedBy])
+Select 120000000,
 N'State Bank of India',
 N'Salem Main',
 N'Current',
@@ -324,7 +324,7 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 11,
+Select 120000000,
 N'HDFC Bank',
 N'Salem Main',
 N'Current',
@@ -334,7 +334,7 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 11,
+Select 120000000,
 N'ICICI Bank',
 N'Salem Main',
 N'Current',
@@ -344,7 +344,7 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 11,
+Select 120000000,
 N'Indian Bank',
 N'Salem Main',
 N'Current',
@@ -354,7 +354,7 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 11,
+Select 120000000,
 N'Indian Overseas Bank',
 N'Salem Main',
 N'Current',
@@ -368,12 +368,12 @@ N'ManualLoad'
 
 
 INSERT INTO [PayC].[dbo].[CustomerBanks]
-           ([CustId]         ,[CustBank]
+           ([CustCode]         ,[CustBank]
            ,[CustBankBranch]           ,[CustBankAccountType]
            ,[CustBankAccountNumber]           ,[CreatedDate]
            ,[CreatedBy]           ,[UpdatedDate]
            ,[UpdatedBy])
-Select 21,
+Select 130000000,
 N'State Bank of India',
 N'Trichy Main',
 N'Current',
@@ -383,7 +383,7 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 21,
+Select 130000000,
 N'HDFC Bank',
 N'Trichy Main',
 N'Current',
@@ -393,7 +393,7 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 21,
+Select 130000000,
 N'ICICI Bank',
 N'Trichy Main',
 N'Current',
@@ -403,7 +403,7 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 21,
+Select 130000000,
 N'Indian Bank',
 N'Trichy Main',
 N'Current',
@@ -413,7 +413,126 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 21,
+Select 130000000,
+N'Indian Overseas Bank',
+N'Trichy Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+
+
+
+
+INSERT INTO [PayC].[dbo].[CustomerBanks]
+           ([CustCode]         ,[CustBank]
+           ,[CustBankBranch]           ,[CustBankAccountType]
+           ,[CustBankAccountNumber]           ,[CreatedDate]
+           ,[CreatedBy]           ,[UpdatedDate]
+           ,[UpdatedBy])
+Select 140000000,
+N'State Bank of India',
+N'Trichy Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 140000000,
+N'HDFC Bank',
+N'Trichy Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 140000000,
+N'ICICI Bank',
+N'Trichy Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 140000000,
+N'Indian Bank',
+N'Trichy Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 140000000,
+N'Indian Overseas Bank',
+N'Trichy Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+
+
+
+
+
+INSERT INTO [PayC].[dbo].[CustomerBanks]
+           ([CustCode]         ,[CustBank]
+           ,[CustBankBranch]           ,[CustBankAccountType]
+           ,[CustBankAccountNumber]           ,[CreatedDate]
+           ,[CreatedBy]           ,[UpdatedDate]
+           ,[UpdatedBy])
+Select 140000000,
+N'State Bank of India',
+N'Trichy Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 140000000,
+N'HDFC Bank',
+N'Trichy Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 140000000,
+N'ICICI Bank',
+N'Trichy Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 140000000,
+N'Indian Bank',
+N'Trichy Main',
+N'Current',
+N'1111222233334444',
+convert(varchar, getdate(), 113),
+N'ManualLoad',
+convert(varchar, getdate(), 113),
+N'ManualLoad'
+union all
+Select 140000000,
 N'Indian Overseas Bank',
 N'Trichy Main',
 N'Current',
@@ -432,9 +551,9 @@ INSERT INTO [PayC].[dbo].[CustomerBanks]
            ,[CustBankAccountNumber]           ,[CreatedDate]
            ,[CreatedBy]           ,[UpdatedDate]
            ,[UpdatedBy])
-Select 31,
+Select 200000000,
 N'State Bank of India',
-N'Trichy Main',
+N'Tiruppur Main',
 N'Current',
 N'1111222233334444',
 convert(varchar, getdate(), 113),
@@ -442,9 +561,9 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 31,
+Select 200000000,
 N'HDFC Bank',
-N'Trichy Main',
+N'Tiruppur Main',
 N'Current',
 N'1111222233334444',
 convert(varchar, getdate(), 113),
@@ -452,9 +571,9 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 31,
+Select 200000000,
 N'ICICI Bank',
-N'Trichy Main',
+N'Tiruppur Main',
 N'Current',
 N'1111222233334444',
 convert(varchar, getdate(), 113),
@@ -462,9 +581,9 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 31,
+Select 200000000,
 N'Indian Bank',
-N'Trichy Main',
+N'Tiruppur Main',
 N'Current',
 N'1111222233334444',
 convert(varchar, getdate(), 113),
@@ -472,76 +591,14 @@ N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
 union all
-Select 31,
+Select 200000000,
 N'Indian Overseas Bank',
-N'Trichy Main',
+N'Tiruppur Main',
 N'Current',
 N'1111222233334444',
 convert(varchar, getdate(), 113),
 N'ManualLoad',
 convert(varchar, getdate(), 113),
 N'ManualLoad'
-
-
-
-
-
-INSERT INTO [PayC].[dbo].[CustomerBanks]
-           ([CustId]         ,[CustBank]
-           ,[CustBankBranch]           ,[CustBankAccountType]
-           ,[CustBankAccountNumber]           ,[CreatedDate]
-           ,[CreatedBy]           ,[UpdatedDate]
-           ,[UpdatedBy])
-Select 31,
-N'State Bank of India',
-N'Trichy Main',
-N'Current',
-N'1111222233334444',
-convert(varchar, getdate(), 113),
-N'ManualLoad',
-convert(varchar, getdate(), 113),
-N'ManualLoad'
-union all
-Select 31,
-N'HDFC Bank',
-N'Trichy Main',
-N'Current',
-N'1111222233334444',
-convert(varchar, getdate(), 113),
-N'ManualLoad',
-convert(varchar, getdate(), 113),
-N'ManualLoad'
-union all
-Select 31,
-N'ICICI Bank',
-N'Trichy Main',
-N'Current',
-N'1111222233334444',
-convert(varchar, getdate(), 113),
-N'ManualLoad',
-convert(varchar, getdate(), 113),
-N'ManualLoad'
-union all
-Select 31,
-N'Indian Bank',
-N'Trichy Main',
-N'Current',
-N'1111222233334444',
-convert(varchar, getdate(), 113),
-N'ManualLoad',
-convert(varchar, getdate(), 113),
-N'ManualLoad'
-union all
-Select 31,
-N'Indian Overseas Bank',
-N'Trichy Main',
-N'Current',
-N'1111222233334444',
-convert(varchar, getdate(), 113),
-N'ManualLoad',
-convert(varchar, getdate(), 113),
-N'ManualLoad'
-
-
 
 

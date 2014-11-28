@@ -116,13 +116,13 @@
 			<tr>
 				<th>Merchant Name</th>
 				<th>Invoice Number</th>
+				<th>Due Date</th>
 				<th>Status</th>
 				<th>Invoice Amount</th>
-				<th>Collection Amount</th>
+				<th>Paid Amount</th>
 				<th>Paid To</th>
+				<th>Payment Date</th>
 				<th>Ledger Page</th>
-				<th>Collection Date</th>
-				<th>Deferred Date</th>
 				<th>&nbsp;</th>
 			</tr>
 			</thead>
@@ -131,44 +131,56 @@
 		   { 
 				String id = String.valueOf(bean.getInvoiceNumber());
 				int detailsNum = bean.getDetailsList().size();
-				String colspanStr = "";
+				String rowspanStr = "";
 				if(detailsNum > 1)
 				{
-					detailsNum++;
-					colspanStr = " rowspan=\"" + detailsNum + "\"";
+					rowspanStr = " rowspan=\"" + detailsNum + "\"";
 				}
 		%>
 			<tr>
-				<td <%= colspanStr%>><%= bean.getPartyName() %></td>
-				<td <%= colspanStr%>><%= bean.getInvoiceNumber() %> </td>
-				<td <%= colspanStr%>><%= bean.getStatus() %></td>
-				<td <%= colspanStr%>><%= bean.getInvoiceAmount() %></td>
+				<td <%= rowspanStr%>><%= bean.getPartyName() %></td>
+				<td <%= rowspanStr%>><%= bean.getInvoiceNumber() %> </td>
+				<td <%= rowspanStr%> nowrap><%= bean.getDueDateForDisplay() %></td>
+				<td <%= rowspanStr%>><%= bean.getStatus() %></td>
+				<td <%= rowspanStr%>><%= bean.getInvoiceAmount() %></td>
 				
-			<% if(bean.getDetailsList().size() == 1) { %>
+				
+			<% if(bean.getDetailsList().size() > 0) { %>
 				<td><%= bean.getTotalCollectionAmount()%></td>
-				<td><%= bean.getDetailsList().get(0).getSupplierAccountInfo() %>
+				<td nowrap><%= bean.getDetailsList().get(0).getSupplierAccountInfo() %>
+				<td nowrap><%= bean.getDetailsList().get(0).getCollectionDateStr() %>
 				<td><%= bean.getDetailsList().get(0).getLedgerNumber() %>
-				<td><%= bean.getDetailsList().get(0).getCollectionDateStr() %>
-				<td><%= bean.getDetailsList().get(0).getDeferedDateStr() %>
-			<% } else if(bean.getDetailsList().size() > 1) { %>
-				<td colspan="5">Pending Amount: <%= (bean.getInvoiceAmount() - bean.getTotalCollectionAmount())%></td>
+				
 			<% } else { %>
-				<td colspan="5">0</td>
+				<td>0</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
 			<% } %>	
-				<td><button class="editButton" onclick="editCurrentRow('<%= bean.getInvoiceNumber() %>'); return false;">Edit</button></td>
+				<td <%= rowspanStr%>>
+					<button class="editButton" 
+							onclick="editCurrentRow('<%= bean.getInvoiceNumber() %>'); return false;">
+							Edit
+					</button>
+				</td>
 			</tr>
 			<% if(bean.getDetailsList().size() > 1) 
 			   {
+					int i=-1;
 					for(CollectionDetailBean detailBean : bean.getDetailsList())
 					{
+						i++;
+						if(i == 0)
+						{
+							// skip first entry as it is already displayed
+							continue;
+						}
 			%>
 						<tr>
-							<td><%= detailBean.getCollectionAmount() %></td>
-							<td><%= detailBean.getSupplierAccountInfo() %></td>
+							<td><%= detailBean.getPaidAmount() %></td>
+							<td nowrap><%= detailBean.getSupplierAccountInfo() %></td>
+							<td nowrap><%= detailBean.getCollectionDateStr() %></td>
 							<td><%= detailBean.getLedgerNumber() %></td>
-							<td><%= detailBean.getCollectionDateStr() %></td>
-							<td><%= detailBean.getDeferedDateStr() %></td>
-							<td>&nbsp;</td>
 						</tr>
 			<% 		}
 			   }%>

@@ -9,7 +9,7 @@ public class CollectionBean implements Serializable
 {
 	private static SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM d, yyyy");
 	
-	private int partyId;
+	private int custCode;
 	private int collectionId;
 	private long invoiceNumber;
 	private double invoiceAmount;
@@ -25,11 +25,11 @@ public class CollectionBean implements Serializable
 		detailsList = new ArrayList<CollectionDetailBean>();
 	}
 	
-	public int getPartyId() {
-		return partyId;
+	public int getCustCode() {
+		return custCode;
 	}
-	public void setPartyId(int partyId) {
-		this.partyId = partyId;
+	public void setCustCode(int partyId) {
+		this.custCode = partyId;
 	}
 	public int getCollectionId() {
 		return collectionId;
@@ -121,7 +121,16 @@ public class CollectionBean implements Serializable
 	public void setDetailsList(ArrayList<CollectionDetailBean> detailsList) {
 		this.detailsList = detailsList;
 	}
-
+	public String getDueDateForDisplay()
+	{
+		String str = getDueDateStr();
+		String defStr = getDeferredDateStr();
+		if(defStr.length() > 0)
+		{
+			str += "<br> Deferred To " + defStr;
+		}
+		return str;
+	}
 	public static String getFormattedDate(Date d)
 	{
 		if(d == null)

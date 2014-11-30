@@ -13,6 +13,8 @@
 
 <%
 	String invoiceId = (String) request.getParameter("id");
+	String selectedDate = (String) request.getParameter("date");
+	String merchantId = (String) request.getParameter("merchantId");
 	
 	CollectionBean bean = DBHandler.getCollectionInfo(invoiceId);
 	if(bean != null)
@@ -21,8 +23,9 @@
 		bean.getDetailsList().add(0, new CollectionDetailBean());
 	}
 	
-	LinkedHashMap<Integer, CustomerBean> supplierMap = DBHandler.getSuppliers();
-
+	LinkedHashMap<Long, CustomerBean> supplierMap = DBHandler.getSuppliers();
+	
+	LinkedHashMap<Long, String> companyMap = DBHandler.getCustomerIdMap("Company");
 %>
 
 <script>
@@ -38,10 +41,11 @@
 		var id = "_" + Math.floor((Math.random() * 100) + 1);
 
 		// Get template data
-		var htmlStr = document.getElementById('detailPanel0').innerHTML;
-		htmlStr = htmlStr.replace("_0", id);
+		var htmlStr = document.getElementById('detailPanel_0').innerHTML;
+		htmlStr = htmlStr.replace(/_0/g, id);
 
 		div1.innerHTML = htmlStr;
+		div1.id='detailPanel' + id;
 
 		// append to our form, so that template data
 		//become part of form
@@ -55,28 +59,58 @@
 		document.getElementById('contentDiv').removeChild(nodeToDelete);
 	}
 	
-	function selectSupplier(id)
+	function selectSupplier(supplierCompId, supplierBankCompId)
 	{
-		alert(id);
+		var supplierId = nidsGetSelectedOptionValue(supplierCompId);
+		var supplierBankComp = nidsGetElementByName(supplierBankCompId);
+		var bankoptions = supplierBankComp.options;
+    		for (var i = 1; i < bankoptions.length; i++) {
+        		nidsRemoveOption(supplierBankCompId, 1);
+    		}
+		
+		var option;
+		
+<%  
+	int insertIndex = 1;
+	
+	for(long id : supplierMap.keySet())
+	{
+%>
+		if(supplierId == '<%= id %>')
+		{
+			
+		<% CustomerBean supplierBean = supplierMap.get(id);
+			for(CustomerBankBean bankBean: supplierBean.getBankAccountList()) { %>
+				option = document.createElement("option");
+				option.text = '<%= bankBean.getBankName() + ", " + bankBean.getBranchName() + ", A/c #" + bankBean.getAccountNumber() %>';
+				option.value = "<%= bankBean.getBankId()%>";
+				supplierBankComp.add(option);
+		<%	} %>
+		}
+<%	} %>
 	}
-</script>
+		
 
+</script>
 <form action="/gm/servlet/collection" id="editForm">
 <div id="contentDiv" style="color: #333; padding: 10px; margin: 0px; background: #FFF; width:100% min-height: 100%">
 <% if(bean != null) { %>
 	
 	<input type="hidden" name="action" value="saveCollection" /> 
-	<input type="hidden" name="collectionRefID" value="<%= bean.getCollectionId() %>"/>
+	<input type="hidden" name="collectionRefId" value="<%= bean.getCollectionId() %>"/>
+	<input type="hidden" name="selectedDate" value="<%= selectedDate %>"/>
+	<input type="hidden" name="merchantId" value="<%= merchantId %>"/>
+	<input type="hidden" name="invoiceAmt" value="<%= bean.getInvoiceAmount()  %>"/>
  	<fieldset>
 	<legend>&nbsp;Invoice Details</legend>
 	<table  cellspacing="5" cellpadding="5">
 		<tr>
 			<td>Merchant Name:</td>
-			<td><%= bean.getPartyName() %></td>
+			<td><%=bean.getCustName()%></td>
 		</tr>
 		<tr>
 			<td>Phone Number:</td>
-			<td><%=bean.getPartyInfo() %></td>
+			<td><%=bean.getCustPhoneNumber() %></td>
 		</tr>
 		<tr>
 			<td>Invoice Number:</td>
@@ -92,7 +126,9 @@
 		</tr>
 		<tr>
 			<td>Deferred Date:</td>
-			<td><input type="text" name="deferredDate" value="<%= bean.getDeferredDateStr() %>"></td>
+			<td><input type="text" name="deferredDate" value="<%= bean.getDeferredDateStr() %>">
+			<label class="instructions">(Example: 31/12/2014 for Dec 31, 2014)</label>
+			</td>
 		</tr>
 		<tr>
 			<td>Status:</td>
@@ -113,121 +149,116 @@
 			hideStr = "style=\"display:none\"";
 		}
 		
-// 		CustomerBean selectedSupplierBean = supplierMap.get(detailBean.getSupplierId());
+		String supplierName = "";
+		String supplierBankInfo = "";
+		for(CustomerBean supplierBean : supplierMap.values()) 
+		{
+			if (detailBean.getSupplierCode() == supplierBean.getId()) 
+			{
+				supplierName = supplierBean.getName();
+				for(CustomerBankBean bankBean : supplierBean.getBankAccountList() ) 
+				{ 
+					if( bankBean.getBankId() == detailBean.getSupplierBankId()) 
+					{
+						supplierBankInfo = bankBean.getBankName() + ", " + bankBean.getBranchName() + ", A/c #" + bankBean.getAccountNumber();
+					}
+				}
+			}
+		}
 		
-// 		CustomerBankBean selectedBankBean = null;
-// 		if(selectedSupplierBean)
-// 		for(CustomerBankBean b : selectedSupplierBean.getBankAccountList())
-// 		{
-// 			if(b.getBankId() == detailBean.getSupplierBankId())
-// 			{
-// 				selectedBankBean = b;
-// 				break;
-// 			}
-// 		}
-		
+   
 %>
-<div id="detailPanel<%=i %>" <%=hideStr%>>
+<div id="detailPanel_<%=i %>" <%=hideStr%>>
 	<input type="hidden" name="detailRefID_<%= i %>" value="<%= detailBean.getCollectionDetailId() %>" />
 	<fieldset>
-	<legend>&nbsp;Payment Detail</legend>
+	<legend>&nbsp;Payment Details</legend>
 	<table  cellspacing="5" cellpadding="5" width="100%">
 		<tr>
 			<td nowrap>Paid To Supplier:</td>
 			<td nowrap> 
-				<select name="supplierId_<%=i%>" onChange="selectSupplier('<%=i%>');">
+			<% if(supplierName.length() > 0) { %>
+				<%= supplierName %>
+			<% } else { %>
+				<select name="supplierId_<%=i%>" 
+						id="supplierId_<%=i%>" 
+						onChange="selectSupplier('supplierId_<%=i%>', 'supplierBankId_<%=i%>');">
+						<option value="" selected disabled>Select Supplier</option>
 					<% for(CustomerBean supplierBean : supplierMap.values()) { %>
-						<option value="<%= supplierBean.getId() %>"
-						<% if (detailBean.getSupplierId() == supplierBean.getId()) { %> selected <%} %>
-						><%= supplierBean.getName() %></option>
+						<option value="<%= supplierBean.getId() %>">
+							<%= supplierBean.getName() %>
+						</option>
 					<% } %>
 				</select>
+			<%  } %>
 			</td>
 			<td valign="top" align="right" width="100%" rowspan="9">
-				<button type="button" class="deleteButton" onClick="deletePayment('detailPanel<%=i%>');">&nbsp;&nbsp;Delete Payment</button>
+				<% if(detailBean.getLedgerNumber() == 0) { %>
+				<button type="button" class="deleteButton" onClick="deletePayment('detailPanel_<%=i%>');">&nbsp;&nbsp;Delete Payment</button>
+				<% } %>
 			</td>
 		</tr>
 		<tr>
-			<td nowrap>Supplier's Bank Name:</td>
+			<td nowrap>Supplier's Bank Account:</td>
 			<td nowrap>
-				<select name="supplierBankId_<%=i%>" onChange="selectBank('<%=i%>');">
-					<% 	for(CustomerBean supplierBean : supplierMap.values()) {
-							if (detailBean.getSupplierId() == supplierBean.getId()) {
-								for(CustomerBankBean bankBean : supplierBean.getBankAccountList() ) { 
-					
-					%>
-									<option value="<%= bankBean.getBankId() %>"
-									<% if( bankBean.getBankId() == detailBean.getSupplierBankId()) { %> selected <% } %>
-									>
-									<%= bankBean.getBankName() %>
-									</option>
-					<%
-								}	
-							}
-						} 
-					%>
+			<% if(supplierBankInfo.length() > 0) { %>
+				<%= supplierBankInfo %>
+			<% } else { %>
+				<select name="supplierBankId_<%=i%>" id="supplierBankId_<%=i%>">
+					<option value="" selected disabled>Select Bank</option>
 				</select>
+			<%  } %>
 			</td>
 		</tr>
 		<tr>
-			<td nowrap>Supplier's Bank Branch:</td>
+			<td nowrap>Merchant's Bank Name:</td>
 			<td nowrap>
-				<select name="supplierBankBranch_<%=i%>" onChange="selectBranch('<%=i%>');">
-					<% 	for(CustomerBean supplierBean : supplierMap.values()) {
-							if (detailBean.getSupplierId() == supplierBean.getId()) {
-								for(CustomerBankBean bankBean : supplierBean.getBankAccountList() ) { 
-					
-					%>
-									<option value="<%= bankBean.getBranchName() %>"
-									<% if( bankBean.getBranchName().equals(detailBean.getSupplierBankBranch())) { %> selected <% } %>
-									>
-									<%= bankBean.getBranchName() %>
-									</option>
-					<%
-								}	
-							}
-						} 
-					%>
-				</select>
+				<% if(i == 0) { %>
+				<input type="text" name="merchantBank_<%=i%>" value="" /></td>
+				<% } else { %>
+					<%= detailBean.getCustomerBankName() %>
+				<% } %>
+		</tr>
+		<tr>
+			<td nowrap>Paid Amount:</td>
+			<td nowrap>
+				<input type="text" name="paidAmt_<%=i%>" 
+						value="<%= detailBean.getPaidAmount() %>" 
+						<% if(i>0) {%> hidden <%} %>/>
+				<% if(i>0) { out.print(detailBean.getPaidAmount()); } %>
 			</td>
+			 
 		</tr>
 		<tr>
-			<td nowrap>Supplier's A/C Number:</td>
+			<td nowrap>Payment Date:</td>
 			<td nowrap>
-				<select name="supplierAccount_<%=i%>">
-				<%	for(CustomerBean supplierBean : supplierMap.values()) {
-							if (detailBean.getSupplierId() == supplierBean.getId()) {
-								for(CustomerBankBean bankBean : supplierBean.getBankAccountList() ) { 
-				%>
-									<option value="<%= bankBean.getAccountNumber() %>"
-						<% if( bankBean.getAccountNumber().equals(detailBean.getSupplierAccountNumber())) { %> selected <% } %>
-						>
-						<%= bankBean.getAccountNumber() %>
-						</option>
-					<% 			}
-							}
-						}%>
-				</select></td>
-		</tr>
-		<tr>
-			<td nowrap>Merchant's Bank:</td>
-			<td nowrap><input type="text" name="partyBank_<%=i%>" value="<%= detailBean.getPartyBankName() %>" /></td>
-		</tr>
-		<tr>
-			<td nowrap>Merchant's Bank Branch:</td>
-			<td nowrap><input type="text" name="partyBankBranch_<%=i%>" value="<%= detailBean.getPartyBankBranch() %>" /></td>
-		</tr>
-		<tr>
-			<td nowrap>Collection Amount:</td>
-			<td nowrap><input type="text" name="collectionAmt_<%=i%>" value="<%= detailBean.getPaidAmount() %>"/></td>
-		</tr>
-		<tr>
-			<td nowrap>Collection Date:</td>
-			<td nowrap><input type="text" name="collectionDate_<%=i%>" value="<%= detailBean.getCollectionDateStr() %>" class="datepicker" /></td>
+			<% if(i == 0) { 
+				// TODO: Date picker is not working. Add validations
+			%>
+				<input type="text" name="collectionDate_<%=i%>" class="datepicker"/> 
+				<label class="instructions">(Example: 31/12/2014 for Dec 31, 2014)</label>
+			<% } else {%>
+					<%= detailBean.getCollectionDateStr() %>
+			<% } %>
+			</td>
 		</tr>
 		<tr>
 			<td nowrap>Ledger Page Number:</td>
 			<td nowrap><input type="text" name="ledger_<%=i%>" value="<%= detailBean.getLedgerNumber() %>"/></td>
+		</tr>
+		<tr>
+			<td nowrap>Company Name:</td>
+			<td nowrap>
+				<select name="companyID_<%=i%>" 
+						id="companyID_<%=i%>">
+						<option value="" selected disabled>Select Company</option>
+					<% for(Entry<Long, String> entry : companyMap.entrySet()) { %>
+						<option value="<%= entry.getKey() %>"
+							<%if(entry.getKey() == detailBean.getCompanyCode()) {%> selected <%} %>>
+							<%= entry.getValue() %>
+						</option>
+					<% } %>
+				</select>
+			</td>
 		</tr>
 	</table>
 	</fieldset>

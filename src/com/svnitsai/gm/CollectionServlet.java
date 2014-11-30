@@ -2,6 +2,8 @@ package com.svnitsai.gm;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.LinkedList;
 
 import javax.servlet.RequestDispatcher;
@@ -24,60 +26,119 @@ public class CollectionServlet extends HttpServlet
 		}
 		else if("saveCollection".equals(action))
 		{
-			System.out.println("Saving collection....");
-			handleGetCollection(request, response);
+			handleSaveCollection(request, response);
 		}
 	}
 
 	private void handleGetCollection(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
-		String filterBy = request.getParameter("filterBy");
 		String selectedDate = request.getParameter("selectedDate");
 		String selectedMerchantId = request.getParameter("merchantId");
 		String selectedMerchantName = request.getParameter("merchantName");
+		String filterBy = request.getParameter("filterBy");
+		if("merchant".equals(filterBy))
+		{
+			selectedDate = "";
+		}
+		else
+		{
+			selectedMerchantId = "";
+		}
 		
-		LinkedList<CollectionBean> bean = readCollectionInfo(	request, 
-																filterBy, 
-																selectedDate,
-																selectedMerchantId);
+		Collection<CollectionBean> bean = DBHandler.getCollections(selectedDate, selectedMerchantId, null, false);
 		request.setAttribute("collectionData", bean);
-		
-		if("date".equals(filterBy))
-		{
-			request.setAttribute("displayStr", "Collection Details for " + selectedDate);
-		}
-		else 
-		{
-			request.setAttribute("displayStr", "Collection Details for " + selectedMerchantName);
-		}
+		request.setAttribute("selectedDate", selectedDate);
+		request.setAttribute("merchantId", selectedMerchantId);
+		request.setAttribute("merchantName", selectedMerchantName);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/web/collectionDisplay.jsp");
 		dispatcher.forward(request, response);
 	}
-	
-	private LinkedList<CollectionBean> readCollectionInfo(HttpServletRequest request,
-															String filterBy,
-															String selectedDate,
-															String selectedMerchantId) 
-	{
-		// TODO: Replace with DB call to get actual data
 
-		LinkedList<CollectionBean> beanList = new LinkedList<CollectionBean>();
+	private void handleSaveCollection(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
+		CollectionBean bean = new CollectionBean();
 		
-		// Entry 1
-		CollectionBean bean1 = DBHandler.getCollectionInfo("1");
-		beanList.add(bean1);
+		// iterate through parameters to get the supplier data
+		Enumeration<String> paramNames = request.getParameterNames();
+		while(paramNames.hasMoreElements())
+		{
+			String name = paramNames.nextElement();
+			if(name.equals("collectionRefId"))
+			{
+				bean.setCollectionId( convertToLong(request.getParameter(name)));
+			}
+			else if(name.equals("deferredDate"))
+			{
+				bean.setDeferredDateStr(request.getParameter(name));
+			}
+			else if(name.equals("invoiceAmt"))
+			{
+				bean.setInvoiceAmount(convertToDouble(request.getParameter(name)));
+			}
+			else if(name.startsWith("detailRefID_") && !name.equals("detailRefID_0"))
+			{
+				// check if detail ID is set.
+				String detailId = request.getParameter(name);
+				
+				System.out.println("Reading details for " + name);
+				String index = name.replace("detailRefID", "");
+				CollectionDetailBean detailBean = new CollectionDetailBean();
+				detailBean.setCollectionDetailId( convertToLong(request.getParameter(name)));
+				detailBean.setPaidAmount(convertToDouble(request.getParameter("paidAmt" + index)));
+				detailBean.setCompanyCode( convertToLong(request.getParameter("companyID" + index)));
+				detailBean.setLedgerNumber(convertToInt(request.getParameter("ledger" + index)));
+				if("0".equals(detailId))
+				{
+					detailBean.setSupplierCode( convertToLong(request.getParameter("supplierId" + index)));
+					detailBean.setSupplierBankId(convertToLong(request.getParameter("supplierBankId" + index)));
+					detailBean.setCustomerBankName(request.getParameter("merchantBank" + index));
+					detailBean.setCollectionDateStr(request.getParameter("collectionDate" + index));
+				}
+				bean.getDetailsList().add(detailBean);
+			}
+				
+		}
 		
-		// Entry 2
-		CollectionBean bean2 = DBHandler.getCollectionInfo("2");
-		beanList.add(bean2);
-		
-		// Entry 3
-		CollectionBean bean3 = DBHandler.getCollectionInfo("3");
-		beanList.add(bean3);
-		
-		
-		return beanList;
+		DBHandler.updateCollectionInfo(bean);
+		request.setAttribute("action", "save");
+		handleGetCollection(request, response);
 	}
+	
+	private int convertToInt(String str)
+	{
+		int i = 0;
+		try
+		{
+			i = Integer.parseInt(str);
+		}
+		catch(Exception e){}
+		return i;
+	}
+	
+	
+	private long convertToLong(String str)
+	{
+		long i = 0;
+		try
+		{
+			i = Long.parseLong(str);
+		}
+		catch(Exception e){}
+		return i;
+	}
+	
+	private double convertToDouble(String str)
+	{
+		double i = 0;
+		try
+		{
+			i = Double.parseDouble(str);
+		}
+		catch(Exception e){}
+		return i;
+	}
+	
+	
 }

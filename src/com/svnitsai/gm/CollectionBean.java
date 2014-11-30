@@ -9,15 +9,17 @@ public class CollectionBean implements Serializable
 {
 	private static SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM d, yyyy");
 	
-	private int custCode;
-	private int collectionId;
+	private long custCode;
+	private long collectionId;
 	private long invoiceNumber;
 	private double invoiceAmount;
-	private String partyName;
-	private String partyInfo;
+	private String custName;
+	private String custPhoneNumber;
+	private String custCity;
 	private String status;
 	private Date dueDate;
 	private Date deferredDate;
+	private String deferredDateStr;
 	private String updatedBy;
 	private Date updatedDate;
 	
@@ -29,16 +31,16 @@ public class CollectionBean implements Serializable
 		detailsList = new ArrayList<CollectionDetailBean>();
 	}
 	
-	public int getCustCode() {
+	public long getCustCode() {
 		return custCode;
 	}
-	public void setCustCode(int partyId) {
+	public void setCustCode(long partyId) {
 		this.custCode = partyId;
 	}
-	public int getCollectionId() {
+	public long getCollectionId() {
 		return collectionId;
 	}
-	public void setCollectionId(int collectionId) {
+	public void setCollectionId(long collectionId) {
 		this.collectionId = collectionId;
 	}
 	public long getInvoiceNumber() {
@@ -53,7 +55,7 @@ public class CollectionBean implements Serializable
 	public void setInvoiceAmount(double invoiceAmount) {
 		this.invoiceAmount = invoiceAmount;
 	}
-	public double getTotalCollectionAmount() {
+	public double getTotalPaidAmount() {
 		double totalCollectionAmount = 0;
 		for(CollectionDetailBean detailBean : getDetailsList())
 		{
@@ -65,38 +67,26 @@ public class CollectionBean implements Serializable
 		
 		return totalCollectionAmount;
 	}
-	public String getPartyName() {
-		return partyName;
+	public String getCustName() {
+		return custName;
 	}
-	public void setPartyName(String partyName) {
-		this.partyName = partyName;
+	public void setCustName(String custName) {
+		this.custName = custName;
 	}
-	public String getPartyInfo() {
-		return partyInfo;
+	public String getCustPhoneNumber() {
+		return custPhoneNumber;
 	}
-	public void setPartyInfo(String info) {
-		this.partyInfo = info;
+	public void setCustPhoneNumber(String custPhoneNumber) {
+		this.custPhoneNumber = custPhoneNumber;
 	}
-	public void setPartyInfo(String city, String contactNumber)
-	{
-		String info = city;
-		if(info == null)
-		{
-			info = "";
-		}
-		if(contactNumber == null)
-		{
-			contactNumber = "";
-		}
-		if(info.length() > 0 && contactNumber.length() > 0)
-		{
-			info += "<br/>Phone: ";
-		}
-		info += contactNumber;
-		setPartyInfo(info);
+	public String getCustCity() {
+		return custCity;
+	}
+	public void setCustCity(String custCity) {
+		this.custCity = custCity;
 	}
 	public String getStatus() {
-		return status;
+		return (status != null) ? status : "Open";
 	}
 	public void setStatus(String status) {
 		this.status = status;
@@ -111,13 +101,18 @@ public class CollectionBean implements Serializable
 		this.dueDate = dueDate;
 	}
 	public String getDeferredDateStr() {
-		return CollectionBean.getFormattedDate(deferredDate);
+		return (this.deferredDateStr != null) 
+				? this.deferredDateStr
+				: CollectionBean.getFormattedDate(deferredDate);
 	}
 	public Date getDeferredDate() {
 		return deferredDate;
 	}
 	public void setDeferredDate(Date deferredDate) {
 		this.deferredDate = deferredDate;
+	}
+	public void setDeferredDateStr(String dateStr) {
+		this.deferredDateStr = dateStr;
 	}
 	public String getUpdatedBy() {
 		return updatedBy;

@@ -5,14 +5,12 @@ import java.util.Date;
 
 public class CollectionDetailBean implements Serializable
 {
-	private int collectionDetailId;
-	private int companyId;
-	private int	partyBankId;
-	private int	supplierId;
-	private int supplierBankId;
+	private long collectionDetailId;
+	private long companyCode;
+	private long supplierCode;
+	private long supplierBankId;
 	private String companyName;
-	private String partyBankName;
-	private String partyBankBranch;
+	private String customerBankName;
 	private String supplierName;
 	private String supplierBankName;
 	private String supplierBankBranch;
@@ -20,9 +18,28 @@ public class CollectionDetailBean implements Serializable
 	private int ledgerNumber;
 	private double paidAmount;
 	private Date collectionDate;
-	
+	private String collectionDateStr;
+	private String updatedBy;
+	private Date updatedDate;
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	public String getUpdatedDateStr() {
+		return CollectionBean.getFormattedDate(updatedDate);
+	}
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+
 	public String getSupplierName() {
-		return supplierName;
+		return (supplierName != null ) ? supplierName : "";
 	}
 	public void setSupplierName(String supplierName) {
 		this.supplierName = supplierName;
@@ -45,10 +62,10 @@ public class CollectionDetailBean implements Serializable
 	public void setSupplierAccountNumber(String supplierAccountNumber) {
 		this.supplierAccountNumber = supplierAccountNumber;
 	}
-	public int getCollectionDetailId() {
+	public long getCollectionDetailId() {
 		return collectionDetailId;
 	}
-	public void setCollectionDetailId(int collectionDetailId) {
+	public void setCollectionDetailId(long collectionDetailId) {
 		this.collectionDetailId = collectionDetailId;
 	}
 	public int getLedgerNumber() {
@@ -57,22 +74,16 @@ public class CollectionDetailBean implements Serializable
 	public void setLedgerNumber(int ledgerNumber) {
 		this.ledgerNumber = ledgerNumber;
 	}
-	public int getPartyBankId() {
-		return partyBankId;
+	public long getSupplierCode() {
+		return supplierCode;
 	}
-	public void setPartyBankId(int partyBankId) {
-		this.partyBankId = partyBankId;
+	public void setSupplierCode(long supplierCode) {
+		this.supplierCode = supplierCode;
 	}
-	public int getSupplierId() {
-		return supplierId;
-	}
-	public void setSupplierId(int supplierId) {
-		this.supplierId = supplierId;
-	}
-	public int getSupplierBankId() {
+	public long getSupplierBankId() {
 		return supplierBankId;
 	}
-	public void setSupplierBankId(int supplierBankId) {
+	public void setSupplierBankId(long supplierBankId) {
 		this.supplierBankId = supplierBankId;
 	}
 	public double getPaidAmount() {
@@ -82,7 +93,9 @@ public class CollectionDetailBean implements Serializable
 		this.paidAmount = paidAmount;
 	}
 	public String getCollectionDateStr() {
-		return CollectionBean.getFormattedDate(collectionDate);
+		return (this.collectionDateStr != null )
+				? this.collectionDateStr
+				: CollectionBean.getFormattedDate(collectionDate);
 	}
 	public Date getCollectionDate() {
 		return collectionDate;
@@ -90,19 +103,21 @@ public class CollectionDetailBean implements Serializable
 	public void setCollectionDate(Date collectionDate) {
 		this.collectionDate = collectionDate;
 	}
-	public int getCompanyId() {
-		return companyId;
+	public void setCollectionDateStr(String collectionDateStr) {
+		this.collectionDateStr = collectionDateStr;
 	}
-	public void setCompanyId(int companyId) {
-		this.companyId = companyId;
+	public long getCompanyCode() {
+		return companyCode;
 	}
-	public String getPartyBankInfo() {
-		return partyBankName + ", " + partyBankBranch;
+	public void setCompanyCode(long companyCode) {
+		this.companyCode = companyCode;
 	}
-	public void setPartyBankInfo(String bankName, String branch)
+	public String getCustomerBankName() {
+		return (customerBankName != null ? customerBankName : "");
+	}
+	public void setCustomerBankName(String bankName)
 	{
-		setPartyBankName(bankName);
-		setPartyBankBranch(branch);
+		this.customerBankName = bankName;
 	}
 	public String getCompanyName() {
 		return companyName;
@@ -116,17 +131,5 @@ public class CollectionDetailBean implements Serializable
 						"<br>" + 
 						getSupplierBankName();
 		return info;
-	}
-	public String getPartyBankName() {
-		return partyBankName;
-	}
-	public void setPartyBankName(String partyBankName) {
-		this.partyBankName = partyBankName;
-	}
-	public String getPartyBankBranch() {
-		return partyBankBranch;
-	}
-	public void setPartyBankBranch(String partyBankBranch) {
-		this.partyBankBranch = partyBankBranch;
 	}
 }

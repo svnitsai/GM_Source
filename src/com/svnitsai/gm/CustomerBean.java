@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class CustomerBean implements Serializable
 {
-	private int id;
+	private long id;
 	private String type;
 	private String name;
 	private String address1;
@@ -19,10 +19,10 @@ public class CustomerBean implements Serializable
 		bankAccountList = new ArrayList<CustomerBankBean>();
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	

@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 public class CustomerBankBean implements Serializable
 {
-	private int bankId;
+	private long bankId;
 	private String bankName;
 	private String branchName;
 	private String accountNumber;
 	private String accountType;
 	
-	public int getBankId() {
+	public long getBankId() {
 		return bankId;
 	}
-	public void setBankId(int supplierBankId) {
+	public void setBankId(long supplierBankId) {
 		this.bankId = supplierBankId;
 	}
 	public String getBankName() {

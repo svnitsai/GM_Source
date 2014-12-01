@@ -52,6 +52,7 @@ CREATE TABLE [dbo].[DailyPayCDetails](
 	[PaidAmount] 			[numeric](10, 2) NULL,
 	[AccountLocationCode] 		[numeric](9,0) NULL,
 	[LedgerPageNumber] 		[numeric](9, 0) NULL,
+	[Deleted]				[numeric](3,0) NULL,
 	[CreatedDate] 			[datetime] NOT NULL,
 	[CreatedBy] 			[varchar] (50) NOT NULL,
 	[UpdatedDate] 			[datetime] NOT NULL,
@@ -83,11 +84,11 @@ CREATE TABLE [dbo].[DailyPayable](
 	[PaidAmount]			[numeric](10,2) Null,
 	[PayableStatus]			[Char] (20) Null,
 	[SupplierCode] 			[numeric](9, 0) NOT NULL,
-	[SupplierBankId] 		[numeric](9,0) NULL,
+	[Instructions]			[varchar](200) NULL,
 	[CreatedDate] 			[datetime] NOT NULL,
 	[CreatedBy] 			[varchar] (50) NOT NULL,
-	[UpdatedDate] 			[datetime] NOT NULL,
-	[UpdatedBy] 			[varchar] (50) NOT NULL,
+	[UpdatedDate] 			[datetime] Null,
+	[UpdatedBy] 			[varchar] (50) Null,
  CONSTRAINT [PK_DailyPayable] PRIMARY KEY CLUSTERED 
 (
 	[PayableReferenceNumber] ASC

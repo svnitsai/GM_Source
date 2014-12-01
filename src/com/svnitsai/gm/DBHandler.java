@@ -242,8 +242,6 @@ public class DBHandler
 			   whereClauseAdded = true;
 		   }
 		   
-		   
-			
 		   sql += " ORDER BY PayCDueDate";
 		   
 		   System.out.println(sql);
@@ -424,103 +422,48 @@ public class DBHandler
 	   {
 		   closeDBObjects(conn, stmt, rs);
 	   }
-	   
-	   
    }
-   /*
-   public static CollectionBean getCollectionInfo(String invoiceId)
+   
+   public static void savePayable(ArrayList<DailyPayableBean> payableList) 
    {
-	   // TODO: Replace it to read from DB
-	   if("1".equals(invoiceId))
-	   {
-		   CollectionBean bean1 = new CollectionBean();
-			bean1.setCollectionId(1);
-			bean1.setDueDate(Calendar.getInstance().getTime());
-			bean1.setInvoiceAmount(150000);
-			bean1.setInvoiceNumber(1);
-			bean1.setPartyInfo("Trichy", "4567890123");
-			bean1.setCustCode(31);
-			bean1.setPartyName("Merchant 140000000");
-			bean1.setStatus("Closed");
-			
-			CollectionDetailBean detailBean1 = new CollectionDetailBean();
-			detailBean1.setCompanyCode(101);
-			detailBean1.setCompanyName("Garment Mantra");
-			detailBean1.setPaidAmount(150000);
-			detailBean1.setCollectionDate(Calendar.getInstance().getTime());
-			detailBean1.setLedgerNumber(1);
-			detailBean1.setPartyBankInfo("IndusInd Bank", "Bangalore");
-			detailBean1.setSupplierCode(200000000);
-			detailBean1.setSupplierName("Supplier 200000000");
-			detailBean1.setSupplierBankId(29);
-			detailBean1.setSupplierBankName("State Bank of India");
-			detailBean1.setSupplierBankBranch("Tiruppur Main");
-			detailBean1.setSupplierAccountNumber("1111222233334444");
-			bean1.getDetailsList().add(detailBean1);
-			
-			return bean1;
-	   }
-	   else if("2".equals(invoiceId))
-	   {
-		   CollectionBean bean2 = new CollectionBean();
-			bean2.setCollectionId(2);
-			bean2.setDueDate(Calendar.getInstance().getTime());
-			bean2.setInvoiceAmount(500000);
-			bean2.setInvoiceNumber(2);
-			bean2.setPartyInfo("Bangalore", "080-22752345");
-			bean2.setCustCode(41);
-			bean2.setPartyName("Merchant 150000000");
-			bean2.setStatus("Payment Deferred");
-			
-			CollectionDetailBean detailBean2 = new CollectionDetailBean();
-			detailBean2.setPaidAmount(150000);
-			detailBean2.setCollectionDate(Calendar.getInstance().getTime());
-			detailBean2.setLedgerNumber(2);
-			detailBean2.setCompanyCode(102);
-			detailBean2.setCompanyName("SP Tex");
-			detailBean2.setPartyBankInfo("Bank of India", "Bangalore");
-			detailBean2.setSupplierCode(200000000);
-			detailBean2.setSupplierName("Supplier 200000000");
-			detailBean2.setSupplierBankId(30);
-			detailBean2.setSupplierBankName("HDFC Bank");
-			detailBean2.setSupplierBankBranch("Tiruppur Main");
-			detailBean2.setSupplierAccountNumber("1111222233334444");
-			bean2.getDetailsList().add(detailBean2);
-			
-			CollectionDetailBean detailBean3 = new CollectionDetailBean();
-			detailBean3.setPaidAmount(150000);
-			detailBean3.setCollectionDate(Calendar.getInstance().getTime());
-			detailBean3.setLedgerNumber(2);
-			detailBean3.setCompanyCode(101);
-			detailBean3.setCompanyName("Garment Mantra");
-			detailBean3.setPartyBankInfo("State Bank of India", "Bangalore");
-			detailBean3.setSupplierCode(51);
-			detailBean3.setSupplierName("Supplier 200000000");
-			detailBean3.setSupplierBankId(29);
-			detailBean3.setSupplierBankName("State Bank of India");
-			detailBean3.setSupplierBankBranch("Tiruppur Main");
-			detailBean3.setSupplierAccountNumber("1111222233334444");
-			bean2.getDetailsList().add(detailBean3);
-			
-			return bean2;
-	   }
-	   else if("3".equals(invoiceId))
-	   {
-		   CollectionBean bean3 = new CollectionBean();
-			bean3.setCollectionId(3);
-			bean3.setDueDate(Calendar.getInstance().getTime());
-			bean3.setInvoiceAmount(50000);
-			bean3.setInvoiceNumber(3);
-			bean3.setPartyInfo("Chennai", "044-456444544");
-			bean3.setCustCode(11);
-			bean3.setPartyName("Merchant 120000000");
-			bean3.setStatus("Open");
-			return bean3;
-	   }
+	   Connection conn = null;
+	   Statement stmt = null;
+	   ResultSet rs = null;
 	   
-	   return null;
+	   try
+	   {
+		   	conn = getConnection();
+           	stmt = conn.createStatement();
+		   
+		   	for(DailyPayableBean bean : payableList)
+			{
+				// insert new entry
+				String insertDetailSql = "INSERT INTO DailyPayable (PayableDate, PayableAmount, SupplierCode, "
+										+"Instructions, CreatedDate, CreatedBy) values("
+										+ "'" + bean.getPayableDateStr() + "', "
+						                + bean.getPayableAmount() + ", "
+						                + bean.getSupplierCode() + ", "
+						                + "'" + bean.getInstructions() + "', "
+						                + "GETDATE(), 'UI Admin')";
+				System.out.println(insertDetailSql);
+				
+				stmt.executeUpdate(insertDetailSql);
+					
+			}
+			
+	   }
+	   catch (Exception e) 
+	   {
+		   // TODO Auto-generated catch block
+		   e.printStackTrace();
+	   } 
+	   finally 
+	   {
+		   closeDBObjects(conn, stmt, rs);
+	   }
    }
-   */
+
+   // TODO: REad from DB connection pool!!!
    public static Connection getConnection()
    {
 	   Connection conn = null;
@@ -576,5 +519,4 @@ public class DBHandler
 	   //System.out.println("Cust list: " + custList.size());
    }
 
-   
 } 

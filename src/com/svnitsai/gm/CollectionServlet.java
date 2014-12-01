@@ -67,7 +67,7 @@ public class CollectionServlet extends HttpServlet
 			String name = paramNames.nextElement();
 			if(name.equals("collectionRefId"))
 			{
-				bean.setCollectionId( convertToLong(request.getParameter(name)));
+				bean.setCollectionId( Util.convertToLong(request.getParameter(name)));
 			}
 			else if(name.equals("deferredDate"))
 			{
@@ -75,7 +75,7 @@ public class CollectionServlet extends HttpServlet
 			}
 			else if(name.equals("invoiceAmt"))
 			{
-				bean.setInvoiceAmount(convertToDouble(request.getParameter(name)));
+				bean.setInvoiceAmount(Util.convertToDouble(request.getParameter(name)));
 			}
 			else if(name.startsWith("detailRefID_") && !name.equals("detailRefID_0"))
 			{
@@ -85,14 +85,14 @@ public class CollectionServlet extends HttpServlet
 				System.out.println("Reading details for " + name);
 				String index = name.replace("detailRefID", "");
 				CollectionDetailBean detailBean = new CollectionDetailBean();
-				detailBean.setCollectionDetailId( convertToLong(request.getParameter(name)));
-				detailBean.setPaidAmount(convertToDouble(request.getParameter("paidAmt" + index)));
-				detailBean.setCompanyCode( convertToLong(request.getParameter("companyID" + index)));
-				detailBean.setLedgerNumber(convertToInt(request.getParameter("ledger" + index)));
+				detailBean.setCollectionDetailId( Util.convertToLong(request.getParameter(name)));
+				detailBean.setPaidAmount(Util.convertToDouble(request.getParameter("paidAmt" + index)));
+				detailBean.setCompanyCode( Util.convertToLong(request.getParameter("companyID" + index)));
+				detailBean.setLedgerNumber(Util.convertToInt(request.getParameter("ledger" + index)));
 				if("0".equals(detailId))
 				{
-					detailBean.setSupplierCode( convertToLong(request.getParameter("supplierId" + index)));
-					detailBean.setSupplierBankId(convertToLong(request.getParameter("supplierBankId" + index)));
+					detailBean.setSupplierCode( Util.convertToLong(request.getParameter("supplierId" + index)));
+					detailBean.setSupplierBankId(Util.convertToLong(request.getParameter("supplierBankId" + index)));
 					detailBean.setCustomerBankName(request.getParameter("merchantBank" + index));
 					detailBean.setCollectionDateStr(request.getParameter("collectionDate" + index));
 				}
@@ -105,40 +105,5 @@ public class CollectionServlet extends HttpServlet
 		request.setAttribute("action", "save");
 		handleGetCollection(request, response);
 	}
-	
-	private int convertToInt(String str)
-	{
-		int i = 0;
-		try
-		{
-			i = Integer.parseInt(str);
-		}
-		catch(Exception e){}
-		return i;
-	}
-	
-	
-	private long convertToLong(String str)
-	{
-		long i = 0;
-		try
-		{
-			i = Long.parseLong(str);
-		}
-		catch(Exception e){}
-		return i;
-	}
-	
-	private double convertToDouble(String str)
-	{
-		double i = 0;
-		try
-		{
-			i = Double.parseDouble(str);
-		}
-		catch(Exception e){}
-		return i;
-	}
-	
 	
 }

@@ -7,8 +7,6 @@ import java.util.Date;
 
 public class CollectionBean implements Serializable 
 {
-	private static SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM d, yyyy");
-	
 	private long custCode;
 	private long collectionId;
 	private long invoiceNumber;
@@ -92,7 +90,7 @@ public class CollectionBean implements Serializable
 		this.status = status;
 	}
 	public String getDueDateStr() {
-		return getFormattedDate(dueDate);
+		return Util.getFormattedDate(dueDate);
 	}
 	public Date getDueDate() {
 		return dueDate;
@@ -103,7 +101,7 @@ public class CollectionBean implements Serializable
 	public String getDeferredDateStr() {
 		return (this.deferredDateStr != null) 
 				? this.deferredDateStr
-				: CollectionBean.getFormattedDate(deferredDate);
+				: Util.getFormattedDate(deferredDate);
 	}
 	public Date getDeferredDate() {
 		return deferredDate;
@@ -121,7 +119,7 @@ public class CollectionBean implements Serializable
 		this.updatedBy = updatedBy;
 	}
 	public String getUpdatedDateStr() {
-		return getFormattedDate(updatedDate);
+		return Util.getFormattedDate(updatedDate);
 	}
 	public Date getUpdatedDate() {
 		return updatedDate;
@@ -145,15 +143,5 @@ public class CollectionBean implements Serializable
 		}
 		return str;
 	}
-	public static String getFormattedDate(Date d)
-	{
-		if(d == null)
-		{
-			return "";
-		}
-		else
-		{
-			return dateFormatter.format(d);
-		}
-	}
+	
 }

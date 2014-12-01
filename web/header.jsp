@@ -35,9 +35,21 @@
 		
 		$( ".addButton" ).button({
 			icons: {
-				primary: "ui-icon-plusthick"
+				primary: "ui-icon-plus"
 			}
 		});
+		$( ".saveButton" ).button({
+			icons: {
+				primary: "ui-icon-disk"
+			}
+		});
+		$( ".printButton" ).button({
+			icons: {
+				primary: "ui-icon-print"
+			}
+		});
+		$( ".anyButton" ).button();
+		
 	});
 </script>
 </head>

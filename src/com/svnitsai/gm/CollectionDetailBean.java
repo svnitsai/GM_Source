@@ -29,7 +29,7 @@ public class CollectionDetailBean implements Serializable
 		this.updatedBy = updatedBy;
 	}
 	public String getUpdatedDateStr() {
-		return CollectionBean.getFormattedDate(updatedDate);
+		return Util.getFormattedDate(updatedDate);
 	}
 	public Date getUpdatedDate() {
 		return updatedDate;
@@ -95,7 +95,7 @@ public class CollectionDetailBean implements Serializable
 	public String getCollectionDateStr() {
 		return (this.collectionDateStr != null )
 				? this.collectionDateStr
-				: CollectionBean.getFormattedDate(collectionDate);
+				: Util.getFormattedDate(collectionDate);
 	}
 	public Date getCollectionDate() {
 		return collectionDate;

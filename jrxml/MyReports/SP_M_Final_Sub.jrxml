@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2014-12-02T08:44:03 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_M_Final_Sub" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="20" uuid="da7ac7dc-de78-435b-b167-daa4b4465c2a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GarmentMantraDB"/>
+	<parameter name="CustCode" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[230000000]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT [CustBank]
+      ,[CustBankBranch]
+      ,[CustBankAccountType]
+      ,[CustBankAccountNumber]
+FROM [CustomerBanks]
+Where CustCode = $P{CustCode}]]>
+	</queryString>
+	<field name="CustBank" class="java.lang.String"/>
+	<field name="CustBankBranch" class="java.lang.String"/>
+	<field name="CustBankAccountType" class="java.lang.String"/>
+	<field name="CustBankAccountNumber" class="java.lang.String"/>
+	<detail>
+		<band height="20">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="-20" y="0" width="400" height="20" uuid="09cadc6b-8ea1-4c8b-92ff-9f2998bda72c"/>
+				<textFieldExpression><![CDATA[$F{CustBank} + ", " + $F{CustBankBranch} + "\nA/C No: " + $F{CustBankAccountNumber} + "\nA/C Type:"+ $F{CustBankAccountType} + "\n"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
+

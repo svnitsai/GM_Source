@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2014-12-02T19:47:29 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Payment_Collection_Main" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2a305a9e-d986-4dff-b385-b4b16b410aed">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="47"/>
+	<property name="ireport.y" value="451"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GarmentMantraDB"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="PieChartDataset" uuid="ffe56b58-7407-4405-a710-c23b4328f030"/>
+	<parameter name="SupplierCode" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$F{SupplierCode}.intValue()]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT DCD.AccountLocationCode, L.Custname AS LocationName
+, C.CustName, DCD.PaidAmount, DCD.SupplierCode, 
+DC.PayCStatus,DCD.LedgerPageNumber,DCD.PayCDate,DCD.PayCReferenceSubNumber, 
+DC.PayCReferenceNumber, DC.InvoiceReferenceNumber 
+FROM DailyPayC DC 
+join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber 
+join Customer C on C.custcode = dc.CustCode and c.custtype = 'Merchant'
+join Customer L on L.CustCode = DCD.AccountLocationCode and L.CustType = 'Company' 
+order by c.custname, dc.paycreferencenumber, dcd.paycreferencesubnumber]]>
+	</queryString>
+	<field name="CustName" class="java.lang.String"/>
+	<field name="PaidAmount" class="java.math.BigDecimal"/>
+	<field name="PayCStatus" class="java.lang.String"/>
+	<field name="LedgerPageNumber" class="java.math.BigDecimal"/>
+	<field name="PayCDate" class="java.sql.Timestamp"/>
+	<field name="InvoiceReferenceNumber" class="java.math.BigDecimal"/>
+	<field name="AccountLocationCode" class="java.math.BigDecimal"/>
+	<field name="SupplierCode" class="java.math.BigDecimal"/>
+	<field name="PayCReferenceSubNumber" class="java.lang.Integer"/>
+	<field name="PayCReferenceNumber" class="java.lang.Integer"/>
+	<field name="LocationName" class="java.lang.String"/>
+	<background>
+		<band height="555" splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="94" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="0" width="822" height="65" forecolor="#006699" backcolor="#006699" uuid="7f815e30-f23c-4a3d-8e08-4b2a364a327a"/>
+				<staticText>
+					<reportElement style="Title" x="231" y="0" width="578" height="65" uuid="f08c820a-c61e-4bec-bca0-1db524175924"/>
+					<textElement textAlignment="Right">
+						<font size="54" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Garment Mantra Ledger report for the date of ]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="802" height="30" uuid="53f55afb-b807-47bc-9cfe-e5757d07d95f"/>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="0" y="0" width="82" height="14" forecolor="#000000" uuid="adc1ac99-74d5-4df4-99d5-475d946d2ec2"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Location]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="82" y="0" width="127" height="14" forecolor="#000000" uuid="341eb0ea-eceb-41f8-86b1-acd10f896203"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Party Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="210" y="0" width="82" height="14" forecolor="#000000" uuid="78867b85-1317-4af6-b703-52a2fa8a43c6"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Paid Amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="555" y="1" width="82" height="14" forecolor="#000000" uuid="12559a03-d997-4e7f-baf1-354d6530b74a"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Status]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="637" y="0" width="82" height="14" forecolor="#000000" uuid="56347a22-e413-40ba-901b-c5a35982dc68"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Page Number]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="719" y="1" width="82" height="14" forecolor="#000000" uuid="49cde5f2-7531-4cc6-a471-42d135c9abf9"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Date Paid]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="82" y="16" width="82" height="14" forecolor="#000000" uuid="fe552ea7-e37b-4c49-b5ce-a811b9b0600a"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Invoice Reference Number]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="292" y="1" width="263" height="14" forecolor="#000000" uuid="b467beb7-f47c-42f3-ac3f-1289d4a19cd0"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Supplier Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="294" y="16" width="261" height="14" forecolor="#000000" uuid="c4b337bb-b336-411d-9d82-e20e5a5a6d21"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Bank Details]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="229" splitType="Stretch">
+			<frame>
+				<reportElement x="-1" y="1" width="803" height="14" uuid="b0172cea-a128-458f-a3bf-8e666a656884"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="1" y="0" width="82" height="14" uuid="a68a654b-7cfd-4826-a73e-96016e55ed71"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LocationName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="210" y="0" width="83" height="14" uuid="42d4939d-f361-4b07-9a60-3c38def6ebd1"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PaidAmount}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="559" y="0" width="79" height="14" uuid="bff27fff-19b5-438e-b839-7daa708a067b"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PayCStatus}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="638" y="0" width="82" height="14" uuid="11a1960a-c8d8-4fcd-83a1-bf501854166b"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LedgerPageNumber}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="720" y="0" width="82" height="14" uuid="c56eece2-d2fc-411d-8a63-0c006bcda859"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PayCDate}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="83" y="0" width="127" height="14" uuid="5ef4a275-eba6-4c8a-aaee-801c58b2f5f2"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CustName}]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement x="294" y="0" width="262" height="14" uuid="6f265c4f-a234-40fa-b0df-0fedb5d36215"/>
+					<subreportParameter name="SupplierCode">
+						<subreportParameterExpression><![CDATA[$P{SupplierCode}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA["Payment_Collection_Sub.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="82" y="15" width="82" height="14" uuid="dc5487fb-8eaf-4aa4-9754-12d85dcc5b99"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvoiceReferenceNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="15" width="100" height="30" uuid="3d13eeb4-fea3-449b-ad21-b95cc850e142"/>
+				<textFieldExpression><![CDATA[$P{SupplierCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="15" width="100" height="30" uuid="4b590275-fafb-43d7-b5ca-06c90c534084"/>
+				<textFieldExpression><![CDATA[$F{SupplierCode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="16" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="2" y="0" width="800" height="16" forecolor="#D0B48E" backcolor="#006699" uuid="3d03c1da-7b2a-4c25-95f9-bfdf57d7e07b"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="753" y="0" width="40" height="16" forecolor="#FFFFFF" uuid="3384867d-87c5-4875-9e73-5dc6a7fd09e4"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="673" y="0" width="80" height="16" forecolor="#FFFFFF" uuid="4cf0551e-e159-4778-83ca-3291ce6b5d28"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="0" width="197" height="16" forecolor="#FFFFFF" uuid="e755b323-c682-4903-9155-f01d7cf8f622"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

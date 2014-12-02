@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2014-12-01T16:46:59 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_Morning_Sub" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3160ef2c-90ae-4ef9-ba3e-bcfa5e126438">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GarmentMantraDB"/>
+	<parameter name="CustCode" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[220000000]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT [CustBank]
+      ,[CustBankBranch]
+      ,[CustBankAccountType]
+      ,[CustBankAccountNumber]
+FROM [CustomerBanks]
+Where CustCode = $P{CustCode}]]>
+	</queryString>
+	<field name="CustBank" class="java.lang.String"/>
+	<field name="CustBankBranch" class="java.lang.String"/>
+	<field name="CustBankAccountType" class="java.lang.String"/>
+	<field name="CustBankAccountNumber" class="java.lang.String"/>
+	<detail>
+		<band height="10" splitType="Stretch">
+			<textField>
+				<reportElement x="-20" y="-20" width="100" height="30" uuid="78f8451e-682f-4a1a-bff0-bb8570173ffa"/>
+				<textFieldExpression><![CDATA[$F{CustBank}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="-20" width="268" height="30" uuid="bf788815-a077-43cf-9b9e-00314681cff9"/>
+				<textFieldExpression><![CDATA[$F{CustBankBranch}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="348" y="-20" width="267" height="30" uuid="62e5c73b-a456-406d-8854-6ad9427dfa09"/>
+				<textFieldExpression><![CDATA[$F{CustBankAccountType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="615" y="-20" width="199" height="30" uuid="fbf0d0c1-fa83-47be-ab40-a332419e4c61"/>
+				<textFieldExpression><![CDATA[$F{CustBankAccountNumber}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

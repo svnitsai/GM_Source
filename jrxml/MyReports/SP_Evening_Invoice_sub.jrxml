@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2014-12-02T15:19:09 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_Evening_Invoice_sub" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f4ad3b71-02a2-4e03-94a9-77ac711780ff">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GarmentMantraDB"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT DC.PayCReferenceNumber, DC.CustCode, 
+c.custname, 
+DC.InvoiceAmount, 
+DC.PayCStatus, DC.InvoiceReferenceNumber,  DCD.PayCDate, DCD.SupplierCode, 
+DCD.PaidAmount
+FROM DailyPayC DC 
+join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber
+join Customer c on c.custcode = dc.custcode and c.custtype = 'Merchant' 
+join Customer s on s.custcode = dcd.suppliercode and s.custtype = 'Supplier' 
+join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId and s.custcode = cb1.custcode 
+where dcd.suppliercode = 200000000]]>
+	</queryString>
+	<field name="custname" class="java.lang.String"/>
+	<field name="InvoiceReferenceNumber" class="java.math.BigDecimal"/>
+	<field name="PaidAmount" class="java.math.BigDecimal"/>
+	<field name="PayCReferenceNumber" class="java.lang.Integer"/>
+	<field name="CustCode" class="java.math.BigDecimal"/>
+	<field name="InvoiceAmount" class="java.math.BigDecimal"/>
+	<field name="PayCStatus" class="java.lang.String"/>
+	<field name="PayCDate" class="java.sql.Timestamp"/>
+	<field name="SupplierCode" class="java.math.BigDecimal"/>
+	<detail>
+		<band splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="-20" y="-20" width="200" height="20" uuid="dd43acef-0474-42ae-9342-c74656e842b7"/>
+				<textFieldExpression><![CDATA[$F{custname}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="180" y="-20" width="100" height="20" uuid="2e975165-fa66-4c25-9150-d59603030a01"/>
+				<textFieldExpression><![CDATA[$F{InvoiceReferenceNumber}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="280" y="-20" width="100" height="20" uuid="5b7b6d6c-5e2d-4a31-8e82-28e9ce92b778"/>
+				<textFieldExpression><![CDATA[$F{PaidAmount} + "\n\n"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

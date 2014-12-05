@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 2, 2014 10:08:40 AM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.svnitsai.gm.database.generated.Dailypayable" table="dailypayable" schema="public">
+        <id name="payablereferencenumber" type="int">
+            <column name="payablereferencenumber" />
+            <generator class="assigned" />
+        </id>
+        <property name="payabledate" type="timestamp">
+            <column name="payabledate" length="29" />
+        </property>
+        <property name="payableamount" type="big_decimal">
+            <column name="payableamount" precision="10" />
+        </property>
+        <property name="paidamount" type="big_decimal">
+            <column name="paidamount" precision="10" />
+        </property>
+        <property name="payablestatus" type="string">
+            <column name="payablestatus" length="20" />
+        </property>
+        <property name="supplierid" type="int">
+            <column name="supplierid" precision="9" scale="0" not-null="true" />
+        </property>
+        <property name="supplierbankid" type="short">
+            <column name="supplierbankid" precision="3" scale="0" not-null="true" />
+        </property>
+        <property name="createddate" type="timestamp">
+            <column name="createddate" length="29" not-null="true" />
+        </property>
+        <property name="createdby" type="string">
+            <column name="createdby" length="50" not-null="true" />
+        </property>
+        <property name="updateddate" type="timestamp">
+            <column name="updateddate" length="29" not-null="true" />
+        </property>
+        <property name="updatedby" type="string">
+            <column name="updatedby" length="50" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

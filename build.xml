@@ -34,6 +34,11 @@
 			<include name="**/*.java" />
 			<classpath refid="project.classpath" />
 		</javac>
+		<copy todir="${buildPath}">
+		  <fileset dir="${srcPath}">
+		    <include name="**/*.cfg.xml" />
+		  </fileset>
+		</copy>
 	</target>
 
 	<target name="jar" depends="compile">
@@ -41,6 +46,7 @@
 		<delete quiet="true" file="${jarfile}" />
 		<jar destfile="${jarfile}" basedir="${buildPath}" includes="**/*.class">
 			<fileset dir="${srcPath}" includes="**/*.properties" />
+			<fileset dir="${srcPath}" includes="**/*.cfg.xml" />
 		</jar>
 		<copy todir="${libPath}" file="${jarfile}" />
 	</target>

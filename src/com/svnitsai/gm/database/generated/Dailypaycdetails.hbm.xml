@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 2, 2014 10:08:40 AM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.svnitsai.gm.database.generated.Dailypaycdetails" table="dailypaycdetails" schema="public">
+        <composite-id name="id" class="com.svnitsai.gm.database.generated.DailypaycdetailsId">
+            <key-property name="paycreferenenumber" type="long">
+                <column name="paycreferenenumber" precision="10" scale="0" />
+            </key-property>
+            <key-property name="paycreferencesubnumber" type="short">
+                <column name="paycreferencesubnumber" precision="3" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="paycdate" type="timestamp">
+            <column name="paycdate" length="29" />
+        </property>
+        <property name="custbankid" type="java.lang.Long">
+            <column name="custbankid" precision="10" scale="0" />
+        </property>
+        <property name="supplierid" type="java.lang.Long">
+            <column name="supplierid" precision="10" scale="0" />
+        </property>
+        <property name="supplierbankid" type="java.lang.Long">
+            <column name="supplierbankid" precision="10" scale="0" />
+        </property>
+        <property name="paidamount" type="big_decimal">
+            <column name="paidamount" precision="10" />
+        </property>
+        <property name="accountlocationid" type="java.lang.Long">
+            <column name="accountlocationid" precision="10" scale="0" />
+        </property>
+        <property name="ledgerpagenumber" type="java.lang.Integer">
+            <column name="ledgerpagenumber" precision="9" scale="0" />
+        </property>
+        <property name="createddate" type="timestamp">
+            <column name="createddate" length="29" not-null="true" />
+        </property>
+        <property name="createdby" type="string">
+            <column name="createdby" length="50" not-null="true" />
+        </property>
+        <property name="updateddate" type="timestamp">
+            <column name="updateddate" length="29" not-null="true" />
+        </property>
+        <property name="updatedby" type="string">
+            <column name="updatedby" length="50" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

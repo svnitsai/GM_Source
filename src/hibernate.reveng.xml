@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+  <table-filter match-schema="public" match-name="customer"/>
+  <table-filter match-schema="public" match-name="customerbanks"/>
+  <table-filter match-schema="public" match-name="dailypayable"/>
+  <table-filter match-schema="public" match-name="dailypayc"/>
+  <table-filter match-schema="public" match-name="dailypaycdetails"/>
+  <table-filter match-schema="public" match-name="useraccess"/>
+</hibernate-reverse-engineering>

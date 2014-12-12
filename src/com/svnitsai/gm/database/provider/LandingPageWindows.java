@@ -190,12 +190,14 @@ public class LandingPageWindows {
 					LogUtil.log(
 							LogUtil.Message_Type.Information,
 							" Merchant Name: " + row.get("CustomerName")
-									+ ", Payable Amount: "
-									+ row.get("InvoiceAmount")
-									+ ", Due Date: "
-									+ row.get("AdjustedDueDate")
+									+ ", Receivable Amount: "
+									+ row.get("ReceivableAmount")
+									+ ", Received Amount: "
+									+ row.get("ReceivedAmount")
 									+ ", Balance Due: "
-									+ row.get("BalanceDue"));
+									+ row.get("BalanceDue")
+									+ ", Due Date: "
+									+ row.get("AdjustedDueDate"));
 				}
 			}
 		} catch (JDBCException e) {

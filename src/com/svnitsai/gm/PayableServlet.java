@@ -21,13 +21,15 @@ public class PayableServlet extends HttpServlet
 			throws ServletException, IOException
 	{
 		String action = request.getParameter("action");
-		if("save".equals(action))
+		if( "save".equals(action) || 
+			"print".equals(action))
 		{
-			handleSave(request, response);
+			handleSave(request, response, action);
 		}
+		
 	}
 
-	private void handleSave(HttpServletRequest request, HttpServletResponse response) 
+	private void handleSave(HttpServletRequest request, HttpServletResponse response, String action) 
 			throws ServletException, IOException 
 	{
 		ArrayList<DailyPayableBean> payableList = new ArrayList<DailyPayableBean>();
@@ -62,8 +64,17 @@ public class PayableServlet extends HttpServlet
 		{
 			statusStr = "No suppliers to save.";
 		}
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/web/suppliers.jsp?status=" + statusStr);
-		dispatcher.forward(request, response);
+		
+		if("save".equals(action))
+		{
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/web/suppliers.jsp?status=" + statusStr);
+			dispatcher.forward(request, response);
+		}
+		else if("print".equals(action))
+		{
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/servlet/report?type=PayableMorning&date=today");
+			dispatcher.forward(request, response);
+		}
 	}
 	
 }

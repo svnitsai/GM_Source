@@ -27,7 +27,7 @@ public class DBHandler
 	   
 	   // Preserves the sorted order in which data was added to the map
 	   LinkedHashMap<Long, String> resultMap = new LinkedHashMap<Long, String>();
-	   
+	 //TODO: HibernateME
 	   try 
 	   {
 		   String sql = "select CustCode, CustName FROM Customer WHERE CustType='" + type + "' "  + 
@@ -71,7 +71,7 @@ public class DBHandler
 	   
 	   // Preserves the sorted order in which data was added to the map
 	   LinkedHashMap<Long, CustomerBean> resultMap = new LinkedHashMap<Long, CustomerBean>();
-	   
+	 //TODO: HibernateME
 	   try 
 	   {
 		   // TODO: Change to read the bank data
@@ -172,6 +172,7 @@ public class DBHandler
 	   Statement stmt = null;
 	   ResultSet rs = null;
 	   
+	   //TODO: HibernateME
 	   // Preserves the sorted order in which data was added to the map
 	   LinkedHashMap<Long, CollectionBean> resultMap = new LinkedHashMap<Long, CollectionBean>();
 	   
@@ -318,7 +319,7 @@ public class DBHandler
 	   {
 		   	conn = getConnection();
            	stmt = conn.createStatement();
-		   
+          //TODO: HibernateME
 		   	System.out.println("ID: " + bean.getCollectionId());
 		   	double balanceAmount = bean.getInvoiceAmount();
 		   	System.out.println("Balance: " + balanceAmount);
@@ -347,7 +348,7 @@ public class DBHandler
 											+"SupplierCode, SupplierBankId, PaidAmount, AccountLocationCode, LedgerPageNumber, "
 											+"CreatedDate, CreatedBy) values(" 
 							                + bean.getCollectionId() + "," 
-							                + "'" + detailBean.getCollectionDateStr() + "', "
+							                + "'" + Util.getFormattedDateForDB(detailBean.getCollectionDateStr()) + "', "
 							                + "'" + detailBean.getCustomerBankName() + "', "
 							                + detailBean.getSupplierCode() + ", "
 							                + detailBean.getSupplierBankId() + ", "
@@ -407,7 +408,7 @@ public class DBHandler
 			String updateCollectionSql = "UPDATE DailyPayC SET PayCStatus='" + status + "' ";
 			if(!"".equals(bean.getDeferredDateStr()))
 			{
-				updateCollectionSql += ", PayCDueDate='" + bean.getDeferredDateStr() + "' ";
+				updateCollectionSql += ", PayCDueDate='" + Util.getFormattedDateForDB(bean.getDeferredDateStr()) + "' ";
 			}
 			updateCollectionSql += "WHERE PayCReferenceNumber=" + bean.getCollectionId();
 			System.out.println(updateCollectionSql);
@@ -434,13 +435,13 @@ public class DBHandler
 	   {
 		   	conn = getConnection();
            	stmt = conn.createStatement();
-		   
+          //TODO: HibernateME
 		   	for(DailyPayableBean bean : payableList)
 			{
 				// insert new entry
 				String insertDetailSql = "INSERT INTO DailyPayable (PayableDate, PayableAmount, SupplierCode, "
 										+"Instructions, CreatedDate, CreatedBy) values("
-										+ "'" + bean.getPayableDateStr() + "', "
+										+ "'" + Util.getFormattedDateForDB(bean.getPayableDateStr()) + "', "
 						                + bean.getPayableAmount() + ", "
 						                + bean.getSupplierCode() + ", "
 						                + "'" + bean.getInstructions() + "', "
@@ -517,6 +518,9 @@ public class DBHandler
    {
 	   //Collection<CollectionBean> custList  = DBHandler.getCollectionsByDate(null);
 	   //System.out.println("Cust list: " + custList.size());
+	   System.out.println ("Get Connection...");
+	   Connection conn = getConnection();
+	   System.out.println ("Out of get connection");
    }
 
 } 

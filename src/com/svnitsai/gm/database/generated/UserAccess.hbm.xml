@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 12, 2014 4:44:45 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.svnitsai.gm.database.generated.UserAccess" table="UserAccess" catalog="PayC">
+        <id name="userId" type="int">
+            <column name="UserId" />
+            <generator class="assigned" />
+        </id>
+        <property name="userName" type="string">
+            <column name="UserName" length="20" />
+        </property>
+        <property name="password" type="string">
+            <column name="Password" length="20" />
+        </property>
+        <property name="role" type="string">
+            <column name="Role" length="20" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CreatedDate" length="23" not-null="true" />
+        </property>
+        <property name="createdBy" type="string">
+            <column name="CreatedBy" length="50" not-null="true" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="23" not-null="true" />
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="50" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

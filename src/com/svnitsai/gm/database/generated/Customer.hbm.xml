@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 12, 2014 4:44:45 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.svnitsai.gm.database.generated.Customer" table="Customer" catalog="PayC">
+        <id name="custId" type="int">
+            <column name="CustId" />
+            <generator class="assigned" />
+        </id>
+        <property name="custCode" type="int">
+            <column name="CustCode" precision="9" scale="0" not-null="true" />
+        </property>
+        <property name="custType" type="string">
+            <column name="CustType" length="20" not-null="true" />
+        </property>
+        <property name="custName" type="string">
+            <column name="CustName" length="50" not-null="true" />
+        </property>
+        <property name="custAddress1" type="string">
+            <column name="CustAddress1" length="50" />
+        </property>
+        <property name="custAddress2" type="string">
+            <column name="CustAddress2" length="50" />
+        </property>
+        <property name="custAddress3" type="string">
+            <column name="CustAddress3" length="50" />
+        </property>
+        <property name="custAddress4" type="string">
+            <column name="CustAddress4" length="50" />
+        </property>
+        <property name="custCity" type="string">
+            <column name="CustCity" length="50" />
+        </property>
+        <property name="custState" type="string">
+            <column name="CustState" length="50" />
+        </property>
+        <property name="custCountry" type="string">
+            <column name="CustCountry" length="50" />
+        </property>
+        <property name="custContactNumber" type="java.lang.Long">
+            <column name="CustContactNumber" precision="16" scale="0" />
+        </property>
+        <property name="custExtension" type="java.lang.Integer">
+            <column name="CustExtension" precision="7" scale="0" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CreatedDate" length="23" not-null="true" />
+        </property>
+        <property name="createdBy" type="string">
+            <column name="CreatedBy" length="50" not-null="true" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="23" not-null="true" />
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="50" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

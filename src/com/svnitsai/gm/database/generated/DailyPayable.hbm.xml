@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 12, 2014 4:44:45 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.svnitsai.gm.database.generated.DailyPayable" table="DailyPayable" catalog="PayC">
+        <id name="payableReferenceNumber" type="int">
+            <column name="PayableReferenceNumber" />
+            <generator class="assigned" />
+        </id>
+        <property name="payableDate" type="timestamp">
+            <column name="PayableDate" length="23" not-null="true" />
+        </property>
+        <property name="payableAmount" type="big_decimal">
+            <column name="PayableAmount" precision="10" not-null="true" />
+        </property>
+        <property name="paidAmount" type="big_decimal">
+            <column name="PaidAmount" precision="10" />
+        </property>
+        <property name="payableStatus" type="string">
+            <column name="PayableStatus" length="20" />
+        </property>
+        <property name="supplierCode" type="int">
+            <column name="SupplierCode" precision="9" scale="0" not-null="true" />
+        </property>
+        <property name="supplierBankId" type="java.lang.Integer">
+            <column name="SupplierBankId" precision="9" scale="0" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CreatedDate" length="23" not-null="true" />
+        </property>
+        <property name="createdBy" type="string">
+            <column name="CreatedBy" length="50" not-null="true" />
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UpdatedDate" length="23" not-null="true" />
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UpdatedBy" length="50" not-null="true" />
+        </property>
+        <property name="instructions" type="string">
+            <column name="Instructions" length="200" />
+        </property>
+    </class>
+</hibernate-mapping>

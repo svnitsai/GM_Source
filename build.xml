@@ -37,6 +37,8 @@
 		<copy todir="${buildPath}">
 		  <fileset dir="${srcPath}">
 		    <include name="**/*.cfg.xml" />
+		  	<include name="**/*.properties" />
+		  	<include name="**/*.hbm.xml"/>
 		  </fileset>
 		</copy>
 	</target>
@@ -47,6 +49,7 @@
 		<jar destfile="${jarfile}" basedir="${buildPath}" includes="**/*.class">
 			<fileset dir="${srcPath}" includes="**/*.properties" />
 			<fileset dir="${srcPath}" includes="**/*.cfg.xml" />
+			<fileset dir="${srcPath}" includes="**/*.hbm.xml" />
 		</jar>
 		<copy todir="${libPath}" file="${jarfile}" />
 	</target>
@@ -60,6 +63,7 @@
 			<zipfileset dir="${webPath}" prefix="web" excludes="index.jsp"/>
 			<zipfileset dir="${webPath}" prefix="" includes="index.jsp"/>
 			<zipfileset dir="${jasperPath}" prefix="jrxml" includes="*.jasper"/>
+			<zipfileset dir="${jasperPath}/MyReports" prefix="jrxml" includes="*.jasper"/>
 		</war>
 	</target>
 	

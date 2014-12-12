@@ -12,7 +12,7 @@ import org.hibernate.Transaction;
 import com.svnitsai.gm.util.date.DateUtil;
 import com.svnitsai.gm.util.exception.DBException;
 import com.svnitsai.gm.util.hibernate.HibernateUtil;
-import com.svnitsai.gm.database.generated.Useraccess;
+import com.svnitsai.gm.database.generated.UserAccess;
 
 /*
  * UserAccessProviderImpl.java
@@ -33,11 +33,11 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 	@SuppressWarnings("finally")
 	@Override
 	public Object ReadById(int dataObjectId) {
-		Useraccess userAccess = new Useraccess();
+		UserAccess userAccess = new UserAccess();
 		try {
 			System.out.println("Inside ReadById");
 			Session session = HibernateUtil.getSession();
-			String SQL_QUERY = "Select userid, username, password, role, createddate, createdby, updateddate, updatedby from Useraccess where userid = :hostUserId";
+			String SQL_QUERY = "Select userId, userName, password, role, createdDate, createdBy, updatedDate, updatedBy from UserAccess where UserId = :hostUserId";
 			Query query = session.createQuery(SQL_QUERY).setParameter(
 					"hostUserId", dataObjectId);
 			Iterator it = query.iterate();
@@ -93,7 +93,7 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 		int returnCode = DBException.DB_SUCCESSFUL;
 		Transaction transaction = null;
 		Session session = null;
-		Useraccess userAccess = (Useraccess) dataObject;
+		UserAccess userAccess = (UserAccess) dataObject;
 		try {
 			session = HibernateUtil.getSession();
 			transaction = session.beginTransaction();
@@ -123,10 +123,10 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 	 * Retrieve Useraccess data by username - case insensitive retrieval
 	 */
 	public Object ReadByUsername(String userName) {
-		Useraccess userAccess = new Useraccess();
+		UserAccess userAccess = new UserAccess();
 		try {
 			Session session = HibernateUtil.getSession();
-			String SQL_QUERY = "Select userid, username, password, role, createddate, createdby, updateddate, updatedby from Useraccess as UA where upper(username) = upper(:hostUserName)";
+			String SQL_QUERY = "Select userId, userName, password, role, createdDate, createdBy, updatedDate, updatedBy from UserAccess as UA where upper(userName) = upper(:hostUserName)";
 			Query query = session.createQuery(SQL_QUERY).setParameter(
 					"hostUserName", userName);
 			Iterator it = query.iterate();
@@ -151,24 +151,24 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 	/*
 	 * Create a useraccess object from object
 	 */
-	private Useraccess getUseraccessFromBean(Object[] row) {
-		Useraccess userAccess = new Useraccess();
+	private UserAccess getUseraccessFromBean(Object[] row) {
+		UserAccess userAccess = new UserAccess();
 
 		/*
 		 * userid, username, password, role, createddate, createdby,
 		 * updateddate, updatedby
 		 */
 
-		userAccess.setUserid(Integer.parseInt(row[0].toString()));
-		userAccess.setUsername(row[1].toString());
+		userAccess.setUserId(Integer.parseInt(row[0].toString()));
+		userAccess.setUserName(row[1].toString());
 		userAccess.setPassword(row[2].toString());
 		userAccess.setRole(row[3].toString());
-		userAccess.setCreateddate(DateUtil.getTimestampFromString(row[4]
+		userAccess.setCreatedDate(DateUtil.getTimestampFromString(row[4]
 				.toString()));
-		userAccess.setCreatedby(row[5].toString());
-		userAccess.setUpdateddate(DateUtil.getTimestampFromString(row[6]
+		userAccess.setCreatedBy(row[5].toString());
+		userAccess.setUpdatedDate(DateUtil.getTimestampFromString(row[6]
 				.toString()));
-		userAccess.setUpdatedby(row[7].toString());
+		userAccess.setUpdatedBy(row[7].toString());
 
 		return userAccess;
 	}

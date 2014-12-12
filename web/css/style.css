@@ -59,7 +59,6 @@ a:hover {
 	margin: 0px;
 	background: #31444F url(images/header.jpg);
 	border-top: 2px solid #E4DD97;
-	border-bottom: 2px solid #E4DD97;
 }
 
 #navigation {
@@ -69,6 +68,7 @@ a:hover {
 	padding: 5px 0 5px 0;
 	margin: 0;
 	background: #607A00;
+	border-top: 2px solid #E4DD97;
 }
 
 #navigation li {
@@ -233,6 +233,29 @@ p {
 	color: #000;
 	background-color: #EAF2D3;
 }
+
+/*
+table {
+    /*width: 716px;*/ /* 140px * 5 column + 16px scrollbar width */
+/*    border-spacing: 0;
+}
+
+tbody, thead tr { display: block; }
+
+tbody {
+    height: 125px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+tbody td, thead th {
+    width: 140px;
+}
+
+thead th:last-child {
+    width: 156px; /* 140px + 16px scrollbar width */
+/*}
+*/
 
 .ui-icon-edit {
 	background-image: url(images/edit.gif);
@@ -416,3 +439,46 @@ ul#preferences-menu li a {
 	font-weight: bold;
 	letter-spacing: 9px;
 }
+
+/* scrollTable */
+#scrollTable {
+	border-collapse: collapse;
+}
+
+#scrollTable td, #scrollTable th {
+	border: 1px solid #9AC31F;
+	padding: 3px 7px 2px 7px;
+}
+
+#scrollTable th {
+	background-color: #EAF2D3;
+	color: #000;
+}
+
+#scrollTable tr.alt td {
+	color: #000;
+	background-color: #EAF2D3;
+}
+
+
+#scrollTable table {
+    width: 716px; /* 140px * 5 column + 16px scrollbar width */
+    border-spacing: 0;
+}
+
+#scrollTable tbody, #scrollTable thead tr { display: block; }
+
+#scrollTable tbody {
+    height: 125px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#scrollTable tbody td, #scrollTable thead th {
+    width: 140px;
+}
+
+#scrollTable thead th:last-child {
+    width: 156px; /* 140px + 16px scrollbar width */
+}
+

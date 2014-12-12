@@ -1,6 +1,6 @@
 ﻿<%@ page language="java"%>
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-<%@ page import="com.svnitsai.gm.database.generated.Useraccess"%>
+<%@ page import="com.svnitsai.gm.database.generated.UserAccess"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <!-- 
@@ -34,9 +34,7 @@
 		<div id="masthead">
 			<br class="clear"></br>
 		</div>
-		<div id="navigation">
-			<div id="control-area">GARMENT MANTRA</div>
-		</div>
+		<div id="company-title"> Garment Mantra </div>
 		<div class="clear"></div>
 		<div class="login-contentarea">
 			<div id="column-container">
@@ -46,14 +44,14 @@
 					</div>
 					<div class="login-item">
 						<%
-							Useraccess currentUser = (Useraccess) (request
+							UserAccess currentUser = (UserAccess) (request
 									.getAttribute("currentUser"));
 							String errorMessageDisplay = (String) request
 									.getAttribute("errorMessage");
 							String userName = (String) request.getAttribute("userName");
 							String userPassword = (String) request.getAttribute("passWord");
 						%>
-						<form action="LoginServlet" method="post">
+						<form action="/gm/web/LoginServlet" method="post">
 							<table class="login-table">
 								<tr>
 									<td nowrap align="right">User Name:</td>

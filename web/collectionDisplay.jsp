@@ -134,7 +134,7 @@
       			</td>
       		</tr>
       	</table>
-      	<input type="submit" value="Get Collection Details" />
+      	<button type="submit" class="anyButton">Get Collection Details</button>
       </form>
   	</div>
   </div>

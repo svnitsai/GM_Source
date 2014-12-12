@@ -7,6 +7,7 @@
 <%@ page import="com.svnitsai.gm.DBHandler" %>
 <%@ page import="java.util.LinkedHashMap" %>
 <%@ page import="java.util.Calendar" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <script>
 	$( document ).ready(function() {
 		addSupplier();
@@ -35,14 +36,27 @@
 		var nodeToDelete = document.getElementById(panelName);
 		document.getElementById('contentDiv').removeChild(nodeToDelete);
 	}
+	
+	function isPageValid()
+	{
+		return true;
+	}
+	
+	function printReport()
+	{
+		$('#action').val('print');
+		nidsSubmitDocumentForm(false);
+	}
 </script>
 <%
 LinkedHashMap<Long, CustomerBean> supplierMap = DBHandler.getSuppliers();
-String todayDate = Util.getFormattedDate(Calendar.getInstance().getTime());
+SimpleDateFormat todayDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+
+String todayDate = todayDateFormatter.format(Calendar.getInstance().getTime());
 String status = request.getParameter("status");
 %>
 <form action="/gm/servlet/payable">
-<input type="hidden" name="action" value="save">
+<input type="hidden" name="action" id="action" value="save">
 <% if(status != null) { %>    
   	<h2><%= status %></h2>
   <% } %>
@@ -91,7 +105,7 @@ String status = request.getParameter("status");
 	&nbsp;
 	<button type="submit" class="saveButton">&nbsp;&nbsp;Save</button> 
 	&nbsp;
-	<button type="button" class="printButton" onClick="addSupplier();">&nbsp;&nbsp;Print Report</button> 
+	<button type="button" class="printButton" onClick="printReport();">&nbsp;&nbsp;Print Report</button> 
 	&nbsp;
 	<br>
 </div>

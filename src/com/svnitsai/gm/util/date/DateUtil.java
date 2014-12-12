@@ -1,6 +1,7 @@
 package com.svnitsai.gm.util.date;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -36,5 +37,12 @@ public class DateUtil {
 			e.printStackTrace();
 		}
 		return timestamp;
+	}
+	
+	/*
+	 * Get Current Date
+	 */
+	public static Date getCurrentDate() {
+		   return new Date();
 	}
 }

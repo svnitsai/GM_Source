@@ -10,7 +10,7 @@ public class Test {
 	
 		UserAccessProviderImpl userAPI = new UserAccessProviderImpl();
 		
-		
+		/*
 		UserAccess userAccessData = new UserAccess();
 		//userAccessData.setUserId(1);
 		userAccessData.setUserName("Admin");
@@ -21,7 +21,7 @@ public class Test {
 		userAccessData.setCreatedDate(DateUtil.getCurrentTimestamp());
 		userAccessData.setUpdatedDate(DateUtil.getCurrentTimestamp());
 		userAPI.Create(userAccessData);
-		
+		*/
 		
 		UserAccess userAccess= (UserAccess) userAPI.ReadById(0);
 		if (userAccess != null) System.out.println ("The user value is " + userAccess.getUserName());

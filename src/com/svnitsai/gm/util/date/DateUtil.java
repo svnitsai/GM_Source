@@ -45,4 +45,20 @@ public class DateUtil {
 	public static Date getCurrentDate() {
 		   return new Date();
 	}
+	/* 
+	 * Get Current Date in yyyy/MM/dd
+	 */
+	public static String getCurrentDate(SimpleDateFormat dateFormatter) {
+	    Date now = new Date();
+	    try {
+		    String strDate = dateFormatter.format(now);
+		    return strDate;
+	    }
+	    catch (Exception e) {
+			 //TODO Exception handling
+				e.printStackTrace();
+	    }
+		return "";
+		
+	}
 }

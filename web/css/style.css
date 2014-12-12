@@ -441,44 +441,44 @@ ul#preferences-menu li a {
 }
 
 /* scrollTable */
-#scrollTable {
+.scrollTable {
 	border-collapse: collapse;
 }
 
-#scrollTable td, #scrollTable th {
+.scrollTable td, .scrollTable th {
 	border: 1px solid #9AC31F;
 	padding: 3px 7px 2px 7px;
 }
 
-#scrollTable th {
+.scrollTable th {
 	background-color: #EAF2D3;
 	color: #000;
 }
 
-#scrollTable tr.alt td {
+.scrollTable tr.alt td {
 	color: #000;
 	background-color: #EAF2D3;
 }
 
 
-#scrollTable table {
+.scrollTable table {
     width: 716px; /* 140px * 5 column + 16px scrollbar width */
     border-spacing: 0;
 }
 
-#scrollTable tbody, #scrollTable thead tr { display: block; }
+.scrollTable tbody, .scrollTable thead tr { display: block; }
 
-#scrollTable tbody {
+.scrollTable tbody {
     height: 125px;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-#scrollTable tbody td, #scrollTable thead th {
+.scrollTable tbody td, .scrollTable thead th {
     width: 140px;
 }
 
-#scrollTable thead th:last-child {
+.scrollTable thead th:last-child {
     width: 156px; /* 140px + 16px scrollbar width */
 }
 

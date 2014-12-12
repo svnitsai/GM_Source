@@ -29,12 +29,13 @@ public class LandingPageWindows {
 	/*
 	 * getBalancePayableWindow()
 	 * 
-	 * @purpose: 	Reads database to get outstanding payable amount;
-	 * 				Query finds the maximum date before today, on which Payable record exists (say BalanceDueDate);
-	 *                For that BalanceDueDate, it computes the Paid amount to Supplier (excluding deleted records)
-	 *                If that paid amount is less than Payable Amount its picked up for display
+	 * @purpose: Reads database to get outstanding payable amount; Query finds
+	 * the maximum date before today, on which Payable record exists (say
+	 * BalanceDueDate); For that BalanceDueDate, it computes the Paid amount to
+	 * Supplier (excluding deleted records) If that paid amount is less than
+	 * Payable Amount its picked up for display
 	 * 
-	 * 				Returns a list of Object in a MAP
+	 * Returns a list of Object in a MAP
 	 */
 	public Object getBalancePayableWindow() {
 		/* List that returns result */
@@ -98,10 +99,8 @@ public class LandingPageWindows {
 							" Supplier Name: " + row.get("SupplierName")
 									+ ", Payable Amount: "
 									+ row.get("PayableAmount")
-									+ ", Paid Amount: "
-									+ row.get("PaidAmount")
-									+ ", Balance Due: "
-									+ row.get("BalanceDue")
+									+ ", Paid Amount: " + row.get("PaidAmount")
+									+ ", Balance Due: " + row.get("BalanceDue")
 									+ ", BalanceDueDate: "
 									+ row.get("BalanceDueDate"));
 				}
@@ -118,10 +117,108 @@ public class LandingPageWindows {
 		}
 	}
 
+	/*
+	 * getCreditSalesWindow()
+	 * 
+	 * @purpose: Reads database to get outstanding RECEIVABLE amount - DailyPayC
+	 * is driver table; Query uses AdjustedDueDate (which is DefferedDate if
+	 * exists, else DueDate) Any record with ReceivableStatus other than OPEN
+	 * are pulled in for display. Includes DailyPayC record even when
+	 * corresponding "DailyPayCDetails not existing"
+	 * 
+	 * Returns a list of Object in a MAP
+	 */
+	public Object getCreditSalesWindow() {
+		/* List that returns result */
+		List result = null;
+		try {
+			Session session = HibernateUtil.getSession();
+			
+			String SQL_QUERY = "Select Receivable.PayCReferenceNumber as ReferenceNumber, Receivable.InvoiceAmount as ReceivableAmount "
+						     + " , Receivable.DeferredDate as DeferredDate, Receivable.PayCDueDate as DueDate "
+                             + "  , Receivable.AdjustedDueDate as AdjustedDueDate, Received.PaidAmount as ReceivedAmount "
+                             + "  , (Receivable.InvoiceAmount - ISNULL(Received.PaidAmount,0)) as BalanceDue "
+                             + "  , Cust.CustName as CustomerName "
+                             + " from " 
+                             + " ( ";
+			/* Get Merchant Receivable Information */
+			SQL_QUERY = SQL_QUERY + " Select DPC.PayCReferenceNumber, DPC.InvoiceAmount, DPC.PayCStatus "
+					+ " , CONVERT(VARCHAR(10),DPC.PayCDueDate,111) as PayCDueDate  "
+					+ " , CONVERT(VARCHAR(10),DPC.DeferredDate,111) as DeferredDate  "
+					+ " , ISNULL(CONVERT(VARCHAR(10),DPC.DeferredDate,111),CONVERT(VARCHAR(10),DPC.PayCDueDate,111)) as AdjustedDueDate  "
+					+ " , DPC.CustCode  "
+					+ " from dbo.DailyPayC DPC  "
+					+ " where (    DPC.PayCStatus <> 'CLOSED'  "
+					+ " 	 or DPC.PayCStatus IS NULL )  "
+					+ " and (ISNULL(CONVERT(VARCHAR(10),DPC.DeferredDate,111),CONVERT(VARCHAR(10),DPC.PayCDueDate,111))  "
+					+ "   <= CONVERT(VARCHAR(10), GETDATE(),111))  " 
+					+ " ) as Receivable  "
+					+ " LEFT OUTER JOIN "
+					+ " ( ";
+            /* Get Merchant Paid Information */
+			SQL_QUERY = SQL_QUERY +  "	  Select DPCD.PayCReferenceNumber, SUM(ISNULL(DPCD.PaidAmount,0))as PaidAmount "
+					+ "   from dbo.DailyPayCDetails DPCD  "
+					+ "  where DPCD.Deleted != 1  "
+					+ " group by DPCD.PayCReferenceNumber  " 
+					+ " ) as Received  "
+					+ " ON Receivable.PayCReferenceNumber = Received.PayCReferenceNumber  "
+					+ " LEFT OUTER JOIN ";
+			/* Get Merchant Information */    
+			SQL_QUERY = SQL_QUERY +  " ( "
+					+ "   Select C.CustCode, C.CustName + ', ' + C.CustCity as CustName "
+					+ " from dbo.Customer C "
+					+ " where C.CustType = 'Merchant' " 
+					+ " ) as Cust  "
+					+ " on Receivable.CustCode = Cust.CustCode; ";
+
+			/* Run as NATIVE SQL Query */
+			Query query = session.createSQLQuery(SQL_QUERY);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			result = query.list();
+			if (result.isEmpty()) {
+				LogUtil.log(LogUtil.Message_Type.Information,
+						" No records to display on CreditSalesWindow @ "
+								+ DateUtil.getCurrentTimestamp().toString());
+				result = null;
+			} else {
+				LogUtil.log(LogUtil.Message_Type.Information, " Total "
+						+ result.size()
+						+ " record(s) to display on CreditSalesWindow @ "
+						+ DateUtil.getCurrentTimestamp().toString());
+				for (Object object : result) {
+					Map row = (Map) object;
+					LogUtil.log(
+							LogUtil.Message_Type.Information,
+							" Merchant Name: " + row.get("CustomerName")
+									+ ", Payable Amount: "
+									+ row.get("InvoiceAmount")
+									+ ", Due Date: "
+									+ row.get("AdjustedDueDate")
+									+ ", Balance Due: "
+									+ row.get("BalanceDue"));
+				}
+			}
+		} catch (JDBCException e) {
+			DBException.HandleJDBCException(e);
+		} catch (HibernateException e) {
+			DBException.HandleHibernateException(e);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			return result;
+		}
+	}
+
+	/*
+	 * ------------------------------------------------------------------------
+	 */
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		System.out.println(" Balance Due Window - main. ");
 		LandingPageWindows landingPageWindow = new LandingPageWindows();
+	
 		List result = (List) landingPageWindow.getBalancePayableWindow();
 		if ((result != null) && (result.size() > 0)) {
 			for (Object object : result) {
@@ -129,11 +226,25 @@ public class LandingPageWindows {
 				System.out.println(" ");
 				System.out.print("Supplier Name: " + row.get("SupplierName"));
 				System.out.print(", Payable Amount: "
-						+ Util.convertToDouble((String) row.get("PayableAmount")));
+						+ Util.convertToDouble((String) row
+								.get("PayableAmount")));
 				System.out.print(", Paid Amount: " + row.get("PaidAmount"));
 			}
-
 		}
+
+		List result2 = (List) landingPageWindow.getCreditSalesWindow();
+		if ((result2 != null) && (result2.size() > 0)) {
+			for (Object object : result2) {
+				Map row = (Map) object;
+				System.out.println(" ");
+				System.out.print(" Merchant Name: " + row.get("CustomerName"));
+				System.out.print(", Payable Amount: " + row.get("InvoiceAmount"));
+				System.out.print(", Due Date: " + row.get("AdjustedDueDate"));
+				System.out.print(", Balance Due: " + row.get("BalanceDue"));
+			}
+		}
+
+	
 	}
 
 }

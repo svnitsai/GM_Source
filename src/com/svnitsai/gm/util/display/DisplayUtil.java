@@ -85,6 +85,34 @@ public class DisplayUtil {
 	    return new DecimalFormat(pattern).format(value);
 	}
 	
+	/*
+	 * Get Camel case string for display 
+	 */
+	public static String getDisplayCamelCase(String inString) {
+        String[] parts = inString.split(" ");
+        String camelCaseString = "";
+        for (String part : parts){
+            if(part!=null && part.trim().length()>0)
+           camelCaseString = camelCaseString + toProperCase(part);
+            else
+                camelCaseString=camelCaseString+part+" ";   
+        }
+        return camelCaseString;
+	}
+	
+	private static String toProperCase(String inString) {
+        String temp=inString.trim();
+        String spaces="";
+        if(temp.length()!=inString.length())
+        {
+        int startCharIndex=inString.charAt(temp.indexOf(0));
+        spaces=inString.substring(0,startCharIndex);
+        }
+        temp=temp.substring(0, 1).toUpperCase() +
+        spaces+temp.substring(1).toLowerCase()+" ";
+        return temp;
+
+    }
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

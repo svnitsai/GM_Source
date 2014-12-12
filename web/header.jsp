@@ -1,4 +1,5 @@
 <%@ page import="com.svnitsai.gm.database.generated.UserAccess" %>
+<%@ page import="com.svnitsai.gm.util.display.DisplayUtil" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -62,6 +63,7 @@ if (null == userName) {
    RequestDispatcher rd = request.getRequestDispatcher("/web/login.jsp");
    rd.forward(request, response);
 }
+String userCamelCase = DisplayUtil.getDisplayCamelCase(userName);
 String userRole = (String) session.getAttribute("Role");
 
 //If requested URL is restricted by role (eg. supplier by ADMIN only), redirect to login
@@ -81,7 +83,7 @@ if ((request.getRequestURL().indexOf("supplier") > 0) && (userRole.compareToIgno
 		<div id="company-title"> Garment Mantra </div>
 	<div id="login-menu">	   
 	 <ul style="list-style: none;">
-	   <li> Welcome <%=userName %>! </li>
+	   <li> Welcome <%=userCamelCase%>! </li>
 	   <li class="opposed"> <a href="/gm/web/logout.jsp">Logout</a> </li>
 	 </ul>
 </div>	  

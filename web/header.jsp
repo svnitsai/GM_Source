@@ -10,6 +10,8 @@
   
   <script src="/gm/web/javascript/jquery-1.11.1.min.js"></script>
   <script src="/gm/web/javascript/jquery-ui.min.js"></script>
+  <script src="/gm/web/javascript/jquery.validate.min.js"></script>
+  <script src="/gm/web/javascript/additional-methods.min.js"></script>
   <script src="/gm/web/javascript/chosen.jquery.min.js"></script>
   <script src="/gm/web/javascript/jquery.dataTables.min.js"></script>
   <script src="/gm/web/javascript/utils.js"></script>

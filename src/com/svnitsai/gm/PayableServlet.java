@@ -39,6 +39,8 @@ public class PayableServlet extends HttpServlet
 		while(paramNames.hasMoreElements())
 		{
 			String name = paramNames.nextElement();
+			// The supplier parameter is sent only if supplier is selected.
+			// hence the last row added with no data is excluded
 			if(name.startsWith("supplier_") && !name.equals("supplier_0"))
 			{
 				String supplierId = request.getParameter(name);
@@ -49,21 +51,13 @@ public class PayableServlet extends HttpServlet
 				bean.setPayableDateStr(request.getParameter("date" + index));
 				bean.setPayableAmount(Util.convertToDouble(request.getParameter("amount" + index)));
 				bean.setInstructions(request.getParameter("instructions" + index));
+				bean.setPayableId(Util.convertToLong(request.getParameter("refId" + index)));
 				payableList.add(bean);
 			}
 		}
 		
-		String statusStr = "";
-		if(payableList.size() > 0)
-		{
-			// save the entries
-			DBHandler.savePayable(payableList); 
-			statusStr = "Changes Saved.";
-		}
-		else
-		{
-			statusStr = "No suppliers to save.";
-		}
+		DBHandler.savePayable(payableList);
+		String statusStr ="Changes Saved.";
 		
 		if("save".equals(action))
 		{

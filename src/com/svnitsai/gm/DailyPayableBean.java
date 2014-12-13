@@ -65,7 +65,7 @@ public class DailyPayableBean
 		this.supplierBankCode = supplierBankCode;
 	}
 	public String getInstructions() {
-		return instructions;
+		return (instructions != null) ? instructions : "";
 	}
 	public void setInstructions(String instructions) {
 		this.instructions = instructions;

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Date;
 
 public class DBHandler {
@@ -391,43 +392,112 @@ public class DBHandler {
 		}
 	}
 
-	public static void savePayable(ArrayList<DailyPayableBean> payableList) {
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		try {
-			conn = getConnection();
-			stmt = conn.createStatement();
-			// TODO: HibernateME
-			for (DailyPayableBean bean : payableList) {
-				// insert new entry
-				String insertDetailSql = "INSERT INTO DailyPayable (PayableDate, PayableAmount, SupplierCode, "
-						+ "Instructions, CreatedDate, CreatedBy) values("
-						+ "'"
-						+ Util.getFormattedDateForDB(bean.getPayableDateStr())
-						+ "', "
-						+ bean.getPayableAmount()
-						+ ", "
-						+ bean.getSupplierCode()
-						+ ", "
-						+ "'"
-						+ bean.getInstructions()
-						+ "', "
-						+ "GETDATE(), 'UI Admin')";
-				System.out.println(insertDetailSql);
-
-				stmt.executeUpdate(insertDetailSql);
-
-			}
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			closeDBObjects(conn, stmt, rs);
-		}
-	}
+	public static LinkedList<DailyPayableBean> getDailyPayables(Date payableDate)
+	   {
+		   Connection conn = null;
+		   Statement stmt = null;
+		   ResultSet rs = null;
+		   
+		   // Preserves the sorted order in which data was added to the map
+		   LinkedList<DailyPayableBean> payableList = new LinkedList<DailyPayableBean>();
+		   
+		   try 
+		   {
+			   // TODO: Change to read the bank data
+			   String sql = "SELECT PayableReferenceNumber, PayableDate, PayableAmount, PaidAmount, PayableStatus, SupplierCode, Instructions "
+					        + "FROM DailyPayable "
+					   		+ "WHERE PayableDate>='" + Util.getFormattedDateForDB(payableDate) + "' "
+					   		+ "ORDER BY PayableDate";
+			   conn = getConnection();
+	           stmt = conn.createStatement();
+			   rs = stmt.executeQuery(sql);
+			    
+			   //STEP 5: Extract data from result set
+			   while(rs.next())
+			   {
+				   
+				   DailyPayableBean bean = new DailyPayableBean();
+				   bean.setPayableId(rs.getLong("PayableReferenceNumber"));
+				   bean.setPayableDate(rs.getDate("PayableDate"));
+				   bean.setPayableAmount(rs.getDouble("PayableAmount"));
+				   bean.setPaidAmount(rs.getDouble("PaidAmount"));
+				   bean.setStatus(rs.getString("PayableStatus"));
+				   bean.setSupplierCode(rs.getLong("SupplierCode"));
+				   bean.setInstructions(rs.getString("Instructions"));
+				   payableList.add(bean);
+			   }
+		   } 
+		   catch (Exception e) 
+		   {
+			   // TODO Auto-generated catch block
+			   e.printStackTrace();
+		   } 
+		   finally 
+		   {
+			   closeDBObjects(conn, stmt, rs);
+		   }
+		   
+		   return payableList;
+	   }
+	   
+	   public static void savePayable(ArrayList<DailyPayableBean> payableList) 
+	   {
+		   Connection conn = null;
+		   Statement stmt = null;
+		   ResultSet rs = null;
+		   
+		   try
+		   {
+			   	conn = getConnection();
+	           	stmt = conn.createStatement();
+			   
+	           	String deleteSql = "DELETE FROM DailyPayable WHERE PayableDate >= '" + Util.getFormattedDateForDB(Calendar.getInstance().getTime()) +"'";
+	           	System.out.println(deleteSql);
+				stmt.executeUpdate(deleteSql);
+				
+	           	for(DailyPayableBean bean : payableList)
+				{
+			   		if(bean.getSupplierCode() > 0)
+			   		{
+						// insert new entry
+						String insertDetailSql = "INSERT INTO DailyPayable (PayableDate, PayableAmount, SupplierCode, "
+												+"Instructions, CreatedDate, CreatedBy) values("
+												+ "'" + Util.getFormattedDateForDB(bean.getPayableDateStr()) + "', "
+								                + bean.getPayableAmount() + ", "
+								                + bean.getSupplierCode() + ", "
+								                + "'" + bean.getInstructions() + "', "
+								                + "GETDATE(), 'UI Admin')";
+						System.out.println(insertDetailSql);
+						
+						stmt.executeUpdate(insertDetailSql);
+			   		}
+			   		/*else
+			   		{
+			   			// update existing entry
+						String updateDetailSql = "UPDATE DailyPayable SET "
+												+ "PayableDate='" + Util.getFormattedDateForDB(bean.getPayableDateStr()) + "', "
+												+ "PayableAmount=" +  bean.getPayableAmount() + ", "
+												+ "SupplierCode=" + bean.getSupplierCode() + ", "
+												+ "Instructions='" + bean.getInstructions() + "' " 
+												+ "WHERE PayableReferenceNumber=" + bean.getPayableId();
+						System.out.println(updateDetailSql);
+						
+						stmt.executeUpdate(updateDetailSql);
+			   		}*/
+						
+				}
+				
+		   }
+		   catch (Exception e) 
+		   {
+			   // TODO Auto-generated catch block
+			   e.printStackTrace();
+		   } 
+		   finally 
+		   {
+			   closeDBObjects(conn, stmt, rs);
+		   }
+	   }
 
 	// TODO: REad from DB connection pool!!!
 	public static Connection getConnection() {

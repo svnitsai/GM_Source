@@ -5,13 +5,64 @@
 <%@ page import="com.svnitsai.gm.CustomerBean" %>
 <%@ page import="com.svnitsai.gm.Util" %>
 <%@ page import="com.svnitsai.gm.DBHandler" %>
+<%@ page import="com.svnitsai.gm.DailyPayableBean" %>
 <%@ page import="java.util.LinkedHashMap" %>
 <%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.LinkedList" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%
+LinkedHashMap<Long, CustomerBean> supplierMap = DBHandler.getSuppliers();
+SimpleDateFormat todayDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+
+String todayDate = todayDateFormatter.format(Calendar.getInstance().getTime());
+String status = request.getParameter("status");
+
+LinkedList<DailyPayableBean> payableList = DBHandler.getDailyPayables(Calendar.getInstance().getTime());
+if(payableList == null)
+{
+	payableList = new LinkedList<DailyPayableBean>();
+}
+DailyPayableBean dummyBean = new DailyPayableBean();
+payableList.add(0, dummyBean);
+
+%>
+
+<style>
+label.error { 
+	display:block;
+	color: red; 
+}
+
+input.error {
+	border:1px solid red;
+}
+</style>
 <script>
+	
 	$( document ).ready(function() {
+		nidsHideElement('supplierPanel_0');
+		nidsEnableControl('supplier_0', false);
+		nidsEnableControl('amount_0', false);
+		nidsEnableControl('date_0', false);
+		
+		<% if(payableList.size() == 1) { %>
 		addSupplier();
+		<% } %>
+		
+	<% if(status != null) { %>
+		$( "#status-message" ).dialog({
+			modal: true,
+			buttons: {
+				Ok: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+	<% } %>
+		
 	});
+	
 	
 	function addSupplier()
 	{
@@ -29,6 +80,16 @@
 		// append to our form, so that template data
 		//become part of form
 		document.getElementById('contentDiv').appendChild(div1);
+		
+		nidsEnableControl('supplier' + id, true);
+		nidsEnableControl('amount' + id, true);
+		nidsEnableControl('date' + id, true);
+
+		$.datepicker.setDefaults({dateFormat:"dd/mm/yy", minDate:0});  
+		$('#date' + id).datepicker();
+		$('#date' + id).datepicker('setDate', new Date());
+
+
 	}
 	
 	function deleteSupplier(panelName)
@@ -39,27 +100,42 @@
 	
 	function isPageValid()
 	{
+		$.validator.messages.required = 'Please specify value';
+		var form = $( "#payableform" );
+	   	form.validate();
+     	if(form.valid() == false)
+      	{
+       		return false;
+      	}
+
 		return true;
 	}
 	
 	function printReport()
 	{
-		$('#action').val('print');
-		nidsSubmitDocumentForm(false);
+		
+		$("#payableform").prop("target", "_blank");
+     	$('#action').val('print');
+    	nidsSubmitDocumentForm(false);
+	}
+
+	function saveChanges()
+	{
+		$("#payableform").prop("target", "_self");
+    	$('#action').val('save');
+    	nidsSubmitDocumentForm(true);
 	}
 </script>
-<%
-LinkedHashMap<Long, CustomerBean> supplierMap = DBHandler.getSuppliers();
-SimpleDateFormat todayDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-
-String todayDate = todayDateFormatter.format(Calendar.getInstance().getTime());
-String status = request.getParameter("status");
-%>
-<form action="/gm/servlet/payable">
+<% if(status != null) { %>
+	<div id="status-message" title="Save Result">
+	<p>
+	<span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+	<%= status %>
+	</p>
+	</div>
+<% } %>
+<form action="/gm/servlet/payable" id="payableform">
 <input type="hidden" name="action" id="action" value="save">
-<% if(status != null) { %>    
-  	<h2><%= status %></h2>
-  <% } %>
 <div id="two">
   <div class="item" id="contentDiv" name="contentDiv">
   	<table width="100%" cellpadding="10" cellspacing="5">
@@ -71,41 +147,70 @@ String status = request.getParameter("status");
 			<td>&nbsp;</td>
 		</tr>
 	</table>
-	<div id="supplierPanel_0" name="supplierPanel_0" style="display:none">
-		<table width="100%" cellpadding="10" cellspacing="5">
-			<tr>
-				<td align="center" width="25%" valign="top">
-					<select name="supplier_0" id="supplier_0" class="chosen-select" style="width:175px">
-	      				<option value="" selected disabled>Select Supplier</option>
-	      				<% for(CustomerBean supplierBean : supplierMap.values()) { %>
-	      					<option value="<%= supplierBean.getId() %>">
-	      						<%= supplierBean.getName() %>
-	      					</option>
-	      				<% } %>
-	      			</select>	
-				</td>
-				<td align="center" valign="top">
-					<input type="text" name="amount_0" id="amount_0" size="20px"/>
-				</td>
-				<td align="center" valign="top">
-					<input type="text" name="date_0" id="date_0" value="<%= todayDate%>" size="12px"/>
-				</td>
-				<td valign="top" width="40%" align="center">
-					<textarea name="instructions_0" id="instructions_0" cols="40"></textarea>
-				</td>
-				<td valign="top">
-					<button type="button" class="deleteButton" onclick="deleteSupplier('supplierPanel_0');">&nbsp;</button>
-				</td>
-			</tr>
-		</table>
-	</div>
+	<% 	for(int i=0; i < payableList.size(); i++) 
+		{
+			DailyPayableBean bean = payableList.get(i);
+			String amt = String.valueOf(bean.getPayableAmount());
+			if(bean.getPayableAmount() == 0)
+			{
+				amt = "";
+			}
+			String date = "";
+			if(bean.getPayableDate() != null)
+			{
+				date = new SimpleDateFormat("dd/MM/yyyy").format(bean.getPayableDate());
+			}
+	%>
+		
+		<div id="supplierPanel_<%=i %>" name="supplierPanel_<%=i %>">
+			<input type="hidden" name="refId_<%= i %>" id="refId_<%=i %>" value="<%= bean.getPayableId() %>">
+			<table width="100%" cellpadding="10" cellspacing="5">
+				<tr>
+					<td align="center" width="25%" valign="top">
+						<select name="supplier_<%=i %>" id="supplier_<%=i %>" class="chosen-select" style="width:175px" 
+
+required>
+		      				<option value="" selected disabled>Select Supplier</option>
+		      				<% for(CustomerBean supplierBean : supplierMap.values()) { %>
+		      					<option value="<%= supplierBean.getId() %>" <% if(supplierBean.getId() == 
+
+bean.getSupplierCode()){ %> selected<%} %>>
+		      						<%= supplierBean.getName() %>
+		      					</option>
+		      				<% } %>
+		      			</select>	
+					</td>
+					<td align="center" valign="top">
+						<input type="text" name="amount_<%=i %>" id="amount_<%=i %>" size="20px" value="<%= amt %>" 
+
+class="number required"/>
+					</td>
+					<td align="center" valign="top">
+						<input type="text" name="date_<%=i %>" id="date_<%=i %>" <% if(i>0){%>class="datepicker" 
+
+value="<%= date %>"<%}%> size="12px" readonly="true" required/>
+					</td>
+					<td valign="top" width="40%" align="center">
+						<textarea name="instructions_<%=i %>" id="instructions_<%=i %>" cols="40"><%= 
+
+bean.getInstructions() %></textarea>
+					</td>
+					<td valign="top">
+						<button type="button" class="deleteButton" onclick="deleteSupplier('supplierPanel_<%=i
+
+%>');">&nbsp;</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<% } %>
   </div>
   <br>
 	<button type="button" class="addButton" onClick="addSupplier();">&nbsp;&nbsp;Add Supplier</button> 
 	&nbsp;
-	<button type="submit" class="saveButton">&nbsp;&nbsp;Save</button> 
+	<input type="submit" class="saveButton" onClick="saveChanges();" value="Save"/> 
 	&nbsp;
-	<button type="button" class="printButton" onClick="printReport();">&nbsp;&nbsp;Print Report</button> 
+	<input type="submit"  class="printButton" onClick="printReport();" value="Print Report">
 	&nbsp;
 	<br>
 </div>

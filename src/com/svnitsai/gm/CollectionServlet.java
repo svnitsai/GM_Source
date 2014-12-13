@@ -93,7 +93,7 @@ public class CollectionServlet extends HttpServlet
 				{
 					detailBean.setSupplierCode( Util.convertToLong(request.getParameter("supplierId" + index)));
 					detailBean.setSupplierBankId(Util.convertToLong(request.getParameter("supplierBankId" + index)));
-					detailBean.setCustomerBankName(request.getParameter("merchantBank" + index));
+					//detailBean.setCustomerBankName(request.getParameter("merchantBank" + index));
 					detailBean.setCollectionDateStr(request.getParameter("collectionDate" + index));
 				}
 				bean.getDetailsList().add(detailBean);

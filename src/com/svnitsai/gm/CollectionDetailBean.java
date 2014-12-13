@@ -10,7 +10,7 @@ public class CollectionDetailBean implements Serializable
 	private long supplierCode;
 	private long supplierBankId;
 	private String companyName;
-	private String customerBankName;
+	//private String customerBankName;
 	private String supplierName;
 	private String supplierBankName;
 	private String supplierBankBranch;
@@ -112,13 +112,13 @@ public class CollectionDetailBean implements Serializable
 	public void setCompanyCode(long companyCode) {
 		this.companyCode = companyCode;
 	}
-	public String getCustomerBankName() {
-		return (customerBankName != null ? customerBankName : "");
-	}
-	public void setCustomerBankName(String bankName)
-	{
-		this.customerBankName = bankName;
-	}
+	//public String getCustomerBankName() {
+	//	return (customerBankName != null ? customerBankName : "");
+	//}
+	//public void setCustomerBankName(String bankName)
+	//{
+	//	this.customerBankName = bankName;
+	//}
 	public String getCompanyName() {
 		return companyName;
 	}

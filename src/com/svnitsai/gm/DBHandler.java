@@ -152,7 +152,7 @@ public class DBHandler {
 			// select and read collection data
 			String sql = "SELECT DC.PayCReferenceNumber, DC.PayCDueDate, DC.CustCode, DC.InvoiceAmount, "
 					+ "DC.PayCStatus, DC.InvoiceReferenceNumber, DCD.PayCReferenceSubNumber, "
-					+ "DC.DeferredDate, DCD.PayCDate, DCD.CustBankName, DCD.SupplierCode, DCD.SupplierBankId, "
+					+ "DC.DeferredDate, DCD.PayCDate, DCD.SupplierCode, DCD.SupplierBankId, "
 					+ "DCD.PaidAmount, DCD.AccountLocationCode, DCD.LedgerPageNumber, "
 					+ "C.CustName, C.CustContactNumber, C.CustCity, "
 					+ "CO.CustName AS CompanyName, s.CustName AS SupplierName, CB1.CustBank AS SupplierBank, "
@@ -245,8 +245,8 @@ public class DBHandler {
 					detailBean.setPaidAmount(rs.getDouble("PaidAmount"));
 					detailBean.setCollectionDate(rs.getDate("PayCDate"));
 					detailBean.setLedgerNumber(rs.getInt("LedgerPageNumber"));
-					detailBean
-							.setCustomerBankName(rs.getString("CustBankName"));
+					//detailBean
+					//		.setCustomerBankName(rs.getString("CustBankName"));
 					detailBean.setSupplierCode(rs.getLong("SupplierCode"));
 					detailBean.setSupplierName(rs.getString("SupplierName"));
 					detailBean.setSupplierBankId(rs.getLong("SupplierBankId"));
@@ -303,7 +303,7 @@ public class DBHandler {
 				balanceAmount = balanceAmount - detailBean.getPaidAmount();
 				if (detailID == 0) {
 					// insert new entry
-					String insertDetailSql = "INSERT INTO DailyPayCDetails (PayCReferenceNumber, PayCDate, CustBankName,  "
+					String insertDetailSql = "INSERT INTO DailyPayCDetails (PayCReferenceNumber, PayCDate, "
 							+ "SupplierCode, SupplierBankId, PaidAmount, AccountLocationCode, LedgerPageNumber, "
 							+ "CreatedDate, CreatedBy) values("
 							+ bean.getCollectionId()
@@ -312,9 +312,9 @@ public class DBHandler {
 							+ Util.getFormattedDateForDB(detailBean
 									.getCollectionDateStr())
 							+ "', "
-							+ "'"
-							+ detailBean.getCustomerBankName()
-							+ "', "
+							//+ "'"
+							//+ detailBean.getCustomerBankName()
+							//+ "', "
 							+ detailBean.getSupplierCode()
 							+ ", "
 							+ detailBean.getSupplierBankId()

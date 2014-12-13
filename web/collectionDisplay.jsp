@@ -7,6 +7,7 @@
 <%@ page import="com.svnitsai.gm.DBHandler" %>
 <%@ page import="com.svnitsai.gm.CollectionBean" %>
 <%@ page import="com.svnitsai.gm.CollectionDetailBean" %>
+<%@ page import="com.svnitsai.gm.util.display.DisplayUtil"%>
 <jsp:include page="header.jsp?hideHeader=true" />
 <%
 	Collection<CollectionBean> collectionBeanList = (Collection<CollectionBean>) request.getAttribute("collectionData");
@@ -170,17 +171,23 @@
 				{
 					rowspanStr = " rowspan=\"" + detailsNum + "\"";
 				}
+				/* Format Amounts to display */
+				String dispInvoiceAmount = " " + DisplayUtil.getDisplayAmount(bean.getInvoiceAmount());
+
 		%>
 			<tr>
 				<td <%= rowspanStr%>><%= serialNum %></td>
 				<td <%= rowspanStr%> nowrap><%=bean.getCustName()%><br/>Phone: <%=bean.getCustPhoneNumber()%></td>
 				<td <%= rowspanStr%>><%= bean.getInvoiceNumber() %> </td>
 				<td <%= rowspanStr%> nowrap><%= bean.getDueDateForDisplay() %><br/><%= bean.getStatus() %></td>
-				<td <%= rowspanStr%>><%= bean.getInvoiceAmount() %></td>
+				<td <%= rowspanStr%> align="right">&#8377;<%=dispInvoiceAmount %> </td>
 				
 				
-			<% if(bean.getDetailsList().size() > 0) { %>
-				<td><%= bean.getDetailsList().get(0).getPaidAmount()%></td>
+			<% if(bean.getDetailsList().size() > 0) { 
+				/* Format Amounts to display */
+				String dispPaidAmount = " " + DisplayUtil.getDisplayAmount(bean.getDetailsList().get(0).getPaidAmount());
+			%>
+				<td align="right">&#8377;<%= dispPaidAmount%></td>
 				<td nowrap><%= bean.getDetailsList().get(0).getSupplierName() %>
 				<td nowrap><%= bean.getDetailsList().get(0).getCollectionDateStr() %>
 				

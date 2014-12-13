@@ -178,7 +178,7 @@
 			<tr>
 				<td <%= rowspanStr%>><%= serialNum %></td>
 				<td <%= rowspanStr%> nowrap><%=bean.getCustName()%><br/>Phone: <%=bean.getCustPhoneNumber()%></td>
-				<td <%= rowspanStr%>><%= bean.getInvoiceNumber() %> </td>
+				<td <%= rowspanStr%> align="right"><%= bean.getInvoiceNumber() %> </td>
 				<td <%= rowspanStr%> nowrap><%= bean.getDueDateForDisplay() %><br/><%= bean.getStatus() %></td>
 				<td <%= rowspanStr%> align="right">&#8377;<%=dispInvoiceAmount %> </td>
 				

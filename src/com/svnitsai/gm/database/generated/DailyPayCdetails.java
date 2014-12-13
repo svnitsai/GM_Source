@@ -1,6 +1,6 @@
 package com.svnitsai.gm.database.generated;
 
-// Generated Dec 12, 2014 4:44:45 PM by Hibernate Tools 4.0.0
+// Generated Dec 13, 2014 2:45:34 PM by Hibernate Tools 4.0.0
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,7 +12,7 @@ public class DailyPayCdetails implements java.io.Serializable {
 
 	private DailyPayCdetailsId id;
 	private Date payCdate;
-	private String custBankName;
+	private String payCtype;
 	private Integer supplierCode;
 	private Long supplierBankId;
 	private BigDecimal paidAmount;
@@ -36,13 +36,13 @@ public class DailyPayCdetails implements java.io.Serializable {
 	}
 
 	public DailyPayCdetails(DailyPayCdetailsId id, Date payCdate,
-			String custBankName, Integer supplierCode, Long supplierBankId,
+			String payCtype, Integer supplierCode, Long supplierBankId,
 			BigDecimal paidAmount, Integer accountLocationCode,
 			Integer ledgerPageNumber, Date createdDate, String createdBy,
 			Date updatedDate, String updatedBy, int deleted) {
 		this.id = id;
 		this.payCdate = payCdate;
-		this.custBankName = custBankName;
+		this.payCtype = payCtype;
 		this.supplierCode = supplierCode;
 		this.supplierBankId = supplierBankId;
 		this.paidAmount = paidAmount;
@@ -71,12 +71,12 @@ public class DailyPayCdetails implements java.io.Serializable {
 		this.payCdate = payCdate;
 	}
 
-	public String getCustBankName() {
-		return this.custBankName;
+	public String getPayCtype() {
+		return this.payCtype;
 	}
 
-	public void setCustBankName(String custBankName) {
-		this.custBankName = custBankName;
+	public void setPayCtype(String payCtype) {
+		this.payCtype = payCtype;
 	}
 
 	public Integer getSupplierCode() {

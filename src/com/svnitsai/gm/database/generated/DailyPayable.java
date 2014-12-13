@@ -1,6 +1,6 @@
 package com.svnitsai.gm.database.generated;
 
-// Generated Dec 12, 2014 4:44:45 PM by Hibernate Tools 4.0.0
+// Generated Dec 13, 2014 2:45:34 PM by Hibernate Tools 4.0.0
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,7 +16,6 @@ public class DailyPayable implements java.io.Serializable {
 	private BigDecimal paidAmount;
 	private String payableStatus;
 	private int supplierCode;
-	private Integer supplierBankId;
 	private Date createdDate;
 	private String createdBy;
 	private Date updatedDate;
@@ -28,29 +27,26 @@ public class DailyPayable implements java.io.Serializable {
 
 	public DailyPayable(int payableReferenceNumber, Date payableDate,
 			BigDecimal payableAmount, int supplierCode, Date createdDate,
-			String createdBy, Date updatedDate, String updatedBy) {
+			String createdBy) {
 		this.payableReferenceNumber = payableReferenceNumber;
 		this.payableDate = payableDate;
 		this.payableAmount = payableAmount;
 		this.supplierCode = supplierCode;
 		this.createdDate = createdDate;
 		this.createdBy = createdBy;
-		this.updatedDate = updatedDate;
-		this.updatedBy = updatedBy;
 	}
 
 	public DailyPayable(int payableReferenceNumber, Date payableDate,
 			BigDecimal payableAmount, BigDecimal paidAmount,
-			String payableStatus, int supplierCode, Integer supplierBankId,
-			Date createdDate, String createdBy, Date updatedDate,
-			String updatedBy, String instructions) {
+			String payableStatus, int supplierCode, Date createdDate,
+			String createdBy, Date updatedDate, String updatedBy,
+			String instructions) {
 		this.payableReferenceNumber = payableReferenceNumber;
 		this.payableDate = payableDate;
 		this.payableAmount = payableAmount;
 		this.paidAmount = paidAmount;
 		this.payableStatus = payableStatus;
 		this.supplierCode = supplierCode;
-		this.supplierBankId = supplierBankId;
 		this.createdDate = createdDate;
 		this.createdBy = createdBy;
 		this.updatedDate = updatedDate;
@@ -104,14 +100,6 @@ public class DailyPayable implements java.io.Serializable {
 
 	public void setSupplierCode(int supplierCode) {
 		this.supplierCode = supplierCode;
-	}
-
-	public Integer getSupplierBankId() {
-		return this.supplierBankId;
-	}
-
-	public void setSupplierBankId(Integer supplierBankId) {
-		this.supplierBankId = supplierBankId;
 	}
 
 	public Date getCreatedDate() {

@@ -52,6 +52,11 @@
 				primary: "ui-icon-print"
 			}
 		});
+		$( ".refreshButton" ).button({
+			icons: {
+				primary: "ui-icon-refresh"
+			}
+		});
 		$( ".anyButton" ).button();
 	});
 </script>

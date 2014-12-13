@@ -7,5 +7,6 @@
   <table-filter match-catalog="PayC" match-name="DailyPayC"/>
   <table-filter match-catalog="PayC" match-name="DailyPayCDetails"/>
   <table-filter match-catalog="PayC" match-name="DailyPayable"/>
+  <table-filter match-catalog="PayC" match-name="DataExtracted"/>
   <table-filter match-catalog="PayC" match-name="UserAccess"/>
 </hibernate-reverse-engineering>

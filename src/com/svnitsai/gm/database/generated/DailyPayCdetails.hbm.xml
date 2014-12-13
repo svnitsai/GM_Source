@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Dec 12, 2014 4:44:45 PM by Hibernate Tools 4.0.0 -->
+<!-- Generated Dec 13, 2014 2:45:34 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
     <class name="com.svnitsai.gm.database.generated.DailyPayCdetails" table="DailyPayCDetails" catalog="PayC">
         <composite-id name="id" class="com.svnitsai.gm.database.generated.DailyPayCdetailsId">
@@ -15,8 +15,8 @@
         <property name="payCdate" type="timestamp">
             <column name="PayCDate" length="23" />
         </property>
-        <property name="custBankName" type="string">
-            <column name="CustBankName" length="50" />
+        <property name="payCtype" type="string">
+            <column name="PayCType" length="10" />
         </property>
         <property name="supplierCode" type="java.lang.Integer">
             <column name="SupplierCode" precision="9" scale="0" />

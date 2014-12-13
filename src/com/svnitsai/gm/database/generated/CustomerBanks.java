@@ -1,6 +1,6 @@
 package com.svnitsai.gm.database.generated;
 
-// Generated Dec 12, 2014 4:44:45 PM by Hibernate Tools 4.0.0
+// Generated Dec 13, 2014 2:45:34 PM by Hibernate Tools 4.0.0
 
 import java.util.Date;
 
@@ -14,26 +14,13 @@ public class CustomerBanks implements java.io.Serializable {
 	private String custBankBranch;
 	private String custBankAccountType;
 	private String custBankAccountNumber;
+	private String custBankAccountName;
 	private Date createdDate;
 	private String createdBy;
 	private Date updatedDate;
 	private String updatedBy;
 
 	public CustomerBanks() {
-	}
-
-	public CustomerBanks(CustomerBanksId id, String custBank,
-			String custBankBranch, String custBankAccountType,
-			Date createdDate, String createdBy, Date updatedDate,
-			String updatedBy) {
-		this.id = id;
-		this.custBank = custBank;
-		this.custBankBranch = custBankBranch;
-		this.custBankAccountType = custBankAccountType;
-		this.createdDate = createdDate;
-		this.createdBy = createdBy;
-		this.updatedDate = updatedDate;
-		this.updatedBy = updatedBy;
 	}
 
 	public CustomerBanks(CustomerBanksId id, String custBank,
@@ -45,6 +32,23 @@ public class CustomerBanks implements java.io.Serializable {
 		this.custBankBranch = custBankBranch;
 		this.custBankAccountType = custBankAccountType;
 		this.custBankAccountNumber = custBankAccountNumber;
+		this.createdDate = createdDate;
+		this.createdBy = createdBy;
+		this.updatedDate = updatedDate;
+		this.updatedBy = updatedBy;
+	}
+
+	public CustomerBanks(CustomerBanksId id, String custBank,
+			String custBankBranch, String custBankAccountType,
+			String custBankAccountNumber, String custBankAccountName,
+			Date createdDate, String createdBy, Date updatedDate,
+			String updatedBy) {
+		this.id = id;
+		this.custBank = custBank;
+		this.custBankBranch = custBankBranch;
+		this.custBankAccountType = custBankAccountType;
+		this.custBankAccountNumber = custBankAccountNumber;
+		this.custBankAccountName = custBankAccountName;
 		this.createdDate = createdDate;
 		this.createdBy = createdBy;
 		this.updatedDate = updatedDate;
@@ -89,6 +93,14 @@ public class CustomerBanks implements java.io.Serializable {
 
 	public void setCustBankAccountNumber(String custBankAccountNumber) {
 		this.custBankAccountNumber = custBankAccountNumber;
+	}
+
+	public String getCustBankAccountName() {
+		return this.custBankAccountName;
+	}
+
+	public void setCustBankAccountName(String custBankAccountName) {
+		this.custBankAccountName = custBankAccountName;
 	}
 
 	public Date getCreatedDate() {

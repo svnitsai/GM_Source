@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 13, 2014 2:45:34 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.svnitsai.gm.database.generated.DataExtracted" table="DataExtracted" catalog="PayC">
+        <composite-id name="id" class="com.svnitsai.gm.database.generated.DataExtractedId">
+            <key-property name="extractReferenceNum" type="long">
+                <column name="ExtractReferenceNum" precision="10" scale="0" />
+            </key-property>
+            <key-property name="extractDateType" type="char">
+                <column name="ExtractDateType" length="1" />
+            </key-property>
+            <key-property name="extractDate" type="timestamp">
+                <column name="ExtractDate" length="23" />
+            </key-property>
+            <key-property name="extractDataType" type="char">
+                <column name="ExtractDataType" length="1" />
+            </key-property>
+            <key-property name="extracted" type="java.lang.Character">
+                <column name="Extracted" length="1" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

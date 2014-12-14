@@ -103,7 +103,14 @@ public class CollectionServlet extends HttpServlet
 		
 		DBHandler.updateCollectionInfo(bean);
 		request.setAttribute("action", "save");
-		handleGetCollection(request, response);
+		//handleGetCollection(request, response);
+		
+		String responseStr = "<html><head><script>window.close();</script></head><body>Done</body></html>";
+		response.setContentLength(responseStr.length());
+	    //And write the string to output.
+		response.getOutputStream().write(responseStr.getBytes());
+		response.getOutputStream().flush();
+		response.getOutputStream().close();
 	}
 	
 }

@@ -50,48 +50,44 @@
 		var selectedMerchant = $( "#merchantId option:selected" ).text().trim();
 		nidsSetElementValue("merchantName", selectedMerchant);
 	}
+
+var popUpObj;
         
-	function editCurrentRow(invoiceId) {
-    		$("#editRowDialog").dialog({
-        		title: 'Edit Collection Details',
-        		autoOpen: false,
-        		resizable: true,
-        		height: 600,
-        		width: 800,
-        		show: { effect: 'drop', direction: "up" },
-        		modal: true,
-        		draggable: true,
-        		open: function (event, ui) {
-            			$(this).load('/gm/web/editCollection.jsp', { id: invoiceId, date: '<%=selectedDate%>', merchantId: '<%= merchantId %>' }); 
-        		},
-        		close: function (event, ui) {
-            			$(this).dialog('close');
-				$(this).remove();
-        		},
-			buttons: [{ 
-      				text: "Save", 
-      				click: function() { 
-         				saveChanges(); 
-      				}
-   			   }, { 
-      				text: "Cancel", 
-      				click: function() { 
-         				$("#editRowDialog").dialog( 'close' ); 
-				}
-   			}]
-    		});
+	function editCurrentRow(invoiceId) 
+	{
 
-		function saveChanges() 
-		{
-			$("#editForm").submit();
-			$("#editRowDialog").dialog( 'close' );
-			return true;
-		}
 
-    		$("#editRowDialog").dialog('open');
+		popUpObj=window.open("/gm/web/editCollection.jsp?id=" + invoiceId + "&date=<%=selectedDate%>&merchantId=<%= merchantId %>",
+		    "Edit Collection Details",
+		    "toolbar=no," +
+		    "scrollbars=no," +
+		    "location=no," +
+		    "statusbar=no," +
+		    "menubar=no," +
+		    "status=no," + 
+		    "resizable=0," +
+		    "width=800," +
+		    "height=550," +
+		    "left = 490," +
+		    "top=300"
+		    );
+	    	popUpObj.focus(); 
+		loadModalDiv();
 
-    		return false;
 	}
+	
+	function loadModalDiv()
+    	{
+	        var bcgDiv = document.getElementById("overlay");
+	        bcgDiv.style.display="block";
+	}
+
+	function hideModalDiv()
+	{
+	        var bcgDiv = document.getElementById("overlay");
+	        bcgDiv.style.display="none";
+	}
+
 
 	
 		
@@ -153,7 +149,7 @@
 				<th>Due Date /<br>Status</th>
 				<th>Invoice Amount</th>
 				<th>Paid Amount</th>
-				<th>Paid To</th>
+				<th>Payment Details</th>
 				<th>Payment Date</th>
 				<th>&nbsp;</th>
 			</tr>
@@ -186,13 +182,25 @@
 			<% if(bean.getDetailsList().size() > 0) { 
 				/* Format Amounts to display */
 				String dispPaidAmount = " " + DisplayUtil.getDisplayAmount(bean.getDetailsList().get(0).getPaidAmount());
+				String supplierName = "";
+				if(bean.getDetailsList().get(0).getPaidAmount() > 0)
+				{
+					if(bean.getDetailsList().get(0).getSupplierCode() == 0)
+					{
+						supplierName = "Cash";
+					}
+					else
+					{
+						supplierName = bean.getDetailsList().get(0).getSupplierName();
+					}
+				}
 			%>
 				<td align="right">&#8377;<%= dispPaidAmount%></td>
-				<td nowrap><%= bean.getDetailsList().get(0).getSupplierName() %>
+				<td nowrap><%= supplierName %>
 				<td nowrap><%= bean.getDetailsList().get(0).getCollectionDateStr() %>
 				
 			<% } else { %>
-				<td>0</td>
+				<td align="right">&#8377; 0</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 			<% } %>	
@@ -214,10 +222,26 @@
 							// skip first entry as it is already displayed
 							continue;
 						}
+						
+						/* Format Amounts to display */
+						String dispPaidAmount = " " + DisplayUtil.getDisplayAmount(detailBean.getPaidAmount());
+						
+						String supplierName = "";
+						if(detailBean.getPaidAmount() > 0)
+						{
+							if(detailBean.getSupplierCode() == 0)
+							{
+								supplierName = "Cash";
+							}
+							else
+							{
+								supplierName = detailBean.getSupplierName();
+							}
+						}
 			%>
 						<tr>
-							<td><%= detailBean.getPaidAmount() %></td>
-							<td nowrap><%= detailBean.getSupplierName() %></td>
+							<td align="right">&#8377;<%= dispPaidAmount %></td>
+							<td nowrap><%= supplierName %></td>
 							<td nowrap><%= detailBean.getCollectionDateStr() %></td>
 						</tr>
 			<% 		}
@@ -228,7 +252,7 @@
 	<% } else { %>
 		<h3>No results found</h3>
 	<% } %>
-  </div>	 		 
-  <div id="editRowDialog"></div>
+  </div>
+  <div id="overlay" class="ui-widget-overlay ui-front" style="z-index: 100; display:none"></div>
  <% } %>
  <jsp:include page="footer.jsp" />

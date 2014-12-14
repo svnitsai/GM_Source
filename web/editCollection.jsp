@@ -9,6 +9,7 @@
 <%@ page import="com.svnitsai.gm.CollectionDetailBean" %>
 <%@ page import="com.svnitsai.gm.CustomerBean" %>
 <%@ page import="com.svnitsai.gm.CustomerBankBean" %>
+<%@ page import="com.svnitsai.gm.util.display.DisplayUtil"%>
 <jsp:include page="header.jsp?hideHeader=all" />
 
 <%
@@ -27,12 +28,34 @@
 	
 	LinkedHashMap<Long, String> companyMap = DBHandler.getCustomerIdMap("Company");
 %>
+<style>
+label.error { 
+	color: red; 
+}
 
+input.error {
+	border:1px solid red;
+}
+</style>
 <script>
-	function pageInit()
+
+	$( document ).ready(function() {
+		nidsHideElement('detailPanel_0');
+		nidsEnableControl('supplierId_0', false);
+		nidsEnableControl('supplierBankId_0', false);
+		nidsEnableControl('paidAmt_0', false);
+		nidsEnableControl('collectionDate_0', false);
+	});
+
+	function OnClose()
 	{
-		
+	    if(window.opener != null && !window.opener.closed) 
+	    {
+	    	window.opener.location.reload(false);
+	       window.opener.hideModalDiv();
+	    }
 	}
+	window.onunload = OnClose;
 
 	function addPayment()
 	{
@@ -51,6 +74,15 @@
 		//become part of form
 		document.getElementById('contentDiv').appendChild(div1);
 		nidsSetElementFocus("partyBank" + id);
+
+		$.datepicker.setDefaults({dateFormat:"dd/mm/yy", minDate:0});  
+		$('#collectionDate' + id).datepicker();
+		$('#collectionDate' + id).datepicker('setDate', new Date());
+		//nidsEnableControl('supplierId' + id, true);
+		//nidsEnableControl('supplierBankId' + id, true);
+		nidsEnableControl('paidAmt' + id, true);
+		nidsEnableControl('collectionDate' + id, true);
+		nidsSetElementFocus("paidAmt" + id);
 	}
 
 	function deletePayment(panelName)
@@ -89,11 +121,35 @@
 		}
 <%	} %>
 	}
-		
+
+	function enableSupplierFields(index, value)
+	{
+		nidsEnableControl('supplierId'+index, value);
+		nidsEnableControl('supplierBankId'+index, value);
+	}
+	
+	function isPageValid()
+	{
+		$.validator.messages.required = 'Please specify value';
+		var form = $( "#editForm" );
+	   	form.validate();
+     		if(form.valid() == false)
+      		{
+       			return false;
+      		}
+
+		return true;
+	}
+	
+	function saveChanges()
+	{
+	    	nidsSubmitDocumentForm(true);
+	}
 
 </script>
 <form action="/gm/servlet/collection" id="editForm">
-<div id="contentDiv" style="color: #333; padding: 10px; margin: 0px; background: #FFF; width:100% min-height: 100%">
+       
+<div id="contentDiv" style="width: auto; min-height: 0px; max-height: none; height: 470px; overflow:auto; padding:10px; background-color:white"> 
 <% if(bean != null) { %>
 	
 	<input type="hidden" name="action" value="saveCollection" /> 
@@ -118,7 +174,7 @@
 		</tr>
 		<tr>
 			<td>Invoice Amount:</td>
-			<td><%= bean.getInvoiceAmount() %></td>
+			<td>&#8377; <%= DisplayUtil.getDisplayAmount(bean.getInvoiceAmount())%></td>
 		</tr>
 		<tr>
 			<td>Collection Due Date:</td>
@@ -126,8 +182,7 @@
 		</tr>
 		<tr>
 			<td>Deferred Date:</td>
-			<td><input type="text" name="deferredDate" value="<%= bean.getDeferredDateStr() %>">
-			<label class="instructions">(Example: 31/12/2014 for Dec 31, 2014)</label>
+			<td><input type="text" name="deferredDate" value="<%= bean.getDeferredDateStr() %>" class="datepicker">
 			</td>
 		</tr>
 		<tr>
@@ -143,24 +198,29 @@
 <% for(int i=0; i< bean.getDetailsList().size(); i++)
    { 
 		CollectionDetailBean detailBean = bean.getDetailsList().get(i);
-		String hideStr = "";
-		if(i == 0)
-		{
-			hideStr = "style=\"display:none\"";
-		}
+		
 		
 		String supplierName = "";
 		String supplierBankInfo = "";
-		for(CustomerBean supplierBean : supplierMap.values()) 
+		boolean paidToSupplier = false;
+		if(detailBean.getSupplierCode() > 0)
 		{
-			if (detailBean.getSupplierCode() == supplierBean.getId()) 
+			paidToSupplier = true;
+		}
+		
+		if(paidToSupplier)
+		{
+			for(CustomerBean supplierBean : supplierMap.values()) 
 			{
-				supplierName = supplierBean.getName();
-				for(CustomerBankBean bankBean : supplierBean.getBankAccountList() ) 
-				{ 
-					if( bankBean.getBankId() == detailBean.getSupplierBankId()) 
-					{
-						supplierBankInfo = bankBean.getBankName() + ", " + bankBean.getBranchName() + ", A/c #" + bankBean.getAccountNumber();
+				if (detailBean.getSupplierCode() == supplierBean.getId()) 
+				{
+					supplierName = supplierBean.getName();
+					for(CustomerBankBean bankBean : supplierBean.getBankAccountList() ) 
+					{ 
+						if( bankBean.getBankId() == detailBean.getSupplierBankId()) 
+						{
+							supplierBankInfo = bankBean.getBankName() + ", " + bankBean.getBranchName() + ", A/c #" + bankBean.getAccountNumber();
+						}
 					}
 				}
 			}
@@ -168,20 +228,56 @@
 		
    
 %>
-<div id="detailPanel_<%=i %>" <%=hideStr%>>
+<div id="detailPanel_<%=i %>">
 	<input type="hidden" name="detailRefID_<%= i %>" value="<%= detailBean.getCollectionDetailId() %>" />
 	<fieldset>
 	<legend>&nbsp;Payment Details</legend>
 	<table  cellspacing="5" cellpadding="5" width="100%">
 		<tr>
-			<td nowrap>Paid To Supplier:</td>
-			<td nowrap> 
+			<td nowrap>Payment Type:</td>
+			<td nowrap>
+				<% if(i==0) { %>
+				<input 	type="radio" 
+						name="paymentType_<%=i %>" 
+						id="paymentType_<%=i %>" 
+						value="cash" 
+						onChange="enableSupplierFields('_<%= i %>', false);"
+						checked> Cash &nbsp;&nbsp;
+						
+				<input 	type="radio" 
+						name="paymentType_<%=i %>" 
+						id="paymentType_<%=i %>" 
+						value="supplier" 
+						onChange="enableSupplierFields('_<%= i %>', true);"
+						> Paid to Supplier
+				<% } else  {
+					if( paidToSupplier)
+					{
+						out.print("Paid To Supplier");
+					}
+					else
+					{
+						out.print("Cash");
+					}
+				  } %>
+			</td>
+			<td valign="top" align="right" width="100%">
+				<% if(detailBean.getLedgerNumber() == 0) { %>
+					<button type="button" class="deleteButton" onClick="deletePayment('detailPanel_<%=i%>');">&nbsp;&nbsp;Delete Payment</button>
+				<% } %>
+			</td>
+		</tr>
+		<tr <%if(i>0 && !paidToSupplier){ %>style="display:none"<%} %>>
+			<td nowrap>Supplier Name:</td>
+			<td nowrap colspan="2"> 
 			<% if(supplierName.length() > 0) { %>
 				<%= supplierName %>
 			<% } else { %>
 				<select name="supplierId_<%=i%>" 
 						id="supplierId_<%=i%>" 
-						onChange="selectSupplier('supplierId_<%=i%>', 'supplierBankId_<%=i%>');">
+						onChange="selectSupplier('supplierId_<%=i%>', 'supplierBankId_<%=i%>');"
+						<%if(!paidToSupplier){ %>disabled<%}%>
+						required>
 						<option value="" selected disabled>Select Supplier</option>
 					<% for(CustomerBean supplierBean : supplierMap.values()) { %>
 						<option value="<%= supplierBean.getId() %>">
@@ -191,51 +287,41 @@
 				</select>
 			<%  } %>
 			</td>
-			<td valign="top" align="right" width="100%" rowspan="9">
-				<% if(detailBean.getLedgerNumber() == 0) { %>
-				<button type="button" class="deleteButton" onClick="deletePayment('detailPanel_<%=i%>');">&nbsp;&nbsp;Delete Payment</button>
-				<% } %>
-			</td>
 		</tr>
-		<tr>
+		<tr <%if(i>0 && !paidToSupplier){ %>style="display:none"<%} %>>
 			<td nowrap>Supplier's Bank Account:</td>
-			<td nowrap>
+			<td nowrap colspan="2">
 			<% if(supplierBankInfo.length() > 0) { %>
 				<%= supplierBankInfo %>
 			<% } else { %>
-				<select name="supplierBankId_<%=i%>" id="supplierBankId_<%=i%>">
+				<select name="supplierBankId_<%=i%>" 
+						id="supplierBankId_<%=i%>" 
+						<%if(!paidToSupplier){%>disabled<%}%>
+						required>
 					<option value="" selected disabled>Select Bank</option>
 				</select>
 			<%  } %>
 			</td>
 		</tr>
 		<tr>
-			<td nowrap>Merchant's Bank Name:</td>
-			<td nowrap>
-				<% if(i == 0) { %>
-				<input type="text" name="merchantBank_<%=i%>" value="" /></td>
-				<% } else { %>
-					<%= detailBean.getCustomerBankName() %>
-				<% } %>
-		</tr>
-		<tr>
 			<td nowrap>Paid Amount:</td>
-			<td nowrap>
-				<input type="text" name="paidAmt_<%=i%>" 
-						value="<%= detailBean.getPaidAmount() %>" 
-						<% if(i>0) {%> hidden <%} %>/>
-				<% if(i>0) { out.print(detailBean.getPaidAmount()); } %>
+			<td nowrap colspan="2">
+				<% if(i==0) { %>
+					<input type="text" name="paidAmt_<%=i%>" required/>
+				<% } else { %>
+					&#8377; <%= DisplayUtil.getDisplayAmount(detailBean.getPaidAmount())%>
+				<% } %>
 			</td>
 			 
 		</tr>
 		<tr>
 			<td nowrap>Payment Date:</td>
-			<td nowrap>
-			<% if(i == 0) { 
-				// TODO: Date picker is not working. Add validations
-			%>
-				<input type="text" name="collectionDate_<%=i%>" class="datepicker"/> 
-				<label class="instructions">(Example: 31/12/2014 for Dec 31, 2014)</label>
+			<td nowrap colspan="2">
+			<% if(i == 0) { %>
+				<input type="text" 
+						name="collectionDate_<%=i%>" 
+						id="collectionDate_<%=i%>"
+						required/> 
 			<% } else {%>
 					<%= detailBean.getCollectionDateStr() %>
 			<% } %>
@@ -243,11 +329,13 @@
 		</tr>
 		<tr>
 			<td nowrap>Ledger Page Number:</td>
-			<td nowrap><input type="text" name="ledger_<%=i%>" value="<%= detailBean.getLedgerNumber() %>"/></td>
+			<td nowrap colspan="2">
+				<input type="text" name="ledger_<%=i%>" value="<%= detailBean.getLedgerNumber() %>"/>
+			</td>
 		</tr>
 		<tr>
 			<td nowrap>Company Name:</td>
-			<td nowrap>
+			<td nowrap colspan="2">
 				<select name="companyID_<%=i%>" 
 						id="companyID_<%=i%>">
 						<option value="" selected disabled>Select Company</option>
@@ -270,6 +358,11 @@
   <% } else { %>
 	<h3>No results found</h3>
   <% } %>
+</div>
+<div style="position:absolute; width:100%; padding:10px;">
+	<input type="submit" class="anyButton" onClick="saveChanges();" value="Save"/>
+	&nbsp;&nbsp;
+	<input type="button" class="anyButton" onClick="window.close()" value="Cancel"/>
 </div>
 </form>
 

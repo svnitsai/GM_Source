@@ -167,38 +167,26 @@ input.error {
 			<table width="100%" cellpadding="10" cellspacing="5">
 				<tr>
 					<td align="center" width="25%" valign="top">
-						<select name="supplier_<%=i %>" id="supplier_<%=i %>" class="chosen-select" style="width:175px" 
-
-required>
+						<select name="supplier_<%=i %>" id="supplier_<%=i %>" class="chosen-select" style="width:175px" required>
 		      				<option value="" selected disabled>Select Supplier</option>
 		      				<% for(CustomerBean supplierBean : supplierMap.values()) { %>
-		      					<option value="<%= supplierBean.getId() %>" <% if(supplierBean.getId() == 
-
-bean.getSupplierCode()){ %> selected<%} %>>
+		      					<option value="<%= supplierBean.getId() %>" <% if(supplierBean.getId() == bean.getSupplierCode()){ %> selected<%} %>>
 		      						<%= supplierBean.getName() %>
 		      					</option>
 		      				<% } %>
 		      			</select>	
 					</td>
 					<td align="center" valign="top">
-						<input type="text" name="amount_<%=i %>" id="amount_<%=i %>" size="20px" value="<%= amt %>" 
-
-class="number required"/>
+						<input type="text" name="amount_<%=i %>" id="amount_<%=i %>" size="20px" value="<%= amt %>" class="number required"/>
 					</td>
 					<td align="center" valign="top">
-						<input type="text" name="date_<%=i %>" id="date_<%=i %>" <% if(i>0){%>class="datepicker" 
-
-value="<%= date %>"<%}%> size="12px" readonly="true" required/>
+						<input type="text" name="date_<%=i %>" id="date_<%=i %>" <% if(i>0){%>class="datepicker" value="<%= date %>"<%}%> size="12px" readonly="true" required/>
 					</td>
 					<td valign="top" width="40%" align="center">
-						<textarea name="instructions_<%=i %>" id="instructions_<%=i %>" cols="40"><%= 
-
-bean.getInstructions() %></textarea>
+						<textarea name="instructions_<%=i %>" id="instructions_<%=i %>" cols="40"><%= bean.getInstructions() %></textarea>
 					</td>
 					<td valign="top">
-						<button type="button" class="deleteButton" onclick="deleteSupplier('supplierPanel_<%=i
-
-%>');">&nbsp;</button>
+						<button type="button" class="deleteButton" onclick="deleteSupplier('supplierPanel_<%=i%>');">&nbsp;</button>
 					</td>
 				</tr>
 			</table>

@@ -234,16 +234,16 @@ public class DBHandler {
 				}
 				bean = resultMap.get(id);
 
-				// Read the bank data
-				long supplierCode = rs.getLong("SupplierCode");
-				if (supplierCode > 0) {
+				// Read the payment data
+				double paidAmt = rs.getDouble("PaidAmount");
+				if (paidAmt > 0) {
 					CollectionDetailBean detailBean = new CollectionDetailBean();
 					detailBean.setCollectionDetailId(rs
 							.getLong("PayCReferenceSubNumber"));
 					detailBean
 							.setCompanyCode(rs.getLong("AccountLocationCode"));
 					detailBean.setCompanyName(rs.getString("CompanyName"));
-					detailBean.setPaidAmount(rs.getDouble("PaidAmount"));
+					detailBean.setPaidAmount(paidAmt);
 					detailBean.setCollectionDate(rs.getDate("PayCDate"));
 					detailBean.setLedgerNumber(rs.getInt("LedgerPageNumber"));
 					//detailBean

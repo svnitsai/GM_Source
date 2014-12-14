@@ -56,7 +56,6 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 	}
 }
 /* If display strings are empty, populate appropriate message */
-//TODO
 %>
 
 <%@include file="web/header.jsp"%>
@@ -78,6 +77,7 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 			"paging" : false
 		});
 	});
+
 </script>
 <!-- Begin Column One-->
 <!-- Balance Payable Window - Begin -->
@@ -131,35 +131,36 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 		<!-- Customer aka Party information refresh -->
 		<div>
 			<!-- TODO: Cater action button -->
-			<table style="border-collapse: collapse;">
-				<tr style="background-color: rgba(241, 245, 235, 0.61);">
-					<td style="width: 375px;"><%=partyDataRefreshMesgDue %></td>
-					<% if (partyDataRefresh) { %>
-					<td><button type="button" class="refreshButton"
-							onClick="addSupplier();">&nbsp;&nbsp;</button></td>
-					<% } else { %>
-					<td><button type="button" class="refreshButton"
-							onClick="addSupplier();" disabled>&nbsp;&nbsp;</button></td>
-					<% } %>
-				</tr>
+			<form action="/gm/web/DataRefreshServlet" method="post">
+				<table style="border-collapse: collapse;">
+					<tr style="background-color: rgba(241, 245, 235, 0.61);">
+						<td style="width: 375px;"><%=partyDataRefreshMesgDue %></td>
+						<% if (partyDataRefresh) { %>
+						<td><button type="submit" class="refreshButton" name="action"
+								value="customerDataRefresh">&nbsp;&nbsp;</button></td>
+						<% } else { %>
+						<td title="Data being loaded"><button type="button"
+								class="refreshButton" onClick="dummy();" disabled>&nbsp;&nbsp;</button></td>
+						<% } %>
+					</tr>
 
-				<tr>
-					<td>&nbsp;&nbsp;&nbsp;</td>
-					<td>&nbsp;</td>
-				</tr>
-				<!-- Receivable information refresh -->
-				<tr>
-					<td><%=creditSalesDataRefreshMesgDue %></td>
-					<% if (creditSalesDataRefresh) { %>
-					<td><button type="button" class="refreshButton"
-							onClick="addSupplier();">&nbsp;&nbsp;</button></td>
-					<% } else { %>
-					<td><button type="button" class="refreshButton"
-							onClick="addSupplier();" disabled>&nbsp;&nbsp;</button></td>
-					<% } %>
-				</tr>
-			</table>
-
+					<tr>
+						<td>&nbsp;&nbsp;&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<!-- Receivable information refresh -->
+					<tr>
+						<td><%=creditSalesDataRefreshMesgDue %></td>
+						<% if (creditSalesDataRefresh) { %>
+						<td><button type="submit" class="refreshButton" name="action"
+								value="creditSalesDataRefresh">&nbsp;&nbsp;</button></td>
+						<% } else { %>
+						<td title="Data being loaded"><button type="button"
+								class="refreshButton" onClick="dummy();" disabled>&nbsp;&nbsp;</button></td>
+						<% } %>
+					</tr>
+				</table>
+			</form>
 		</div>
 	</div>
 </div>

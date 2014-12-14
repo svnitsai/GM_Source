@@ -17,6 +17,16 @@
 		<url-pattern>/web/LoginServlet</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>Data Refresh Servlet</servlet-name>
+		<servlet-class>com.svnitsai.gm.DataRefreshServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Data Refresh Servlet</servlet-name>
+		<url-pattern>/web/DataRefreshServlet</url-pattern>
+	</servlet-mapping>
+
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>

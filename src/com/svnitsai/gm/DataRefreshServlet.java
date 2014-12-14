@@ -31,7 +31,7 @@ public class DataRefreshServlet extends HttpServlet {
 		
 		String action = request.getParameter("action");
 		
-		System.out.println ("Value of action is " + action);
+		LogUtil.log(LogUtil.Message_Type.Information," Value of Data Refresh request is : " + action);
 
 		if ("creditSalesDataRefresh".equals(action)) {
 		    // Invoke creditSalesDataRefresh job here.

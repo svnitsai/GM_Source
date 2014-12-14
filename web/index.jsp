@@ -206,33 +206,6 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 				<%
 					}
 				%>
-				<!--  		
-		<tr>
-			<td style="width:160px" align="left">AtoZ Garments, Erode</td>
-			<td style="width:160px" align="left">Nov 24, 2014</td>
-			<td style="width:110px" align="right">&#8377; 9,99,99,999</td>
-		</tr>
-		<tr>
-			<td style="width:160px" align="left">Chandra Textiles, Chennai</td>
-			<td style="width:160px" align="left">Nov 25, 2014</td>
-			<td style="width:110px" align="right">&#8377; 19,99,999</td>
-		</tr>
-		<tr>
-			<td style="width:160px" align="left">Gomathi Textiles, Tiruppur</td>
-			<td style="width:160px" align="left">Nov 26, 2014</td>
-			<td style="width:110px" align="right">&#8377; 29,99,999</td>
-		</tr>
-		<tr>
-			<td style="width:160px" align="left">AtoZ Garments, Bangalore</td>
-			<td style="width:160px" align="left">Nov 24, 2014</td>
-			<td style="width:110px" align="right">&#8377; 9,99,999</td>
-		</tr>
-		<tr>
-			<td style="width:160px" align="left">Chandra Textiles, Delhi</td>
-			<td style="width:160px" align="left">Nov 25, 2014</td>
-			<td style="width:110px" align="right">&#8377; 19,99,999</td>
-		</tr>
-		-->
 			</tbody>
 		</table>
 	</div>

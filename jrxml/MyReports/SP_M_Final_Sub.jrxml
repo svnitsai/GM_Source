@@ -1,30 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-12-02T08:44:03 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_M_Final_Sub" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="20" uuid="da7ac7dc-de78-435b-b167-daa4b4465c2a">
+<!-- 2014-12-13T21:50:20 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_M_Final_Sub" pageWidth="800" pageHeight="50" orientation="Landscape" columnWidth="800" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="da7ac7dc-de78-435b-b167-daa4b4465c2a">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GarmentMantraDB"/>
-	<parameter name="CustCode" class="java.lang.Integer" isForPrompting="false">
-		<defaultValueExpression><![CDATA[230000000]]></defaultValueExpression>
-	</parameter>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="SupplierCode" class="java.math.BigDecimal" isForPrompting="false"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT [CustBank]
       ,[CustBankBranch]
       ,[CustBankAccountType]
       ,[CustBankAccountNumber]
+      ,[CustBankAccountName]
 FROM [CustomerBanks]
-Where CustCode = $P{CustCode}]]>
+Where CustCode = $P{SupplierCode}]]>
 	</queryString>
 	<field name="CustBank" class="java.lang.String"/>
 	<field name="CustBankBranch" class="java.lang.String"/>
 	<field name="CustBankAccountType" class="java.lang.String"/>
 	<field name="CustBankAccountNumber" class="java.lang.String"/>
+	<field name="CustBankAccountName" class="java.lang.String"/>
 	<detail>
-		<band height="20">
+		<band height="21">
 			<textField isStretchWithOverflow="true">
-				<reportElement x="-20" y="0" width="400" height="20" uuid="09cadc6b-8ea1-4c8b-92ff-9f2998bda72c"/>
-				<textFieldExpression><![CDATA[$F{CustBank} + ", " + $F{CustBankBranch} + "\nA/C No: " + $F{CustBankAccountNumber} + "\nA/C Type:"+ $F{CustBankAccountType} + "\n"]]></textFieldExpression>
+				<reportElement x="0" y="0" width="219" height="20" uuid="09cadc6b-8ea1-4c8b-92ff-9f2998bda72c">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CustBank}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="219" y="1" width="160" height="20" uuid="6b2fc766-3706-4359-a3b4-4ac19c1836b4">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CustBankBranch}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="379" y="1" width="140" height="20" uuid="f87e98a8-1317-4cc1-abe2-a6c8f71bf134">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CustBankAccountName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="519" y="1" width="140" height="20" uuid="9831f432-f373-4501-94de-ed09ea50d6fe">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CustBankAccountNumber}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="663" y="1" width="137" height="20" uuid="85138137-6bf2-48b0-8605-1b48b1a47827">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CustBankAccountType}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 </jasperReport>
-

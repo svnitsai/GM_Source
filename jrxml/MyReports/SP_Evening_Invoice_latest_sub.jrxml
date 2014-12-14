@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2014-12-14T13:42:38 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_Evening_Invoice_latest_sub" pageWidth="581" pageHeight="80" orientation="Landscape" columnWidth="581" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f4ad3b71-02a2-4e03-94a9-77ac711780ff">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GarmentMantraDB"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="payableDateFrom" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="payableDateTo" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="supplierCode" class="java.math.BigDecimal" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="supplierBankId" class="java.math.BigDecimal" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT DC.PayCReferenceNumber, DC.CustCode, c.custname, 
+DC.InvoiceAmount, DC.PayCStatus, DC.InvoiceReferenceNumber,  DCD.PayCDate, DCD.SupplierCode, 
+DCD.PaidAmount, DCD.SupplierBankId
+FROM DailyPayC DC 
+join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber
+join DailyPayable DP ON DCD.SupplierCode = DP.SupplierCode AND DCD.PayCDate = DP.PayableDate 
+join Customer c on c.custcode = dc.custcode and c.custtype = 'Merchant' 
+join Customer s on s.custcode = dcd.suppliercode and s.custtype = 'Supplier' 
+join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId and s.custcode = cb1.custcode 
+WHERE CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{payableDateFrom}, 112)
+and dcd.suppliercode = $P{supplierCode}
+and DCD.SupplierBankId = $P{supplierBankId}]]>
+	</queryString>
+	<field name="custname" class="java.lang.String"/>
+	<field name="InvoiceReferenceNumber" class="java.math.BigDecimal"/>
+	<field name="PaidAmount" class="java.math.BigDecimal"/>
+	<field name="PayCReferenceNumber" class="java.lang.Integer"/>
+	<field name="CustCode" class="java.math.BigDecimal"/>
+	<field name="InvoiceAmount" class="java.math.BigDecimal"/>
+	<field name="PayCStatus" class="java.lang.String"/>
+	<field name="PayCDate" class="java.sql.Timestamp"/>
+	<field name="SupplierCode" class="java.math.BigDecimal"/>
+	<field name="SupplierBankId" class="java.math.BigDecimal"/>
+	<variable name="TotalPaidAmount_by_bank" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[SUM($F{PaidAmount})]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="379" height="20" uuid="dd43acef-0474-42ae-9342-c74656e842b7">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{custname}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="379" y="0" width="100" height="20" uuid="2e975165-fa66-4c25-9150-d59603030a01">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("\u20B9 ##,##,##0").format($F{InvoiceAmount})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="481" y="0" width="100" height="20" uuid="5b7b6d6c-5e2d-4a31-8e82-28e9ce92b778">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("\u20B9 ##,##,##0").format($F{PaidAmount})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band>
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</summary>
+</jasperReport>

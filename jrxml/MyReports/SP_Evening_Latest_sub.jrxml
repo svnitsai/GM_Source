@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2014-12-14T13:41:39 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_Evening_Latest_sub" pageWidth="800" pageHeight="300" orientation="Landscape" columnWidth="800" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1d80d5e5-1f70-40d2-ab2e-210118c2b8dc">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GarmentMantraDB"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="payableDateFrom" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="supplierCode" class="java.math.BigDecimal" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="supplierBankId" class="java.math.BigDecimal" isForPrompting="false"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT max(dcd.suppliercode) as supplierCode, DCD.SupplierBankId, max(CB1.CustBank) AS SupplierBank, 
+max(CB1.CustBankBranch) AS SupplierBankBranch, max(CB1.CustBankAccountNumber) AS SupplierAcctNum, 
+max(CB1.CustBankAccountType) AS SupplierBankAccountType, 
+max(CB1.CustBankAccountName) AS SupplierBankAccountName
+  FROM DailyPayCDetails DCD
+join DailyPayable DP ON DCD.SupplierCode = DP.SupplierCode
+               AND DCD.PayCDate = DP.PayableDate 
+left join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId 
+        and DCD.SupplierCode = CB1.CustCode
+WHERE 
+CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{payableDateFrom} , 112)
+and dcd.suppliercode = $P{supplierCode}
+group by DCD.SupplierBankId]]>
+	</queryString>
+	<field name="SupplierBank" class="java.lang.String"/>
+	<field name="SupplierBankBranch" class="java.lang.String"/>
+	<field name="SupplierAcctNum" class="java.lang.String"/>
+	<field name="SupplierBankAccountType" class="java.lang.String"/>
+	<field name="SupplierBankId" class="java.math.BigDecimal"/>
+	<field name="supplierCode" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SupplierBankAccountName" class="java.lang.String"/>
+	<variable name="subPayableDateFrom" class="java.lang.String">
+		<variableExpression><![CDATA[$P{payableDateFrom}]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="74" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="160" height="33" uuid="e2354d78-eaba-4b94-9740-ebd450fee00b"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="false" isItalic="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SupplierBank}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="0" width="140" height="33" uuid="6166384f-cde1-42ae-80af-a3f657e60199"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="false" isItalic="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SupplierBankBranch}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="0" width="200" height="33" uuid="37783e99-d269-41b9-81ce-195c8aacb0a5"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="false" isItalic="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SupplierAcctNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="660" y="0" width="140" height="33" uuid="8f6b2773-efde-4864-a3ee-c31949720e21"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="false" isItalic="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SupplierBankAccountType}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="33" width="581" height="41" uuid="7846a127-5c41-4911-9207-78ef4f67be48">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<subreportParameter name="payableDateFrom">
+					<subreportParameterExpression><![CDATA[$V{subPayableDateFrom}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="supplierCode">
+					<subreportParameterExpression><![CDATA[$F{supplierCode}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="supplierBankId">
+					<subreportParameterExpression><![CDATA[$F{SupplierBankId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["SP_Evening_Invoice_latest_sub.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="300" y="0" width="160" height="33" uuid="97b6cb64-ba61-4d73-9586-1655168ec8d7"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="false" isItalic="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SupplierBankAccountName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

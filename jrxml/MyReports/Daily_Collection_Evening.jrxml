@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-12-02T23:59:08 -->
+<!-- 2014-12-13T23:00:03 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Daily_Collection_Evening" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="71e4abbb-2429-45da-8447-f8cda65ba808">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="47"/>
@@ -17,18 +17,32 @@
 		</conditionalStyle>
 	</style>
 	<subDataset name="PieChartDataset" uuid="81414170-8766-4da2-9888-50db57d4b3cc"/>
+	<parameter name="dateFrom" class="java.lang.String"/>
+	<parameter name="dateTo" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="paycRefNum" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="paycRefSubNum" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="selectedDate" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT DC.PayCDueDate, DC.PayCStatus, C.CustName, C.CustCity, 
-DC.InvoiceReferenceNumber,
-C.CustContactNumber, DC.InvoiceAmount, DC.DeferredDate, DCD.CustBankName,
+		<![CDATA[SELECT distinct DC.PayCDueDate, DC.PayCStatus, C.CustName, C.CustCity, 
+DC.InvoiceReferenceNumber, C.CustContactNumber, DC.InvoiceAmount, DC.DeferredDate, 
 DCD.PayCReferenceSubNumber, DCD.PayCDate, DCD.SupplierCode, DCD.SupplierBankId,
-DCD.PaidAmount, DC.PayCReferenceNumber, DC.CustCode
+DC.PayCReferenceNumber, DC.CustCode, 
+(select SUM(DCDD.PaidAmount) From DailyPayCDetails DCDD 
+	WHERE DCDD.PayCReferenceNumber=DCD.PayCReferenceNumber AND DCD.Deleted <> 1
+) AS TotalPaidAmount
 FROM DailyPayC DC
 join Customer c on c.custcode = dc.custcode and c.custtype = 'Merchant'
 left join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber AND DCD.Deleted <> 1
-left join Customer s on s.custcode = dcd.suppliercode and s.custtype = 'Supplier'
-left join CustomerBanks CB1 
-	on CB1.CustBankId = DCD.SupplierBankId and s.custcode = cb1.custcode
+WHERE 
+    (
+    CONVERT(varchar,DC.PayCDueDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)
+	OR 
+	CONVERT(varchar,DC.DeferredDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)
+	OR
+	CONVERT(varchar,DCD.PayCDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)
+	OR
+	(DC.PayCStatus = 'CLOSED')
+	)
 ORDER BY PayCDueDate, PayCReferenceNumber, PayCReferenceSubNumber]]>
 	</queryString>
 	<field name="PayCDueDate" class="java.sql.Timestamp"/>
@@ -39,28 +53,39 @@ ORDER BY PayCDueDate, PayCReferenceNumber, PayCReferenceSubNumber]]>
 	<field name="CustContactNumber" class="java.math.BigDecimal"/>
 	<field name="InvoiceAmount" class="java.math.BigDecimal"/>
 	<field name="DeferredDate" class="java.sql.Timestamp"/>
-	<field name="CustBankName" class="java.lang.String"/>
 	<field name="PayCDate" class="java.sql.Timestamp"/>
-	<field name="PaidAmount" class="java.math.BigDecimal"/>
 	<field name="PayCReferenceSubNumber" class="java.lang.Integer"/>
 	<field name="SupplierCode" class="java.math.BigDecimal"/>
 	<field name="SupplierBankId" class="java.math.BigDecimal"/>
 	<field name="PayCReferenceNumber" class="java.lang.Integer"/>
 	<field name="CustCode" class="java.math.BigDecimal"/>
+	<field name="TotalPaidAmount" class="java.math.BigDecimal"/>
 	<background>
 		<band height="555" splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="94" splitType="Stretch">
+		<band height="50" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<frame>
-				<reportElement mode="Opaque" x="-20" y="0" width="822" height="65" forecolor="#006699" backcolor="#006699" uuid="76c3778c-31f5-4335-a38b-391002b2b297"/>
-				<staticText>
-					<reportElement style="Title" x="231" y="0" width="578" height="65" uuid="fda8b7f7-9d6b-4b60-bfa1-b36eab8434d2"/>
-					<textElement textAlignment="Right">
-						<font size="54" isBold="false"/>
+				<reportElement mode="Opaque" x="1" y="0" width="800" height="50" isPrintWhenDetailOverflows="true" forecolor="#4D6637" backcolor="#4D6637" uuid="76c3778c-31f5-4335-a38b-391002b2b297">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="SubTitle" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" mode="Opaque" x="10" y="9" width="788" height="29" forecolor="#F5C937" backcolor="#4D6637" uuid="f682ea96-4f72-4813-95a2-36d96093d2fc">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement>
+						<font fontName="Arial" size="24" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
-					<text><![CDATA[Garment Mantra Daily Collection report for the date of]]></text>
-				</staticText>
+					<textFieldExpression><![CDATA["Daily Collection Report For " + $P{selectedDate}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
@@ -68,172 +93,218 @@ ORDER BY PayCDueDate, PayCReferenceNumber, PayCReferenceSubNumber]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="14" splitType="Stretch">
+		<band height="28" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<frame>
-				<reportElement x="-1" y="0" width="803" height="14" uuid="29a7708d-778c-4a42-bd2c-2c58220938e0"/>
+				<reportElement x="-1" y="0" width="803" height="28" uuid="29a7708d-778c-4a42-bd2c-2c58220938e0">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" x="0" y="0" width="38" height="14" forecolor="#000000" uuid="b8c81bbd-073d-41c1-bad9-6c7986270268"/>
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="210" y="1" width="248" height="24" forecolor="#000000" backcolor="#FFFFCC" uuid="6fc3fed0-3dab-4e06-b7e6-ecf96eafe4ef">
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="local_mesure_unity" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
 					</textElement>
-					<text><![CDATA[PayCDueDate]]></text>
+					<text><![CDATA[Party Details]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" x="38" y="0" width="38" height="14" forecolor="#000000" uuid="f8a8bde7-17a3-46f9-9231-c955316b261a"/>
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="459" y="1" width="111" height="24" forecolor="#000000" backcolor="#FFFFCC" uuid="a688f8e2-551d-4674-a3bf-605d9409c6ac">
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="local_mesure_unity" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
 					</textElement>
-					<text><![CDATA[PayCStatus]]></text>
+					<text><![CDATA[Invoice Amount]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" x="76" y="0" width="38" height="14" forecolor="#000000" uuid="6fc3fed0-3dab-4e06-b7e6-ecf96eafe4ef"/>
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="570" y="1" width="99" height="24" forecolor="#000000" backcolor="#FFFFCC" uuid="4b1d6e52-d827-40de-b730-872c536328f7">
+						<property name="local_mesure_unity" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
 					</textElement>
-					<text><![CDATA[CustName]]></text>
+					<text><![CDATA[Balance Amount]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" x="114" y="0" width="38" height="14" forecolor="#000000" uuid="bc67805b-85d5-4469-9613-7367002bb041"/>
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="670" y="1" width="132" height="24" forecolor="#000000" backcolor="#FFFFCC" uuid="cdd28ece-1e0e-413f-a427-c98a199dc3cb">
+						<property name="local_mesure_unity" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
 					</textElement>
-					<text><![CDATA[CustCity]]></text>
+					<text><![CDATA[Due Date]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" x="152" y="0" width="38" height="14" forecolor="#000000" uuid="12c87b9f-8e01-4619-a437-7ee1bbb177a3"/>
+					<reportElement mode="Opaque" x="1" y="1" width="39" height="24" backcolor="#FFFFCC" uuid="9a83a3d6-73fb-4278-b482-d2ce21294831">
+						<property name="local_mesure_unity" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[InvoiceReferenceNumber]]></text>
+					<text><![CDATA[S.No]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" x="190" y="0" width="38" height="14" forecolor="#000000" uuid="a688f8e2-551d-4674-a3bf-605d9409c6ac"/>
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="41" y="1" width="101" height="24" forecolor="#000000" backcolor="#FFFFCC" uuid="12c87b9f-8e01-4619-a437-7ee1bbb177a3">
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="local_mesure_unity" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
 					</textElement>
-					<text><![CDATA[CustContactNumber]]></text>
+					<text><![CDATA[Invoice Number]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" x="228" y="0" width="38" height="14" forecolor="#000000" uuid="4b1d6e52-d827-40de-b730-872c536328f7"/>
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="140" y="1" width="70" height="24" forecolor="#000000" backcolor="#FFFFCC" uuid="f8a8bde7-17a3-46f9-9231-c955316b261a">
+						<property name="local_mesure_unity" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
 					</textElement>
-					<text><![CDATA[InvoiceAmount]]></text>
-				</staticText>
-				<staticText>
-					<reportElement style="Column header" positionType="Float" x="266" y="0" width="38" height="14" forecolor="#000000" uuid="cdd28ece-1e0e-413f-a427-c98a199dc3cb"/>
-					<textElement>
-						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
-					</textElement>
-					<text><![CDATA[DeferredDate]]></text>
-				</staticText>
-				<staticText>
-					<reportElement style="Column header" positionType="Float" x="304" y="0" width="38" height="14" forecolor="#000000" uuid="396992be-a9a1-4592-80a5-2950d709515b"/>
-					<textElement>
-						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
-					</textElement>
-					<text><![CDATA[CustBankName]]></text>
-				</staticText>
-				<staticText>
-					<reportElement style="Column header" positionType="Float" x="350" y="0" width="250" height="14" forecolor="#000000" uuid="a9bcc3ff-1390-478a-ac36-28f667dc7db2"/>
-					<textElement>
-						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
-					</textElement>
-					<text><![CDATA[Paid Amount and Supplier Details]]></text>
+					<text><![CDATA[Status]]></text>
 				</staticText>
 			</frame>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="86" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="802" height="14" uuid="df21fab5-fc73-429d-948d-d7199c1aa643"/>
+				<reportElement x="0" y="1" width="802" height="85" uuid="df21fab5-fc73-429d-948d-d7199c1aa643">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement style="Detail" positionType="Float" x="0" y="0" width="38" height="14" uuid="478399f9-3670-4fd3-aef7-824000a52cc5"/>
-					<textElement>
-						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{PayCDueDate}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement style="Detail" positionType="Float" x="38" y="0" width="38" height="14" uuid="c852f82c-725b-4e30-8003-a9c20bb46da9"/>
+					<reportElement style="Detail" positionType="Float" x="140" y="2" width="69" height="14" uuid="c852f82c-725b-4e30-8003-a9c20bb46da9"/>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PayCStatus}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement style="Detail" positionType="Float" x="76" y="0" width="38" height="14" uuid="f1b1f6f9-87af-42d6-a397-1e6c3c60246d"/>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="210" y="25" width="359" height="20" forecolor="#665D5D" uuid="a9bcc3ff-1390-478a-ac36-28f667dc7db2"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+						<font fontName="Arial" size="12" isBold="false" isItalic="true" pdfFontName="Helvetica"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{CustName}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement style="Detail" positionType="Float" x="114" y="0" width="38" height="14" uuid="df7ec8e5-2c7c-44b6-b95f-95dd9725aac5"/>
+					<text><![CDATA[Supplier and Bank Details]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="568" y="25" width="101" height="20" forecolor="#615E5E" uuid="fd510f39-3324-4840-8451-b8517cb618c4">
+						<property name="local_mesure_unitx" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+						<font fontName="Arial" size="12" isBold="false" isItalic="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{CustCity}]]></textFieldExpression>
-				</textField>
+					<text><![CDATA[Paid Amount]]></text>
+				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement style="Detail" positionType="Float" x="152" y="0" width="38" height="14" uuid="247708a9-2be2-46d1-bdec-f52f7f3ce801"/>
+					<reportElement style="Detail" positionType="Float" x="40" y="2" width="100" height="14" uuid="247708a9-2be2-46d1-bdec-f52f7f3ce801"/>
+					<box>
+						<bottomPen lineStyle="Dashed"/>
+					</box>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+						<paragraph lineSpacing="Single" spacingAfter="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{InvoiceReferenceNumber}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement style="Detail" positionType="Float" x="190" y="0" width="38" height="14" uuid="c6a51e16-ec37-4281-bb6b-37087a2d23e7"/>
+				<subreport>
+					<reportElement x="210" y="45" width="459" height="25" uuid="c448838c-c61d-48e5-b70e-6655c8fe92bc"/>
+					<subreportParameter name="paycRefNum">
+						<subreportParameterExpression><![CDATA[$F{PayCReferenceNumber}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="paycRefSubNum">
+						<subreportParameterExpression><![CDATA[$F{PayCReferenceSubNumber}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA["Daily_Collection_Evening_sub.jasper"]]></subreportExpression>
+				</subreport>
+				<textField isBlankWhenNull="true">
+					<reportElement x="4" y="2" width="36" height="14" uuid="5dd49551-f6d6-4ec8-96f7-27f4d6844b88"/>
+					<textElement>
+						<font fontName="Arial" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="210" y="2" width="247" height="14" uuid="f1b1f6f9-87af-42d6-a397-1e6c3c60246d"/>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{CustContactNumber}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[TRIM($F{CustName}) +", "+ TRIM($F{CustCity}) + "\n Phone:" + $F{CustContactNumber}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement style="Detail" positionType="Float" x="228" y="0" width="38" height="14" uuid="cdf6af9d-784a-4455-af8c-7538ae9a7db8"/>
+					<reportElement style="Detail" positionType="Float" x="459" y="0" width="109" height="16" uuid="cdf6af9d-784a-4455-af8c-7538ae9a7db8"/>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{InvoiceAmount}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new java.text.DecimalFormat("\u20B9##,##,##0").format($F{InvoiceAmount})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement style="Detail" positionType="Float" x="266" y="0" width="38" height="14" uuid="b2985138-d218-4e29-8839-892ad6816672"/>
+					<reportElement style="Detail" positionType="Float" stretchType="RelativeToTallestObject" x="668" y="2" width="130" height="14" uuid="b2985138-d218-4e29-8839-892ad6816672"/>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{DeferredDate}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[(new SimpleDateFormat("MMM d,YYYY").format($F{PayCDueDate})) + "\n Deferred: " + 
+(new SimpleDateFormat("MMM d,YYYY").format($F{DeferredDate}))]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement style="Detail" positionType="Float" x="304" y="0" width="38" height="14" uuid="02dc2410-f629-41cb-ae21-df2def350840"/>
+				<textField isBlankWhenNull="true">
+					<reportElement x="569" y="2" width="99" height="14" uuid="ddd99b0d-d602-4195-9048-4de387279eec"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+						<font fontName="Arial" size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{CustBankName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new java.text.DecimalFormat("\u20B9##,##,##0").format(SUM($F{InvoiceAmount}, PRODUCT($F{TotalPaidAmount}, -1)))]]></textFieldExpression>
 				</textField>
+				<line>
+					<reportElement positionType="Float" x="1" y="81" width="798" height="1" uuid="36b90ffe-8843-41aa-ae8d-22eb5254cbaa"/>
+				</line>
 			</frame>
 		</band>
 	</detail>
 	<pageFooter>
 		<band height="16" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="2" y="0" width="800" height="16" forecolor="#D0B48E" backcolor="#006699" uuid="2078db66-32b1-43f1-ae09-d4f93b7adc15"/>
+				<reportElement mode="Opaque" x="2" y="0" width="800" height="16" forecolor="#D0B48E" backcolor="#4D6637" uuid="2078db66-32b1-43f1-ae09-d4f93b7adc15"/>
 				<textField evaluationTime="Report">
-					<reportElement style="Column header" x="753" y="0" width="40" height="16" forecolor="#FFFFFF" uuid="603edd6a-8af6-488b-bfaa-3380ab113891"/>
+					<reportElement style="Column header" x="753" y="0" width="40" height="16" forecolor="#F5C937" uuid="603edd6a-8af6-488b-bfaa-3380ab113891"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
 					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement style="Column header" x="673" y="0" width="80" height="16" forecolor="#FFFFFF" uuid="ddcf9801-4312-48cd-b66b-fc1ea441821c"/>
+					<reportElement style="Column header" mode="Transparent" x="673" y="0" width="80" height="16" forecolor="#F5C937" uuid="ddcf9801-4312-48cd-b66b-fc1ea441821c"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
 					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 				</textField>
 				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement style="Column header" x="2" y="0" width="197" height="16" forecolor="#FFFFFF" uuid="b30f1874-498c-4143-ae50-038deb8af27d"/>
+					<reportElement style="Column header" x="2" y="0" width="197" height="16" forecolor="#F5C937" uuid="b30f1874-498c-4143-ae50-038deb8af27d"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>

@@ -227,12 +227,12 @@ public class LandingPageWindows {
 			Session session = HibernateUtil.getSession();
 			String SQL_QUERY = "Select DE.ExtractDataType, CONVERT(VARCHAR(10),DE.ExtractDate,111) as ExtractedDate "
 					+ "    , DE.Extracted "
-					+ "from dbo.DataExtracted DE "
+					+ "from dbo.DataExtracted DE WITH (READUNCOMMITTED )"
 					+ "where DE.ExtractDate = (Select MAX(DEI.ExtractDate) from dbo.DataExtracted DEI where DEI.ExtractDataType = 'P' and DEI.ExtractDateType = 'D') "
 					+ " UNION "
 					+ " Select DE.ExtractDataType, CONVERT(VARCHAR(10),DE.ExtractDate,111) as ExtractedDate "
 					+ "     , DE.Extracted "
-					+ " from dbo.DataExtracted DE "
+					+ " from dbo.DataExtracted DE WITH (READUNCOMMITTED )"
 					+ " where DE.ExtractDate = (Select MAX(DEI.ExtractDate) from dbo.DataExtracted DEI where DEI.ExtractDataType = 'C' and DEI.ExtractDateType = 'D'); ";
 
 			/* Run as NATIVE SQL Query */

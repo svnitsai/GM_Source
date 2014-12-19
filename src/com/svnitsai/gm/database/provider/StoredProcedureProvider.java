@@ -8,6 +8,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.svnitsai.gm.Util;
 import com.svnitsai.gm.util.exception.DBException;
@@ -37,12 +38,15 @@ public class StoredProcedureProvider {
 	public Object callCreditSalesDataRefresh() {
 		/* List that returns result */
 		List result = null;
+		Session session = HibernateUtil.getSession();
+		System.out.println (" Begin Transaction ");
+		Transaction transaction = session.beginTransaction();
+
 		try {
 			LogUtil.log(LogUtil.Message_Type.Information,
 					" Credit Sales Data Refresh Started @ "
 							+ DateUtil.getCurrentTimestamp().toString());
 
-			Session session = HibernateUtil.getSession();
 			Query query = session.createSQLQuery("EXEC CS_CSALESEXTRACT ");
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 
@@ -61,14 +65,24 @@ public class StoredProcedureProvider {
 									+ " Return Code: " + row.get("ReturnValue"));
 				}
 			}
+
+			transaction.commit();
+			
+
 		} catch (JDBCException e) {
+			transaction.rollback();
 			DBException.HandleJDBCException(e);
 		} catch (HibernateException e) {
+			transaction.rollback();
 			DBException.HandleHibernateException(e);
 		} catch (Exception e) {
+			transaction.rollback();
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
+			System.out.println (" session close invoked in Credit Sales data load ");
+
+			session.close();
 			return result;
 		}
 	}
@@ -84,12 +98,15 @@ public class StoredProcedureProvider {
 	public Object callCustomerDataRefresh() {
 		/* List that returns result */
 		List result = null;
+		Session session = HibernateUtil.getSession();
+		System.out.println (" Begin Transaction ");
+		Transaction transaction = session.beginTransaction();
+
 		try {
 			LogUtil.log(LogUtil.Message_Type.Information,
 					" Customer Data Refresh Started @ "
 							+ DateUtil.getCurrentTimestamp().toString());
 
-			Session session = HibernateUtil.getSession();
 			Query query = session.createSQLQuery("EXEC CS_PARTYEXTRACT ");
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 
@@ -108,14 +125,23 @@ public class StoredProcedureProvider {
 									+ " Return Code: " + row.get("ReturnValue"));
 				}
 			}
+			
+			transaction.commit();
+			
 		} catch (JDBCException e) {
+			transaction.rollback();
 			DBException.HandleJDBCException(e);
 		} catch (HibernateException e) {
+			transaction.rollback();
 			DBException.HandleHibernateException(e);
 		} catch (Exception e) {
+			transaction.rollback();
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
+			System.out.println (" session close invoked in Customer data load ");
+
+			session.close();
 			return result;
 		}
 	}

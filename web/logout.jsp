@@ -18,6 +18,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link rel="stylesheet" type="text/css" href="/gm/web/css/style.css" />
 <link rel="stylesheet" type="text/css" href="/gm/web/css/jquery-ui.css" />
+<%@ page import="com.svnitsai.gm.util.hibernate.HibernateUtil"%>
 
 <script src="/gm/web/javascript/jquery-1.11.1.min.js"></script>
 <script src="/gm/web/javascript/jquery-ui.min.js"></script>
@@ -32,6 +33,10 @@ if (null != userName) {
 	session.removeAttribute("Role");
 	session.invalidate();
 }
+
+//Shutdown Hibernate SessionFactory
+HibernateUtil.shutdown();
+
 RequestDispatcher rd = request.getRequestDispatcher("/web/login.jsp");
 rd.forward(request, response);
 %>

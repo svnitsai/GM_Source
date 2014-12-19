@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.svnitsai.gm.database.provider.UserAccessProviderImpl;
+import com.svnitsai.gm.database.generated.UserAccess;
 import com.svnitsai.gm.util.date.DateUtil;
 import com.svnitsai.gm.util.log.LogUtil;
 
@@ -32,22 +33,22 @@ try
 	//User authenticated?
 	boolean isValidUser = true;
 	
-//	// Use providerImpl to validate user
-//	UserAccessProviderImpl userAPI = new UserAccessProviderImpl();
-//
-//	//Retrieve username and password from the request sent from JSP
+	// Use providerImpl to validate user
+	UserAccessProviderImpl userAPI = new UserAccessProviderImpl();
+
+	//Retrieve username and password from the request sent from JSP
 	String userName = request.getParameter("jspUserName");
-//	String userPassword = request.getParameter("jspPassword");
-//	
-//	//Read database by the user name
-//	Useraccess userAccess= (Useraccess) userAPI.ReadByUsername(userName);
-//	if (userAccess != null) {
-//		if (userAccess.getPassword().compareTo(userPassword) == 0) {
-//			isValidUser = true;
-//			LogUtil.log(LogUtil.Message_Type.Information, "User " + userAccess.getUsername() + " has logged in @ " + DateUtil.getCurrentTimestamp().toString());
-//		} else LogUtil.log(LogUtil.Message_Type.Information," Invalid password entered for user: " + userName + " !!!");
-//	}
-//	else LogUtil.log(LogUtil.Message_Type.Information," Invalid User " + userName + " login !!!");
+	String userPassword = request.getParameter("jspPassword");
+	
+	//Read database by the user name
+	UserAccess userAccess= (UserAccess) userAPI.ReadByUsername(userName);
+	if (userAccess != null) {
+		if (userAccess.getPassword().compareTo(userPassword) == 0) {
+			isValidUser = true;
+			LogUtil.log(LogUtil.Message_Type.Information, "User " + userAccess.getUserName() + " has logged in @ " + DateUtil.getCurrentTimestamp().toString());
+		} else LogUtil.log(LogUtil.Message_Type.Information," Invalid password entered for user: " + userName + " !!!");
+	}
+	else LogUtil.log(LogUtil.Message_Type.Information," Invalid User " + userName + " login !!!");
 
 	//If validUser create Session
 	if (isValidUser) {
@@ -61,14 +62,14 @@ try
         {
         	session.setAttribute("Role", "USER");
         }
-        //session.setAttribute("Role", userAccess.getRole().toUpperCase());
+        session.setAttribute("Role", userAccess.getRole().toUpperCase());
 
-        //request.setAttribute("currentUser",userAccess); 
+        request.setAttribute("currentUser",userAccess); 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 		dispatcher.forward(request, response);
 	} else {
         request.setAttribute("userName", userName);
-		//request.setAttribute("passWord", userPassword);
+		request.setAttribute("passWord", userPassword);
         request.setAttribute("errorMessage","Invalid user / password!"); 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/web/login.jsp");
 		dispatcher.forward(request, response);

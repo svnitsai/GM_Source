@@ -40,8 +40,9 @@ public class LandingPageWindows {
 	public Object getBalancePayableWindow() {
 		/* List that returns result */
 		List result = null;
+		Session session = HibernateUtil.getSession();
+
 		try {
-			Session session = HibernateUtil.getSession();
 
 			String SQL_QUERY = " Select Cust.CustName as SupplierName, SupplierPayable.PayableAmount as PayableAmount "
 					+ " , ISNULL(SupplierPaid.PaidAmount,0) as PaidAmount, SupplierPayable.PayableDate as BalanceDueDate "
@@ -113,6 +114,8 @@ public class LandingPageWindows {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
+			session.close();
+			System.out.println ( " session close invoked in getBalancePayableWindow ");
 			return result;
 		}
 	}
@@ -133,9 +136,9 @@ public class LandingPageWindows {
 	public Object getCreditSalesWindow() {
 		/* List that returns result */
 		List result = null;
-		try {
-			Session session = HibernateUtil.getSession();
+		Session session = HibernateUtil.getSession();
 
+		try {
 			String SQL_QUERY = "Select Receivable.PayCReferenceNumber as ReferenceNumber, Receivable.InvoiceAmount as ReceivableAmount "
 					+ " , Receivable.DeferredDate as DeferredDate, Receivable.PayCDueDate as DueDate "
 					+ "  , Receivable.AdjustedDueDate as AdjustedDueDate, Received.PaidAmount as ReceivedAmount "
@@ -207,6 +210,8 @@ public class LandingPageWindows {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
+			session.close();
+			System.out.println (" session close invoked in getCreditSalesWindow ");
 			return result;
 		}
 	}
@@ -223,16 +228,17 @@ public class LandingPageWindows {
 	public Object getDataRefreshWindow() {
 		/* List that returns result */
 		List result = null;
+		Session session = HibernateUtil.getSession();
+
 		try {
-			Session session = HibernateUtil.getSession();
 			String SQL_QUERY = "Select DE.ExtractDataType, CONVERT(VARCHAR(10),DE.ExtractDate,111) as ExtractedDate "
 					+ "    , DE.Extracted "
-					+ "from dbo.DataExtracted DE WITH (READUNCOMMITTED )"
+					+ "from dbo.DataExtracted DE "
 					+ "where DE.ExtractDate = (Select MAX(DEI.ExtractDate) from dbo.DataExtracted DEI where DEI.ExtractDataType = 'P' and DEI.ExtractDateType = 'D') "
 					+ " UNION "
 					+ " Select DE.ExtractDataType, CONVERT(VARCHAR(10),DE.ExtractDate,111) as ExtractedDate "
 					+ "     , DE.Extracted "
-					+ " from dbo.DataExtracted DE WITH (READUNCOMMITTED )"
+					+ " from dbo.DataExtracted DE "
 					+ " where DE.ExtractDate = (Select MAX(DEI.ExtractDate) from dbo.DataExtracted DEI where DEI.ExtractDataType = 'C' and DEI.ExtractDateType = 'D'); ";
 
 			/* Run as NATIVE SQL Query */
@@ -268,6 +274,8 @@ public class LandingPageWindows {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
+			session.close();
+			System.out.println (" session close invoked in getDataRefreshWindow ");
 			return result;
 		}
 	}

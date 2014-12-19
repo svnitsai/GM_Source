@@ -34,9 +34,10 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 	@Override
 	public Object ReadById(int dataObjectId) {
 		UserAccess userAccess = new UserAccess();
+		Session session = HibernateUtil.getSession();
+
 		try {
 			System.out.println("Inside ReadById");
-			Session session = HibernateUtil.getSession();
 			String SQL_QUERY = "Select userId, userName, password, role, createdDate, createdBy, updatedDate, updatedBy from UserAccess where UserId = :hostUserId";
 			Query query = session.createQuery(SQL_QUERY).setParameter(
 					"hostUserId", dataObjectId);
@@ -55,6 +56,7 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
+			session.close();
 			return userAccess;
 		}
 	}
@@ -110,6 +112,7 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 				transaction.commit();
 				session.flush();
 				session.clear();
+				session.close();
 			} catch (JDBCException e) {
 				returnCode = DBException.HandleJDBCException(e);
 			} catch (HibernateException e) {
@@ -120,12 +123,13 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 	}
 
 	/*
-	 * Retrieve Useraccess data by username - case insensitive retrieval
+	 * Retrieve UserAccess data by username - case insensitive retrieval
 	 */
 	public Object ReadByUsername(String userName) {
 		UserAccess userAccess = new UserAccess();
+		Session session = HibernateUtil.getSession();
+
 		try {
-			Session session = HibernateUtil.getSession();
 			String SQL_QUERY = "Select userId, userName, password, role, createdDate, createdBy, updatedDate, updatedBy from UserAccess as UA where upper(userName) = upper(:hostUserName)";
 			Query query = session.createQuery(SQL_QUERY).setParameter(
 					"hostUserName", userName);
@@ -144,6 +148,9 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
+			System.out.println(" System session closed in ReadByUserName");
+			
+			session.close();
 			return userAccess;
 		}
 	}

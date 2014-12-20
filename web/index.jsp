@@ -111,10 +111,14 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 				<tr>
 					<td style="width: 160px" align="left"><%=row.get("SupplierName")%>
 					</td>
+					<!--
 					<td style="width: 110px" align="right">&#8377;<%=dispPayableAmount%>
-					</td>
+					</td> 
 					<td style="width: 110px" align="right">&#8377;<%=dispBalanceDue%>
-					</td>
+					</td> -->
+					<td style="width: 110px" align="right"><span style="font-family: DejaVu Sans;">&#x20b9; </span><%=dispPayableAmount%>
+					</td> 
+					<td style="width: 110px" align="right"><span style="font-family: DejaVu Sans;">&#x20b9; </span><%=dispBalanceDue%>
 				</tr>
 				<%
 					}
@@ -197,7 +201,7 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 					<td style="width: 160px" align="left"><%=row.get("CustomerName")%>
 					</td>
 					<td style="width: 160px" align="left"><%=dispAdjustedDueDate%></td>
-					<td style="width: 110px" align="right">&#8377;<%=dispReceivableBalanceDue%></td>
+					<td style="width: 110px" align="right"><span style="font-family: DejaVu Sans;">&#x20b9;</span><%=dispReceivableBalanceDue%></td>
 				</tr>
 				<%
 					}

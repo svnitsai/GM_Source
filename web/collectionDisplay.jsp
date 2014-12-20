@@ -176,7 +176,7 @@ var popUpObj;
 				<td <%= rowspanStr%> nowrap><%=bean.getCustName()%><br/>Phone: <%=bean.getCustPhoneNumber()%></td>
 				<td <%= rowspanStr%> align="right"><%= bean.getInvoiceNumber() %> </td>
 				<td <%= rowspanStr%> nowrap><%= bean.getDueDateForDisplay() %><br/><%= bean.getStatus() %></td>
-				<td <%= rowspanStr%> align="right">&#8377;<%=dispInvoiceAmount %> </td>
+				<td <%= rowspanStr%> align="right"><span style="font-family: DejaVu Sans;">&#x20b9; </span><%=dispInvoiceAmount %> </td>
 				
 				
 			<% if(bean.getDetailsList().size() > 0) { 
@@ -195,12 +195,12 @@ var popUpObj;
 					}
 				}
 			%>
-				<td align="right">&#8377;<%= dispPaidAmount%></td>
+				<td align="right"><span style="font-family: DejaVu Sans;">&#x20b9; </span><%= dispPaidAmount%></td>
 				<td nowrap><%= supplierName %>
 				<td nowrap><%= bean.getDetailsList().get(0).getCollectionDateStr() %>
 				
 			<% } else { %>
-				<td align="right">&#8377; 0</td>
+				<td align="right"><span style="font-family: DejaVu Sans;">&#x20b9; </span> 0</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 			<% } %>	
@@ -240,7 +240,7 @@ var popUpObj;
 						}
 			%>
 						<tr>
-							<td align="right">&#8377;<%= dispPaidAmount %></td>
+							<td align="right"><span style="font-family: DejaVu Sans;">&#x20b9; </span><%= dispPaidAmount %></td>
 							<td nowrap><%= supplierName %></td>
 							<td nowrap><%= detailBean.getCollectionDateStr() %></td>
 						</tr>

@@ -7,13 +7,17 @@
   <link rel="stylesheet" type="text/css" href="/gm/web/css/style.css" />
   <link rel="stylesheet" type="text/css" href="/gm/web/css/jquery-ui.css" />
   <link rel="stylesheet" type="text/css" href="/gm/web/css/jquery.datatables.css" />
+  <link rel="stylesheet" type="text/css" href="/gm/web/css/select2.css" />
   
   <script src="/gm/web/javascript/jquery-1.11.1.min.js"></script>
   <script src="/gm/web/javascript/jquery-ui.min.js"></script>
   <script src="/gm/web/javascript/jquery.validate.min.js"></script>
   <script src="/gm/web/javascript/additional-methods.min.js"></script>
   <script src="/gm/web/javascript/chosen.jquery.min.js"></script>
+	<!-- Table Scroll formatting -->
   <script src="/gm/web/javascript/jquery.dataTables.min.js"></script>
+	<!-- Select drop down formatting -->
+  <script src="/gm/web/javascript/select2.min.js"></script>
   <script src="/gm/web/javascript/utils.js"></script>
     
   <title>Garment Mantra</title>
@@ -39,14 +43,14 @@
 			}
 		});
 		
-		$( ".addButton" ).button({
-			icons: {
-				primary: "ui-icon-plus"
-			}
-		});
 		$( ".saveButton" ).button({
 			icons: {
 				primary: "ui-icon-disk"
+			}
+		});
+		$( ".addButton" ).button({
+			icons: {
+				primary: "ui-icon-plus"
 			}
 		});
 		$( ".printButton" ).button({

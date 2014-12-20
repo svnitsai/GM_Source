@@ -174,7 +174,7 @@ input.error {
 		</tr>
 		<tr>
 			<td>Invoice Amount:</td>
-			<td>&#8377; <%= DisplayUtil.getDisplayAmount(bean.getInvoiceAmount())%></td>
+			<td><span style="font-family: DejaVu Sans;">&#x20b9; </span> <%= DisplayUtil.getDisplayAmount(bean.getInvoiceAmount())%></td>
 		</tr>
 		<tr>
 			<td>Collection Due Date:</td>
@@ -309,7 +309,7 @@ input.error {
 				<% if(i==0) { %>
 					<input type="text" name="paidAmt_<%=i%>" required/>
 				<% } else { %>
-					&#8377; <%= DisplayUtil.getDisplayAmount(detailBean.getPaidAmount())%>
+					<span style="font-family: DejaVu Sans;">&#x20b9; </span> <%= DisplayUtil.getDisplayAmount(detailBean.getPaidAmount())%>
 				<% } %>
 			</td>
 			 

@@ -5,7 +5,7 @@
  <session-factory>
   <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
   <property name="hibernate.connection.password">svnadmin</property>
-  <property name="hibernate.connection.url">jdbc:sqlserver://ADMIN-PC:49168;DatabaseName=PayC;instanceName=SQL2008R2;</property>
+  <property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;DatabaseName=ProdPayC;instanceName=SQLEXPRESS;</property>
   <property name="hibernate.connection.username">admin</property>
   <property name="hibernate.default_schema">dbo</property>
   <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>

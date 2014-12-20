@@ -55,7 +55,7 @@ a:hover {
 	color: #333;
 	width: 930px;
 	padding: 10px;
-	height: 80px;
+	height: 50px;
 	margin: 0px;
 	background: #31444F url(images/header.jpg);
 	border-top: 2px solid #E4DD97;
@@ -307,7 +307,7 @@ ul#preferences-menu li a {
 	background-repeat: no-repeat;
 	width: 400px;
 	height: 235px;
-	margin: 200px auto 240px;
+	margin: 150px auto 150px;
 	padding: 0px;
 }
 

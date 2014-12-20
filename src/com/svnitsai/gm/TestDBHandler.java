@@ -8,17 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.Date;
 
-import com.svnitsai.gm.CollectionBean;
-import com.svnitsai.gm.CustomerBankBean;
-import com.svnitsai.gm.CustomerBean;
-import com.svnitsai.gm.util.date.DateUtil;
-import com.svnitsai.gm.util.log.LogUtil;
-
-public class DBHandler {
+public class TestDBHandler {
 	public static LinkedHashMap<Long, String> getMerchants() {
 		return getCustomerIdMap("Merchant");
 	}
@@ -56,7 +50,6 @@ public class DBHandler {
 	}
 
 	public static LinkedHashMap<Long, CustomerBean> getSuppliers() {
-		System.out.println(" inside getsuppliers");
 		return getCustomers("Supplier");
 	}
 
@@ -70,33 +63,16 @@ public class DBHandler {
 		// TODO: HibernateME
 		try {
 			// TODO: Change to read the bank data
-			/* Code changed as Customer Bank data was mostly empty - SSK
-			 String sql = "select C.CustCode, CustName, CustAddress1, CustAddress2, CustCity, CustState, CustCountry, CustContactNumber, "
-			 
+			String sql = "select C.CustCode, CustName, CustAddress1, CustAddress2, CustCity, CustState, CustCountry, CustContactNumber, "
 					+ "CustBankId, CustBank, CustBankBranch, CustBankAccountType, CustBankAccountNumber "
 					+ "FROM Customer C, CustomerBanks CB "
 					+ "WHERE CustType='"
 					+ type
 					+ "' AND C.CustCode = CB.CustCode "
 					+ "ORDER BY CustName";
-					*/
-			String sql = "Select C.CustCode, C.CustName, C.CustAddress1, C.CustAddress2, ISNULL(C.CustCity,'') as CustCity, ISNULL(C.CustState,'') as CustState "
-			        + " , ISNULL(C.CustCountry,'') as CustCountry, ISNULL(C.CustContactNumber,0) as CustContactNumber"
-					+ " , ISNULL(CB.CustBankId,0) as CustBankId, ISNULL(CB.CustBank,'') as CustBank, ISNULL(CB.CustBankBranch,'') as CustBankBranch "
-					+ " , ISNULL(CB.CustBankAccountType,'') as CustBankAccountType, ISNULL(CB.CustBankAccountNumber,'') as CustBankAccountNumber "
-					+ "	FROM Customer C LEFT OUTER JOIN CustomerBanks CB "
-					+ " ON C.custcode = CB.custcode "
-					+ "WHERE CustType='"
-					+ type
-					+ "' ORDER BY CustCode Desc";
-
-			System.out.println(" SQL Customer query is : " + sql);
 			conn = getConnection();
-			System.out.println(" After get connection");
 			stmt = conn.createStatement();
-			System.out.println(" After create statement");
 			rs = stmt.executeQuery(sql);
-			System.out.println(" after execute statement");
 
 			// STEP 5: Extract data from result set
 			while (rs.next()) {
@@ -526,14 +502,13 @@ public class DBHandler {
 	// TODO: REad from DB connection pool!!!
 	public static Connection getConnection() {
 		Connection conn = null;
-		LogUtil.log(LogUtil.Message_Type.Information, " About to get database connection using JDBC @ "
-			+ DateUtil.getCurrentTimestamp().toString());
+
 		try {
 			String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 			String username = "admin";
 			String password = "svnadmin";
 			Class.forName(driver).newInstance();
-			String dbURL = "jdbc:sqlserver://ADMIN-PC:49168;databaseName=PayC;instanceName=SQL2008R2;";
+			String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=ProdPayC";
 			conn = DriverManager.getConnection(dbURL, username, password);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -544,9 +519,6 @@ public class DBHandler {
 
 	public static void closeDBObjects(Connection conn, Statement stmt,
 			ResultSet rs) {
-		LogUtil.log(LogUtil.Message_Type.Information, " About to close database objects for JDBC connection @ "
-				+ DateUtil.getCurrentTimestamp().toString());
-
 		try {
 			if (rs != null && !rs.isClosed()) {
 				rs.close();
@@ -566,8 +538,11 @@ public class DBHandler {
 	}
 
 	/*
-	 * For testing only */
-	public static void main(String[] args) {
-	 Collection<CollectionBean> custList = (Collection<CollectionBean>) DBHandler.getSuppliers();
-	}
+	 * For testing only public static void main(String[] args) {
+	 * //Collection<CollectionBean> custList =
+	 * DBHandler.getCollectionsByDate(null); //System.out.println("Cust list: "
+	 * + custList.size()); System.out.println ("Get Connection..."); Connection
+	 * conn = getConnection(); System.out.println ("Out of get connection"); }
+	 */
+
 }

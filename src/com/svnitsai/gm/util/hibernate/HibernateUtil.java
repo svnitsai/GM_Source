@@ -7,12 +7,15 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-import com.svnitsai.gm.util.exception.DBException;
 import com.svnitsai.gm.util.date.DateUtil;
 
-/**
- * @author Senthil
- *
+/*
+ * HibernateUtil.java
+ * 
+ * @author: 	SVN Systems and Innovations
+ * 
+ * @purpose: 	Uses Singleton Pattern to create database factory
+ * 
  */
 public class HibernateUtil {
 

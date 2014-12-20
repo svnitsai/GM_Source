@@ -60,6 +60,9 @@ input.error {
 			}
 		});
 	<% } %>
+
+	    $(document).ready(function() { $(".supplierDropDown").select2(); });
+	    
 		
 	});
 	
@@ -168,6 +171,8 @@ input.error {
 				<tr>
 					<td align="center" width="25%" valign="top">
 						<select name="supplier_<%=i %>" id="supplier_<%=i %>" class="chosen-select" style="width:175px" required>
+						<!--<select name="supplier_<%=i %>" id="supplier_<%=i %>" placeholder="Select Supplier" class="supplierDropDown" style="width:175px" required > 
+						 auto complete search box-->
 		      				<option value="" selected disabled>Select Supplier</option>
 		      				<% for(CustomerBean supplierBean : supplierMap.values()) { %>
 		      					<option value="<%= supplierBean.getId() %>" <% if(supplierBean.getId() == bean.getSupplierCode()){ %> selected<%} %>>
@@ -196,9 +201,15 @@ input.error {
   <br>
 	<button type="button" class="addButton" onClick="addSupplier();">&nbsp;&nbsp;Add Supplier</button> 
 	&nbsp;
+	<!-- Fix to display ICONS
 	<input type="submit" class="saveButton" onClick="saveChanges();" value="Save"/> 
+	&nbsp; 
+		<input type="submit"  class="printButton" onClick="printReport();" value="Print Report">
 	&nbsp;
-	<input type="submit"  class="printButton" onClick="printReport();" value="Print Report">
+	-->
+	<button type="button" class="saveButton" onClick="saveChanges();">&nbsp;&nbsp;Save</button> 
+	&nbsp;
+	<button type="button"  class="printButton" onClick="printReport();">&nbsp;&nbsp;Print Report</button>
 	&nbsp;
 	<br>
 </div>

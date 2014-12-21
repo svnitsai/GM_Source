@@ -89,6 +89,9 @@ String activePage = "Home";
 if (request.getRequestURL().indexOf("supplier") > 0) activePage = "Supplier";
 else if (request.getRequestURL().indexOf("collection") > 0) activePage = "Collections";
 else if (request.getRequestURL().indexOf("report") > 0) activePage = "Reports";
+else if (request.getRequestURL().indexOf("customer") > 0) activePage = "Customer";
+else if (request.getRequestURL().indexOf("help") > 0) activePage = "Help";
+
 %>
 
 </head>
@@ -119,36 +122,66 @@ else if (request.getRequestURL().indexOf("report") > 0) activePage = "Reports";
 	      			<li class="active"><a href="/gm">Home</a></li>
 			        <li><a href="/gm/web/suppliers.jsp">Payables</a></li>
 				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
+				    <li><a href="/gm/web/customer.jsp">Customer</a></li>
 				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
+				    <li><a href="/gm/web/help.jsp">Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Supplier")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 			        <li class="active"><a href="/gm/web/suppliers.jsp">Payables</a></li>
 				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
+				    <li><a href="/gm/web/customer.jsp">Customer</a></li>
 				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
+				    <li><a href="/gm/web/help.jsp">Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Collections")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 			        <li><a href="/gm/web/suppliers.jsp">Payables</a></li>
 				    <li class="active"><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
+				    <li><a href="/gm/web/customer.jsp">Customer</a></li>
 				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
+				    <li><a href="/gm/web/help.jsp">Help</a></li>
+	      		<% } else if (activePage.equalsIgnoreCase("Customer")) {%>	
+	      			<li><a href="/gm">Home</a></li>
+			        <li><a href="/gm/web/suppliers.jsp">Payables</a></li>
+				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
+				    <li class="active"><a href="/gm/web/customer.jsp">Customer</a></li>
+				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
+				    <li><a href="/gm/web/help.jsp">Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Reports")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 			        <li><a href="/gm/web/suppliers.jsp">Payables</a></li>
 				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
+				    <li><a href="/gm/web/customer.jsp">Customer</a></li>
 				    <li class="active"><a href="/gm/web/reports.jsp">Reports</a></li>
+				    <li><a href="/gm/web/help.jsp">Help</a></li>
+	      		<% } else if (activePage.equalsIgnoreCase("Help")) {%>	
+	      			<li><a href="/gm">Home</a></li>
+			        <li><a href="/gm/web/suppliers.jsp">Payables</a></li>
+				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
+				    <li><a href="/gm/web/customer.jsp">Customer</a></li>
+				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
+				    <li class="active"><a href="/gm/web/help.jsp">Help</a></li>
 				<% } %>
 	      <% } else  { %>
 		      	<%  if (activePage.equalsIgnoreCase("Home")) {  %>
 			      <li class="active"><a href="/gm">Home</a></li>
 			      <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 			      <li><a href="/gm/web/invoiceReport.jsp">Reports</a></li>
+				    <li><a href="/gm/web/help.jsp">Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Collections")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 				    <li class="active"><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
+				    <li><a href="/gm/web/help.jsp">Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Reports")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 				    <li class="active"><a href="/gm/web/reports.jsp">Reports</a></li>
+				    <li><a href="/gm/web/help.jsp">Help</a></li>
+	      		<% } else if (activePage.equalsIgnoreCase("Help")) {%>	
+	      			<li><a href="/gm">Home</a></li>
+				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
+				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
+				    <li class="active"><a href="/gm/web/help.jsp">Help</a></li>
 		      <% } %>
 	      <% } %>
 	    </ul>

@@ -58,7 +58,7 @@ a:hover {
 	height: 50px;
 	margin: 0px;
 	background: #31444F url(images/header.jpg);
-	border-top: 2px solid #E4DD97;
+	border-top: 1px solid #E4DD97;
 }
 
 #navigation {
@@ -68,7 +68,7 @@ a:hover {
 	padding: 5px 0 5px 0;
 	margin: 0;
 	background: #607A00;
-	border-top: 2px solid #E4DD97;
+	border-top: 1px solid #E4DD97;
 }
 
 #navigation li {
@@ -88,12 +88,35 @@ a:hover {
 	padding: 4px 15px 4px 15px;
 }
 
-#navigation a:hover {
+/*
+navigation ul li a.hoover, #navigation ul li a.active{
 	margin: 0;
 	background: #738F11;
-	padding: 4px 15px 4px /* text-decoration:underline;  */
+	padding: 4px 15px 4px;
 }
 
+
+.menu ul li a:hover, .menu ul li a:active{
+	margin: 0;
+	background: #738F11;
+	padding: 4px 15px 4px;
+}
+*/
+
+.menu a:hover{
+	margin: 0;
+	background: #738F11;
+	padding: 4px;
+	border-radius: 5px
+}
+
+.menu .active{
+	margin: 0;
+	background: #738F11;
+	padding: 4px;
+	border-radius: 5px;	
+}
+	
 #one {
 	color: #333;
 	width: 930px;
@@ -271,7 +294,7 @@ thead th:last-child {
 
 #navigation {
 	background: none repeat scroll 0% 0% #607A00;
-	height: 30px;
+	/*height: 30px;*/
 	width: 100%;
 }
 

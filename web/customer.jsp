@@ -89,8 +89,8 @@ input.error {
 							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
 						<td style="width: 110px" align="left">DHARMALE</td>
 						<td style="width: 30px" align="center"
-							title="Maintain Bank Information"><button type="button"
-								class="addButton" onClick="addCustBank();">&nbsp;</button></td>
+							title="Bank Information"><button type="button"
+								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
@@ -98,8 +98,8 @@ input.error {
 							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
 						<td style="width: 110px" align="left">DHARMALE</td>
 						<td style="width: 30px" align="center"
-							title="Maintain Bank Information"><button type="button"
-								class="addButton" onClick="addCustBank();">&nbsp;</button></td>
+							title="Bank Information"><button type="button"
+								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
@@ -107,8 +107,8 @@ input.error {
 							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
 						<td style="width: 110px" align="left">DHARMALE</td>
 						<td style="width: 30px" align="center"
-							title="Maintain Bank Information"><button type="button"
-								class="addButton" onClick="addCustBank();">&nbsp;</button></td>
+							title="Bank Information"><button type="button"
+								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
@@ -116,8 +116,8 @@ input.error {
 							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
 						<td style="width: 110px" align="left">DHARMALE</td>
 						<td style="width: 30px" align="center"
-							title="Maintain Bank Information"><button type="button"
-								class="addButton" onClick="addCustBank();">&nbsp;</button></td>
+							title="Bank Information"><button type="button"
+								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
@@ -125,8 +125,8 @@ input.error {
 							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
 						<td style="width: 110px" align="left">DHARMALE</td>
 						<td style="width: 30px" align="center"
-							title="Maintain Bank Information"><button type="button"
-								class="addButton" onClick="addCustBank();">&nbsp;</button></td>
+							title="Bank Information"><button type="button"
+								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
@@ -134,8 +134,8 @@ input.error {
 							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
 						<td style="width: 110px" align="left">DHARMALE</td>
 						<td style="width: 30px" align="center"
-							title="Maintain Bank Information"><button type="button"
-								class="addButton" onClick="addCustBank();">&nbsp;</button></td>
+							title="Bank Information"><button type="button"
+								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
@@ -143,8 +143,8 @@ input.error {
 							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
 						<td style="width: 110px" align="left">DHARMALE</td>
 						<td style="width: 30px" align="center"
-							title="Maintain Bank Information"><button type="button"
-								class="addButton" onClick="addCustBank();">&nbsp;</button></td>
+							title="Bank Information"><button type="button"
+								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
@@ -152,8 +152,8 @@ input.error {
 							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
 						<td style="width: 110px" align="left">DHARMALE</td>
 						<td style="width: 30px" align="center"
-							title="Maintain Bank Information"><button type="button"
-								class="addButton" onClick="addCustBank();">&nbsp;</button></td>
+							title="Bank Information"><button type="button"
+								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
@@ -161,8 +161,8 @@ input.error {
 							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
 						<td style="width: 110px" align="left">DHARMALE</td>
 						<td style="width: 30px" align="center"
-							title="Maintain Bank Information"><button type="button"
-								class="addButton" onClick="addCustBank();">&nbsp;</button></td>
+							title="Bank Information"><button type="button"
+								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
 					</tr>
 				</tbody>
 			</table>

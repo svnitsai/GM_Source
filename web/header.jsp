@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="/gm/web/css/jquery-ui.css" />
   <link rel="stylesheet" type="text/css" href="/gm/web/css/jquery.datatables.css" />
   <link rel="stylesheet" type="text/css" href="/gm/web/css/select2.css" />
-  
+
   <script src="/gm/web/javascript/jquery-1.11.1.min.js"></script>
   <script src="/gm/web/javascript/jquery-ui.min.js"></script>
   <script src="/gm/web/javascript/jquery.validate.min.js"></script>
@@ -61,6 +61,11 @@
 		$( ".refreshButton" ).button({
 			icons: {
 				primary: "ui-icon-refresh"
+			}
+		});
+		$( ".infoButton" ).button({
+			icons: {
+				primary: "ui-icon-info"
 			}
 		});
 		$( ".anyButton" ).button();
@@ -124,35 +129,35 @@ else if (request.getRequestURL().indexOf("help") > 0) activePage = "Help";
 				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 				    <li><a href="/gm/web/customer.jsp">Customer</a></li>
 				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
-				    <li><a href="/gm/web/help.jsp">Help</a></li>
+				    <li><a href="/gm/web/Files/GM_Help.pdf" onClick="window.open('/gm/web/Files/GM_Help.pdf', 'newwindow', 'width=700, height=500').focus(); return false;")>Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Supplier")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 			        <li class="active"><a href="/gm/web/suppliers.jsp">Payables</a></li>
 				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 				    <li><a href="/gm/web/customer.jsp">Customer</a></li>
 				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
-				    <li><a href="/gm/web/help.jsp">Help</a></li>
+				    <li><a href="/gm/web/Files/GM_Help.pdf" onClick="window.open('/gm/web/Files/GM_Help.pdf', 'newwindow', 'width=700, height=500').focus(); return false;")>Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Collections")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 			        <li><a href="/gm/web/suppliers.jsp">Payables</a></li>
 				    <li class="active"><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 				    <li><a href="/gm/web/customer.jsp">Customer</a></li>
 				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
-				    <li><a href="/gm/web/help.jsp">Help</a></li>
+				    <li><a href="/gm/web/Files/GM_Help.pdf" onClick="window.open('/gm/web/Files/GM_Help.pdf', 'newwindow', 'width=700, height=500').focus(); return false;")>Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Customer")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 			        <li><a href="/gm/web/suppliers.jsp">Payables</a></li>
 				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 				    <li class="active"><a href="/gm/web/customer.jsp">Customer</a></li>
 				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
-				    <li><a href="/gm/web/help.jsp">Help</a></li>
+				    <li><a href="/gm/web/Files/GM_Help.pdf" onClick="window.open('/gm/web/Files/GM_Help.pdf', 'newwindow', 'width=700, height=500').focus(); return false;")>Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Reports")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 			        <li><a href="/gm/web/suppliers.jsp">Payables</a></li>
 				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 				    <li><a href="/gm/web/customer.jsp">Customer</a></li>
 				    <li class="active"><a href="/gm/web/reports.jsp">Reports</a></li>
-				    <li><a href="/gm/web/help.jsp">Help</a></li>
+				    <li><a href="/gm/web/Files/GM_Help.pdf" onClick="window.open('/gm/web/Files/GM_Help.pdf', 'newwindow', 'width=700, height=500').focus(); return false;")>Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Help")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 			        <li><a href="/gm/web/suppliers.jsp">Payables</a></li>
@@ -166,17 +171,17 @@ else if (request.getRequestURL().indexOf("help") > 0) activePage = "Help";
 			      <li class="active"><a href="/gm">Home</a></li>
 			      <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 			      <li><a href="/gm/web/invoiceReport.jsp">Reports</a></li>
-				    <li><a href="/gm/web/help.jsp">Help</a></li>
+				    <li><a href="/gm/web/Files/GM_Help.pdf" onClick="window.open('/gm/web/Files/GM_Help.pdf', 'newwindow', 'width=700, height=500').focus(); return false;")>Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Collections")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 				    <li class="active"><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 				    <li><a href="/gm/web/reports.jsp">Reports</a></li>
-				    <li><a href="/gm/web/help.jsp">Help</a></li>
+				    <li><a href="/gm/web/Files/GM_Help.pdf" onClick="window.open('/gm/web/Files/GM_Help.pdf', 'newwindow', 'width=700, height=500').focus(); return false;")>Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Reports")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
 				    <li class="active"><a href="/gm/web/reports.jsp">Reports</a></li>
-				    <li><a href="/gm/web/help.jsp">Help</a></li>
+				    <li><a href="/gm/web/Files/GM_Help.pdf" onClick="window.open('/gm/web/Files/GM_Help.pdf', 'newwindow', 'width=700, height=500').focus(); return false;")>Help</a></li>
 	      		<% } else if (activePage.equalsIgnoreCase("Help")) {%>	
 	      			<li><a href="/gm">Home</a></li>
 				    <li><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>

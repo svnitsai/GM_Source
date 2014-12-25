@@ -79,19 +79,39 @@ public class CollectionServlet extends HttpServlet
 			}
 			else if(name.startsWith("detailRefID_") && !name.equals("detailRefID_0"))
 			{
-				// check if detail ID is set.
+				// check if this is an existing payment (where detail ID is set) 
 				String detailId = request.getParameter(name);
 				
 				System.out.println("Reading details for " + name);
 				String index = name.replace("detailRefID", "");
 				CollectionDetailBean detailBean = new CollectionDetailBean();
 				detailBean.setCollectionDetailId( Util.convertToLong(request.getParameter(name)));
-				detailBean.setPaidAmount(Util.convertToDouble(request.getParameter("paidAmt" + index)));
+				
+				String paidAmt = request.getParameter("paidAmt" + index);
+				if(paidAmt != null)
+				{
+					paidAmt = paidAmt.replace(",", "");
+					paidAmt = paidAmt.replace(" ", "");
+				}
+				else
+				{
+					paidAmt = "0";
+				}
+				detailBean.setPaidAmount(Util.convertToDouble(paidAmt.trim()));
+				
 				detailBean.setCompanyCode( Util.convertToLong(request.getParameter("companyID" + index)));
 				detailBean.setLedgerNumber(Util.convertToInt(request.getParameter("ledger" + index)));
 				if("0".equals(detailId))
 				{
+					// detailId =0 ==> New payment
+					String paymentType = request.getParameter("paymentType" + index);
 					detailBean.setSupplierCode( Util.convertToLong(request.getParameter("supplierId" + index)));
+					if(detailBean.getSupplierCode() == 0)
+					{
+						// supplier not selected. It must be the other payment types. Get the type
+						// cash(0), Adjustment (-1) or RG (-2)
+						detailBean.setSupplierCode( Util.convertToLong(request.getParameter("paymentType" + index)));
+					}
 					detailBean.setSupplierBankId(Util.convertToLong(request.getParameter("supplierBankId" + index)));
 					//detailBean.setCustomerBankName(request.getParameter("merchantBank" + index));
 					detailBean.setCollectionDateStr(request.getParameter("collectionDate" + index));

@@ -49,7 +49,19 @@ public class PayableServlet extends HttpServlet
 				
 				String index = name.replace("supplier", "");
 				bean.setPayableDateStr(request.getParameter("date" + index));
-				bean.setPayableAmount(Util.convertToDouble(request.getParameter("amount" + index)));
+				
+				String paidAmt = request.getParameter("amount" + index);
+				if(paidAmt != null)
+				{
+					paidAmt = paidAmt.replace(",", "");
+					paidAmt = paidAmt.replace(" ", "");
+				}
+				else
+				{
+					paidAmt = "0";
+				}
+				bean.setPayableAmount(Util.convertToDouble(paidAmt.trim()));
+				
 				bean.setInstructions(request.getParameter("instructions" + index));
 				bean.setPayableId(Util.convertToLong(request.getParameter("refId" + index)));
 				payableList.add(bean);

@@ -45,6 +45,27 @@
 	}
 %>
 <script>
+$( document ).ready(function() {
+	handleFilterChange();
+});
+function isPageValid()
+{
+	$.validator.messages.required = 'Please specify value';
+	var form = $( "#editForm" );
+   	form.validate();
+ 		if(form.valid() == false)
+  		{
+   			return false;
+  		}
+
+	return true;
+}
+
+function saveChanges()
+{
+    	nidsSubmitDocumentForm(true);
+}
+
 	function setMerchantName()
 	{
 		var selectedMerchant = $( "#merchantId option:selected" ).text().trim();
@@ -88,7 +109,21 @@ var popUpObj;
 	        bcgDiv.style.display="none";
 	}
 
-
+	function handleFilterChange()
+	{
+		var filter = nidsGetElementValue("filterBy");
+		if(filter == 'date')
+		{
+			nidsEnableControl("selectedDate", true);
+			nidsEnableControl("merchantId", false);
+		}
+		else
+		{
+			nidsEnableControl("selectedDate", false);
+			nidsEnableControl("merchantId", true);
+		}
+		
+	}
 	
 		
 </script>
@@ -96,28 +131,29 @@ var popUpObj;
   <div id="two">
     <div class="item">    
     	Get collection details for:
-      <form action="/gm/servlet/collection">
+      <form action="/gm/servlet/collection" id="editForm">
       	<input type="hidden" name="action" value="getCollections" /> 
       	<input type="hidden" name="merchantName" id="merchantName"/>
       	<table cellspacing="5" cellpadding="5">
       		<tr>
       			<td>
-      				<label><input type="radio" name="filterBy" value="date" 
-      						<% if(!isMerchantSelected) {%>checked <%} %>> Selected Date:</label>
+      				<label><input type="radio" name="filterBy" id="filterBy" value="date" 
+      						<% if(!isMerchantSelected) {%>checked <%} %> onclick="handleFilterChange();"> Selected Date:</label>
       			</td>
-      			<td><input type="text" name="selectedDate" class="datepicker" value="<%= selectedDate %>"></td>
+      			<td><input type="text" name="selectedDate" id="selectedDate" class="datepicker" value="<%= selectedDate %>" required></td>
       		</tr>
       		<tr>
       			<td>
       				<label>
-      					<input 	type="radio" name="filterBy" value="merchant"
+      					<input 	type="radio" name="filterBy" id="filterBy" value="merchant"
       							<% if(merchantMap.size() == 0) {%> disabled 
       							<%} else if (isMerchantSelected) { %> checked <%} %>
+      							 onclick="handleFilterChange();"
       							> Customer:</label>
       			</td>
       			<td>
       				<select name="merchantId" id="merchantId"
-      						onChange="setMerchantName();">
+      						onChange="setMerchantName();" required>
       					<option value="" selected disabled>Select Customer Name</option>
       					<% for(Entry<Long, String> entry : merchantMap.entrySet())
       					   {
@@ -189,6 +225,14 @@ var popUpObj;
 					{
 						supplierName = "Cash";
 					}
+					else if(bean.getDetailsList().get(0).getSupplierCode() == -1)
+					{
+						supplierName = "Adjustment";
+					}
+					else if(bean.getDetailsList().get(0).getSupplierCode() == -2)
+					{
+						supplierName = "RG";
+					}
 					else
 					{
 						supplierName = bean.getDetailsList().get(0).getSupplierName();
@@ -232,6 +276,14 @@ var popUpObj;
 							if(detailBean.getSupplierCode() == 0)
 							{
 								supplierName = "Cash";
+							}
+							else if(detailBean.getSupplierCode() == -1)
+							{
+								supplierName = "Adjustment";
+							}
+							else if(detailBean.getSupplierCode() == -2)
+							{
+								supplierName = "RG";
 							}
 							else
 							{

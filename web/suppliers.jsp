@@ -6,6 +6,7 @@
 <%@ page import="com.svnitsai.gm.Util" %>
 <%@ page import="com.svnitsai.gm.DBHandler" %>
 <%@ page import="com.svnitsai.gm.DailyPayableBean" %>
+<%@ page import="com.svnitsai.gm.util.display.DisplayUtil"%>
 <%@ page import="java.util.LinkedHashMap" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.util.ArrayList" %>
@@ -45,6 +46,8 @@ input.error {
 		nidsEnableControl('supplier_0', false);
 		nidsEnableControl('amount_0', false);
 		nidsEnableControl('date_0', false);
+		
+		$.datepicker.setDefaults({dateFormat:"dd/mm/yy", minDate:0});  
 		
 		<% if(payableList.size() == 1) { %>
 		addSupplier();
@@ -88,11 +91,8 @@ input.error {
 		nidsEnableControl('amount' + id, true);
 		nidsEnableControl('date' + id, true);
 
-		$.datepicker.setDefaults({dateFormat:"dd/mm/yy", minDate:0});  
 		$('#date' + id).datepicker();
 		$('#date' + id).datepicker('setDate', new Date());
-
-
 	}
 	
 	function deleteSupplier(panelName)
@@ -116,7 +116,6 @@ input.error {
 	
 	function printReport()
 	{
-		
 		$("#payableform").prop("target", "_blank");
      	$('#action').val('print');
     	nidsSubmitDocumentForm(false);
@@ -153,7 +152,7 @@ input.error {
 	<% 	for(int i=0; i < payableList.size(); i++) 
 		{
 			DailyPayableBean bean = payableList.get(i);
-			String amt = String.valueOf(bean.getPayableAmount());
+			String amt = DisplayUtil.getDisplayAmount(bean.getPayableAmount());
 			if(bean.getPayableAmount() == 0)
 			{
 				amt = "";

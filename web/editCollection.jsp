@@ -129,7 +129,7 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 		<% CustomerBean supplierBean = supplierMap.get(id);
 			for(CustomerBankBean bankBean: supplierBean.getBankAccountList()) { %>
 				option = document.createElement("option");
-				option.text = '<%= bankBean.getBankName() + ", " + bankBean.getBranchName() + ", A/c #" + bankBean.getAccountNumber() %>';
+				option.text = '<%= bankBean.getBankInfoString() %>';
 				option.value = "<%= bankBean.getBankId()%>";
 				supplierBankComp.add(option);
 		<%	} %>
@@ -259,7 +259,7 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 					{ 
 						if( bankBean.getBankId() == detailBean.getSupplierBankId()) 
 						{
-							supplierBankInfo = bankBean.getBankName() + ", " + bankBean.getBranchName() + ", A/c #" + bankBean.getAccountNumber();
+							supplierBankInfo = bankBean.getBankInfoString();
 						}
 					}
 				}

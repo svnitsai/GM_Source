@@ -9,6 +9,7 @@ public class CustomerBankBean implements Serializable
 	private String branchName;
 	private String accountNumber;
 	private String accountType;
+	private String accountName;
 	
 	public long getBankId() {
 		return bankId;
@@ -23,13 +24,13 @@ public class CustomerBankBean implements Serializable
 		this.bankName = bankName;
 	}
 	public String getBranchName() {
-		return branchName;
+		return (branchName != null) ? branchName : "";
 	}
 	public void setBranchName(String branchName) {
 		this.branchName = branchName;
 	}
 	public String getAccountNumber() {
-		return accountNumber;
+		return (accountNumber != null) ? accountNumber : "";
 	}
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
@@ -40,6 +41,29 @@ public class CustomerBankBean implements Serializable
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
+	public String getAccountName() {
+		return (accountName != null) ? accountName : "";
+	}
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
 	
+	public String getBankInfoString()
+	{
+		String supplierBankInfo = getBankName();
+		if(getBranchName().trim().length() > 0)
+		{
+			supplierBankInfo += ", " + getBranchName();
+		}
+		if(getAccountNumber().trim().length() > 0)
+		{
+			supplierBankInfo += ", A/c # " + getAccountNumber();
+		}
+		if(getAccountName().trim().length() > 0)
+		{
+			supplierBankInfo += ", A/c Name: " + getAccountName();
+		}
+		return supplierBankInfo;
+	}
 	
 }

@@ -93,18 +93,18 @@ public class LandingPageWindows {
 						+ result.size()
 						+ " record(s) to display on BalancePayableWindow @ "
 						+ DateUtil.getCurrentTimestamp().toString());
-				for (Object object : result) {
-					Map row = (Map) object;
-					LogUtil.log(
-							LogUtil.Message_Type.Information,
-							" Supplier Name: " + row.get("SupplierName")
-									+ ", Payable Amount: "
-									+ row.get("PayableAmount")
-									+ ", Paid Amount: " + row.get("PaidAmount")
-									+ ", Balance Due: " + row.get("BalanceDue")
-									+ ", BalanceDueDate: "
-									+ row.get("BalanceDueDate"));
-				}
+//				for (Object object : result) {
+//					Map row = (Map) object;
+//					LogUtil.log(
+//							LogUtil.Message_Type.Information,
+//							" Supplier Name: " + row.get("SupplierName")
+//									+ ", Payable Amount: "
+//									+ row.get("PayableAmount")
+//									+ ", Paid Amount: " + row.get("PaidAmount")
+//									+ ", Balance Due: " + row.get("BalanceDue")
+//									+ ", BalanceDueDate: "
+//									+ row.get("BalanceDueDate"));
+//				}
 			}
 		} catch (JDBCException e) {
 			DBException.HandleJDBCException(e);
@@ -115,7 +115,7 @@ public class LandingPageWindows {
 			e.printStackTrace();
 		} finally {
 			session.close();
-			System.out.println ( " session close invoked in getBalancePayableWindow ");
+			//System.out.println ( " session close invoked in getBalancePayableWindow ");
 			return result;
 		}
 	}
@@ -188,19 +188,19 @@ public class LandingPageWindows {
 						+ result.size()
 						+ " record(s) to display on CreditSalesWindow @ "
 						+ DateUtil.getCurrentTimestamp().toString());
-				for (Object object : result) {
-					Map row = (Map) object;
-					LogUtil.log(
-							LogUtil.Message_Type.Information,
-							" Merchant Name: " + row.get("CustomerName")
-									+ ", Receivable Amount: "
-									+ row.get("ReceivableAmount")
-									+ ", Received Amount: "
-									+ row.get("ReceivedAmount")
-									+ ", Balance Due: " + row.get("BalanceDue")
-									+ ", Due Date: "
-									+ row.get("AdjustedDueDate"));
-				}
+//				for (Object object : result) {
+//					Map row = (Map) object;
+//					LogUtil.log(
+//							LogUtil.Message_Type.Information,
+//							" Merchant Name: " + row.get("CustomerName")
+//									+ ", Receivable Amount: "
+//									+ row.get("ReceivableAmount")
+//									+ ", Received Amount: "
+//									+ row.get("ReceivedAmount")
+//									+ ", Balance Due: " + row.get("BalanceDue")
+//									+ ", Due Date: "
+//									+ row.get("AdjustedDueDate"));
+//				}
 			}
 		} catch (JDBCException e) {
 			DBException.HandleJDBCException(e);
@@ -211,7 +211,7 @@ public class LandingPageWindows {
 			e.printStackTrace();
 		} finally {
 			session.close();
-			System.out.println (" session close invoked in getCreditSalesWindow ");
+			//System.out.println (" session close invoked in getCreditSalesWindow ");
 			return result;
 		}
 	}
@@ -275,7 +275,7 @@ public class LandingPageWindows {
 			e.printStackTrace();
 		} finally {
 			session.close();
-			System.out.println (" session close invoked in getDataRefreshWindow ");
+			//System.out.println (" session close invoked in getDataRefreshWindow ");
 			return result;
 		}
 	}

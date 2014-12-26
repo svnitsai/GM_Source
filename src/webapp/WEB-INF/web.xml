@@ -27,6 +27,26 @@
 		<url-pattern>/web/DataRefreshServlet</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>Customer Bank Information Edit Servlet</servlet-name>
+		<servlet-class>com.svnitsai.gm.CustomerBankInfoServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Customer Bank Information Edit Servlet</servlet-name>
+		<url-pattern>/web/CustomerBankInfoServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Customer Information Servlet</servlet-name>
+		<servlet-class>com.svnitsai.gm.CustomerServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Customer Information Servlet</servlet-name>
+		<url-pattern>/web/CustomerServlet</url-pattern>
+	</servlet-mapping>
+
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>

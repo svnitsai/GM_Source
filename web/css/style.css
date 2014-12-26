@@ -126,6 +126,29 @@ navigation ul li a.hoover, #navigation ul li a.active{
 	background: #FFF;
 }
 
+.hide-label {
+	display: none;
+}
+
+.err-mesg-font {
+	font-size: 8px;
+	font-family: "Trebuchet MS",sans-serif;
+	font-weight: bold;
+	font-style: italic;
+	color: #F00;
+}
+
+.ui-dialog-title {
+	text-align: center;
+	letter-spacing: 6px;
+	font-weight: bold;
+	font-size: 18px; 
+}
+
+.ui-widget-content {
+	background-color: #EAF2D3;
+}
+
 #one .item {
 	padding: 10px;
 	margin: 0 0 10px 0;

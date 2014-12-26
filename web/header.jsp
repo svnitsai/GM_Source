@@ -68,6 +68,30 @@
 				primary: "ui-icon-info"
 			}
 		});
+		$( ".cancelButton" ).button({
+			icons: {
+				primary: "ui-icon-cancel"
+			}
+		});
+		$( ".editButtonNolabel" ).button({
+			icons: {
+				primary: "ui-icon-pencil"
+			}
+		});
+// 		$( ".prevButton" ).button({
+// 			icons: {
+// 				primary: "ui-icon-carat-1-w" ,
+// 				secondary: "ui-icon-carat-1-w"
+// 			}
+// 		});
+// 		$( ".nextButton" ).button({
+// 			icons: {
+// 				primary: "ui-icon-carat-1-e",
+// 				secondary: "ui-icon-carat-1-e"
+// 			}
+// 		});
+		
+		
 		$( ".anyButton" ).button();
 	});
 </script>

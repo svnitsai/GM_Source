@@ -2,39 +2,86 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 
 <jsp:include page="header.jsp?hideHeader=true" />
-<%@ page import="com.svnitsai.gm.CustomerBean"%>
-<%@ page import="com.svnitsai.gm.Util"%>
-<%@ page import="com.svnitsai.gm.DBHandler"%>
-<%@ page import="com.svnitsai.gm.DailyPayableBean"%>
-<%@ page import="java.util.LinkedHashMap"%>
-<%@ page import="java.util.Calendar"%>
-<%@ page import="java.util.ArrayList"%>
-<%@ page import="java.util.LinkedList"%>
-<%@ page import="java.text.SimpleDateFormat"%>
+<%@ page import="com.svnitsai.gm.database.provider.CustomerInfoProvider" %>
+<%@ page import="com.svnitsai.gm.util.display.DisplayUtil" %>
+<%@ page import="java.util.List"%>
+<%@ page import="java.util.Map"%>
+
+
+<!-- 
+ * customer.jsp
+ * 
+ * @author: 	SVN Systems and Innovations
+ * 
+ * @purpose: 	Screen lists customer table data by customerType; Has link
+ *              to customer bank information edit screen.
+ * 
+-->
+
 <%
-	LinkedHashMap<Long, CustomerBean> supplierMap = DBHandler.getSuppliers();
-SimpleDateFormat todayDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-
-String todayDate = todayDateFormatter.format(Calendar.getInstance().getTime());
-String status = request.getParameter("status");
-
-LinkedList<DailyPayableBean> payableList = DBHandler.getDailyPayables(Calendar.getInstance().getTime());
-if(payableList == null)
-{
-	payableList = new LinkedList<DailyPayableBean>();
+//Default (on first entry), screen will show customerType of SUPPLIER
+//Second time around, customerServlet will pass radio button clicked in session variable
+String customerTypeProc = "supplier";
+if (session.getAttribute("customerTypeProc") != null) {
+	customerTypeProc = (String) session.getAttribute("customerTypeProc");
 }
-DailyPayableBean dummyBean = new DailyPayableBean();
-payableList.add(0, dummyBean);
+
+CustomerInfoProvider customerInfoProvider = new CustomerInfoProvider();
+/* Get Customer Information for Customer aka merchants */
+List customerInfoList = (List) customerInfoProvider.getCustomerInfoList(customerTypeProc);
+
 %>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#scrollCustomerInfoTable').dataTable({
 			"scrollY" : "250px", //Height of the table
 			"scrollCollapse" : true,
-			"paging" : false
+			"paging" : true
 		});
+		
+		$(".nosorting").each(function() {
+			$(this).removeClass("sorting");
+		})
 
 	});
+
+	//TODO: Fix Modal issue
+	var popUpObj;
+	function addCustBank(custId, custName, custCity, custProcType) 
+	{
+		popUpObj=window.open("/gm/web/editCustomerBankInfo.jsp?custId=" + custId + "&custName=" + custName + "&custCity=" + custCity + "&custProcType=" + custProcType,
+		    "Edit Customer Bank Details",
+		    "toolbar=no, scrollbars=no,location=no,statusbar=no,menubar=no,status=no,resizable=no,width=950,height=500,left=350,top=150" );
+	    	popUpObj.focus(); 
+			loadModalDiv();
+// 			popUpObj.onbeforeunload = function () {
+// 			    console.log("popup before unload");
+// 			    //if (popUpObj.closed) hideModalDiv();
+// 			    hideModalDiv();
+// 			}
+ 			popUpObj.onunload = function () {
+ 			    console.log("popup unload");
+ 			    //if (popUpObj.closed) hideModalDiv();
+ 			    hideModalDiv();
+ 			}
+// 			popUpObj.onload = function () {
+// 				loadModalDiv();
+// 			    console.log("popup loaded");
+// 			}
+	}
+	
+	function loadModalDiv()
+    	{
+	        var bcgDiv = document.getElementById("overlay");
+	        bcgDiv.style.display="block";
+	}
+
+	function hideModalDiv()
+	{
+	        var bcgDiv = document.getElementById("overlay");
+	        bcgDiv.style.display="none";
+	}
+		
 </script>
 
 
@@ -48,21 +95,23 @@ input.error {
 	border: 1px solid red;
 }
 </style>
+
 <div id="one">
 	<div class="item" id="contentDiv" name="contentDiv">
 		<!-- Customer Filter by Supplier / Merchant -->
 		<div>
-			<!-- TODO: change me -->
-			<form action="/gm/web/DataRefreshServlet" method="post">
+			<form action="/gm/web/CustomerServlet" method="post">
 				<table style="border-collapse: collapse; height: 50px;">
 					<tr style="background-color: rgba(241, 245, 235, 0.61);">
 						<td style="width:250px; text-align: center; ">Customers to show: &nbsp;&nbsp;&nbsp;</td>
 						<td style="width:250px; text-align: center;"><input type="radio" name="filterCustomerBy"
-								value="merchant" onSelect="filterCustomer()" checked>
-								Merchants</td>
-						<td style="width:420px; text-align: left;"><input type="radio" name="filterCustomerBy"
-								value="supplier" onSelect="filterCustomer()">
+								value="merchant" onclick="submit()"<%if (customerTypeProc.equalsIgnoreCase("merchant")) {%> checked <% } %>>
+								Customers</td>
+						<td style="width:200px; text-align: left;"><input type="radio" name="filterCustomerBy"
+								value="supplier"  onclick="submit()" <%if (customerTypeProc.equalsIgnoreCase("supplier")) {%> checked <% } %>>
 								Suppliers
+						</td>
+						<td style="width:220px; text-align: right;">&nbsp;&nbsp;&nbsp;
 						</td>
 					</tr>
 				</table>
@@ -70,7 +119,7 @@ input.error {
 		</div>
 
 		<!--  Customer info table - begins -->
-		<form action="/gm/servlet/payable" id="payableform">
+		<form>
 			<input type="hidden" name="action" id="action" value="save">
 			<table id="scrollCustomerInfoTable" class="display" cellspacing="0"
 				width="100%">
@@ -79,110 +128,40 @@ input.error {
 						<th>Customer Name</th>
 						<th>Customer Address</th>
 						<th>Customer City</th>
-						<th>&nbsp;&nbsp;&nbsp;</th>
+						<th  class="nosorting">&nbsp;&nbsp;&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
+					<% 		  if ((customerInfoList != null) && (customerInfoList.size() > 0)) {
+								  for (Object object : customerInfoList) { 
+									  Map row = (Map) object;
+									  String dispCustName = row.get("CustName").toString();
+									  String dispCustAddress = DisplayUtil.getAddress(row.get("CustAddress1").toString()
+											  , row.get("CustAddress2").toString(), row.get("CustAddress3").toString(), row.get("CustAddress4").toString());
+									  String dispCity = DisplayUtil.getCity(row.get("CustCity").toString());
+									  String dispCustCode = row.get("CustCode").toString();
+					%>
 					<tr>
-						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
-						<td style="width: 160px" align="left">C-WING,1 TO 32,
-							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
-						<td style="width: 110px" align="left">DHARMALE</td>
+						<td style="width: 160px" align="left"><%=dispCustName %></td>
+						<td style="width: 160px" align="left"><%=dispCustAddress %></td>
+						<td style="width: 110px" align="left"><%=dispCity %></td>
 						<td style="width: 30px" align="center"
 							title="Bank Information"><button type="button"
-								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
+								class="infoButton" onClick="addCustBank('<%=dispCustCode%>', '<%=dispCustName%>', '<%=dispCity%>', '<%=customerTypeProc%>');">&nbsp;</button></td>
 					</tr>
-					<tr>
-						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
-						<td style="width: 160px" align="left">C-WING,1 TO 32,
-							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
-						<td style="width: 110px" align="left">DHARMALE</td>
-						<td style="width: 30px" align="center"
-							title="Bank Information"><button type="button"
-								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
-						<td style="width: 160px" align="left">C-WING,1 TO 32,
-							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
-						<td style="width: 110px" align="left">DHARMALE</td>
-						<td style="width: 30px" align="center"
-							title="Bank Information"><button type="button"
-								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
-						<td style="width: 160px" align="left">C-WING,1 TO 32,
-							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
-						<td style="width: 110px" align="left">DHARMALE</td>
-						<td style="width: 30px" align="center"
-							title="Bank Information"><button type="button"
-								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
-						<td style="width: 160px" align="left">C-WING,1 TO 32,
-							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
-						<td style="width: 110px" align="left">DHARMALE</td>
-						<td style="width: 30px" align="center"
-							title="Bank Information"><button type="button"
-								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
-						<td style="width: 160px" align="left">C-WING,1 TO 32,
-							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
-						<td style="width: 110px" align="left">DHARMALE</td>
-						<td style="width: 30px" align="center"
-							title="Bank Information"><button type="button"
-								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
-						<td style="width: 160px" align="left">C-WING,1 TO 32,
-							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
-						<td style="width: 110px" align="left">DHARMALE</td>
-						<td style="width: 30px" align="center"
-							title="Bank Information"><button type="button"
-								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
-						<td style="width: 160px" align="left">C-WING,1 TO 32,
-							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
-						<td style="width: 110px" align="left">DHARMALE</td>
-						<td style="width: 30px" align="center"
-							title="Bank Information"><button type="button"
-								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">RAMCHANDRA DRESSESS</td>
-						<td style="width: 160px" align="left">C-WING,1 TO 32,
-							AMRAVATI NAGPUR HIGHWAY, NH6 TABORGAON,</td>
-						<td style="width: 110px" align="left">DHARMALE</td>
-						<td style="width: 30px" align="center"
-							title="Bank Information"><button type="button"
-								class="infoButton" onClick="addCustBank();">&nbsp;</button></td>
-					</tr>
+					
+					<%
+								  } 
+						  }
+
+					%>
 				</tbody>
 			</table>
 			<!--  Customer info table ends -->
 		</form>
 	</div>
-
-	<!--   <br> -->
-	<!-- 	<button type="button" class="addButton" onClick="addSupplier();">&nbsp;&nbsp;Add Supplier</button>  -->
-	<!-- 	&nbsp; -->
-	<!-- 	<!-- Fix to display ICONS -->
-	<!-- 	<input type="submit" class="saveButton" onClick="saveChanges();" value="Save"/>  -->
-	<!-- 	&nbsp;  -->
-	<!-- 		<input type="submit"  class="printButton" onClick="printReport();" value="Print Report"> -->
-	<!-- 	&nbsp; -->
-	<!-- 	-->
-	<!-- 	<button type="button" class="saveButton" onClick="saveChanges();">&nbsp;&nbsp;Save</button>  -->
-	<!-- 	&nbsp; -->
-	<!-- 	<button type="button"  class="printButton" onClick="printReport();">&nbsp;&nbsp;Print Report</button> -->
-	<!-- 	&nbsp; -->
-	<!-- 	<br> -->
+	<!-- Overlay transparent screen to implement modal window -->
+  <div id="overlay" class="ui-widget-overlay ui-front" style="z-index: 100; display:none"></div>
+	
 </div>
 <jsp:include page="footer.jsp" />

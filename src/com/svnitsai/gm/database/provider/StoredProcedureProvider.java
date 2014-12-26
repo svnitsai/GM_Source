@@ -10,7 +10,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.svnitsai.gm.Util;
 import com.svnitsai.gm.util.exception.DBException;
 import com.svnitsai.gm.util.hibernate.HibernateUtil;
 import com.svnitsai.gm.util.log.LogUtil;
@@ -39,7 +38,6 @@ public class StoredProcedureProvider {
 		/* List that returns result */
 		List result = null;
 		Session session = HibernateUtil.getSession();
-		System.out.println (" Begin Transaction ");
 		Transaction transaction = session.beginTransaction();
 
 		try {
@@ -67,8 +65,6 @@ public class StoredProcedureProvider {
 			}
 
 			transaction.commit();
-			
-
 		} catch (JDBCException e) {
 			transaction.rollback();
 			DBException.HandleJDBCException(e);
@@ -80,8 +76,6 @@ public class StoredProcedureProvider {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
-			System.out.println (" session close invoked in Credit Sales data load ");
-
 			session.close();
 			return result;
 		}
@@ -99,7 +93,6 @@ public class StoredProcedureProvider {
 		/* List that returns result */
 		List result = null;
 		Session session = HibernateUtil.getSession();
-		System.out.println (" Begin Transaction ");
 		Transaction transaction = session.beginTransaction();
 
 		try {
@@ -139,8 +132,6 @@ public class StoredProcedureProvider {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
-			System.out.println (" session close invoked in Customer data load ");
-
 			session.close();
 			return result;
 		}

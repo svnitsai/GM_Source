@@ -114,7 +114,68 @@ public class DisplayUtil {
 		temp = temp.substring(0, 1).toUpperCase() + spaces
 				+ temp.substring(1).toLowerCase() + " ";
 		return temp;
-
+	}
+	
+	/*
+	 * Cleanup the city for display
+	 */
+	
+	public static String getCity(String inString) {
+		return cleanUpString(inString);
+	}
+	/*
+	 * Cleanup the address lines for display
+	 */
+	
+	public static String getAddress(String add1, String add2, String add3, String add4) {
+		String concatenatedAddress = "";
+		concatenatedAddress = concatAddLine(concatenatedAddress, add1);
+		concatenatedAddress = concatAddLine(concatenatedAddress, add2);
+		concatenatedAddress = concatAddLine(concatenatedAddress, add3);
+		concatenatedAddress = concatAddLine(concatenatedAddress, add4);
+		
+		return concatenatedAddress;
+	}
+	
+	private static String concatAddLine(String concatAddress, String addLine) {
+		if (addLine.isEmpty() || addLine == null) return concatAddress;
+		else {
+			String cleanAddLine = cleanUpString(addLine);
+			//String cleanConcatAddress = cleanUpAddLine(concatAddress);
+			if (cleanAddLine.length() > 0) {
+				if (concatAddress.length() > 0) return concatAddress.concat(", ").concat(cleanAddLine); 
+				else return cleanAddLine;
+			}
+			else 
+				return cleanUpString(concatAddress);
+		}
+	}
+	
+	private static String cleanUpString (String inString) {
+		//System.out.println (" address at beg " + inString);
+		//Remove extra spaces at the end
+		inString = inString.trim(); 
+		
+		// Do nothing, if incoming string is empty
+		if (inString.isEmpty() || inString == null) return inString;
+		
+		//Remove leading commas
+		if (inString.charAt(0) == ',') {
+			inString = inString.substring(1, inString.length());
+			inString = inString.trim();
+		}
+		//System.out.println ("   after leading commas " + inString);
+		
+		//Remove trailing commas
+		int inStringLength = inString.length();
+		if (inStringLength > 1) {
+			if (inString.charAt(inStringLength - 1) == ',') {
+				inString = inString.substring(0, inStringLength - 1);
+				inString = inString.trim();
+			}
+		}
+		//System.out.println (" address at end " + inString);
+		return inString;
 	}
 
 	/*

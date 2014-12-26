@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="/gm/web/css/jquery-ui.css" />
   <link rel="stylesheet" type="text/css" href="/gm/web/css/jquery.datatables.css" />
   <link rel="stylesheet" type="text/css" href="/gm/web/css/select2.css" />
-
+  
   <script src="/gm/web/javascript/jquery-1.11.1.min.js"></script>
   <script src="/gm/web/javascript/jquery-ui.min.js"></script>
   <script src="/gm/web/javascript/jquery.validate.min.js"></script>
@@ -19,7 +19,8 @@
 	<!-- Select drop down formatting -->
   <script src="/gm/web/javascript/select2.min.js"></script>
   <script src="/gm/web/javascript/utils.js"></script>
-    
+  <script src="/gm/web/javascript/jquery.validate.fixes.js"></script>
+
   <title>Garment Mantra</title>
 
    <script>
@@ -46,6 +47,11 @@
 		$( ".saveButton" ).button({
 			icons: {
 				primary: "ui-icon-disk"
+			}
+		});
+		$( ".cancelButton" ).button({
+			icons: {
+				primary: "ui-icon-cancel"
 			}
 		});
 		$( ".addButton" ).button({
@@ -94,7 +100,29 @@
 		
 		$( ".anyButton" ).button();
 	});
+	
+	function isPageValid()
+	{
+		$.validator.messages.required = 'Please specify value';
+		var form = $( "#inputForm" );
+	   	form.validate();
+     		if(form.valid() == false)
+      		{
+       			return false;
+      		}
+
+		return true;
+	}
 </script>
+<style>
+label.error { 
+	color: red; 
+}
+
+input.error {
+	border:1px solid red;
+}
+</style>
 <% 
 //Force user to login if 'not already logged in'
 String userName = (String) session.getAttribute("User");

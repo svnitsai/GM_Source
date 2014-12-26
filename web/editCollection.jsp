@@ -1,6 +1,9 @@
 ﻿<%@ page language="java" %>
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.Set" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Map.Entry" %>
 <%@ page import="java.util.LinkedList" %>
 <%@ page import="java.util.LinkedHashMap" %>
@@ -28,15 +31,6 @@
 	
 	LinkedHashMap<Long, String> companyMap = DBHandler.getCustomerIdMap("Company");
 %>
-<style>
-label.error { 
-	color: red; 
-}
-
-input.error {
-	border:1px solid red;
-}
-</style>
 <script>
 
 	$( document ).ready(function() {
@@ -45,6 +39,26 @@ input.error {
 		nidsEnableControl('supplierBankId_0', false);
 		nidsEnableControl('paidAmt_0', false);
 		nidsEnableControl('collectionDate_0', false);
+		$.datepicker.setDefaults({dateFormat:"dd/mm/yy"});
+		<%  Calendar dueDateCalendar = null;
+			if(bean != null) { 
+				Date dueDate = bean.getDueDate();
+				if(dueDate != null)
+				{
+					dueDateCalendar = Calendar.getInstance();
+					dueDateCalendar.setTime(dueDate);
+				}
+			}
+			
+			if(dueDateCalendar != null)
+			{
+		%>
+				$('#deferredDate').datepicker({
+					minDate: new Date(<%= dueDateCalendar.get(Calendar.YEAR)%>, <%= 
+
+dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_MONTH)%>)
+				}); 
+		<%  } %>
 	});
 
 	function OnClose()
@@ -75,9 +89,10 @@ input.error {
 		document.getElementById('contentDiv').appendChild(div1);
 		nidsSetElementFocus("partyBank" + id);
 
-		$.datepicker.setDefaults({dateFormat:"dd/mm/yy", minDate:0});  
+		 
 		$('#collectionDate' + id).datepicker();
 		$('#collectionDate' + id).datepicker('setDate', new Date());
+		
 		//nidsEnableControl('supplierId' + id, true);
 		//nidsEnableControl('supplierBankId' + id, true);
 		nidsEnableControl('paidAmt' + id, true);
@@ -114,7 +129,7 @@ input.error {
 		<% CustomerBean supplierBean = supplierMap.get(id);
 			for(CustomerBankBean bankBean: supplierBean.getBankAccountList()) { %>
 				option = document.createElement("option");
-				option.text = '<%= bankBean.getBankName() + ", " + bankBean.getBranchName() + ", A/c #" + bankBean.getAccountNumber() %>';
+				option.text = '<%= bankBean.getBankInfoString() %>';
 				option.value = "<%= bankBean.getBankId()%>";
 				supplierBankComp.add(option);
 		<%	} %>
@@ -138,6 +153,31 @@ input.error {
        			return false;
       		}
 
+     	// validate that the total paid amount did not exceed the invoice amount
+     	var invoiceAmt = <%= bean.getInvoiceAmount() %>
+     	var totalPaidAmt = 0;
+	var elem = document.getElementById('editForm').elements;
+     	for(var i = 0; i < elem.length; i++)
+        {
+     		var elemName = elem[i].name;
+     		if(elemName.search("paidAmt_") != -1)
+     		{
+     			var paidAmt = elem[i].value;
+     			paidAmt = paidAmt.replace(/,/g, '');
+     			var iPaidAmt = parseFloat(paidAmt);
+			if(isNaN(iPaidAmt) == false)
+			{
+				totalPaidAmt = totalPaidAmt + iPaidAmt;
+ 			}
+     		}
+        }
+        
+     	if(totalPaidAmt > invoiceAmt)
+     	{
+     		alert("Error: Total Payments (Rs. " + totalPaidAmt + ") is more than the invoice amount.");
+     		return false;
+     	}
+     	
 		return true;
 	}
 	
@@ -182,7 +222,7 @@ input.error {
 		</tr>
 		<tr>
 			<td>Deferred Date:</td>
-			<td><input type="text" name="deferredDate" value="<%= bean.getDeferredDateStr() %>" class="datepicker">
+			<td><input type="text" name="deferredDate" id="deferredDate" value="<%= bean.getDeferredDateStr() %>" readonly="true">
 			</td>
 		</tr>
 		<tr>
@@ -203,7 +243,7 @@ input.error {
 		String supplierName = "";
 		String supplierBankInfo = "";
 		boolean paidToSupplier = false;
-		if(detailBean.getSupplierCode() > 0)
+		if(detailBean.getSupplierCode() > 0 )
 		{
 			paidToSupplier = true;
 		}
@@ -219,7 +259,7 @@ input.error {
 					{ 
 						if( bankBean.getBankId() == detailBean.getSupplierBankId()) 
 						{
-							supplierBankInfo = bankBean.getBankName() + ", " + bankBean.getBranchName() + ", A/c #" + bankBean.getAccountNumber();
+							supplierBankInfo = bankBean.getBankInfoString();
 						}
 					}
 				}
@@ -240,24 +280,46 @@ input.error {
 				<input 	type="radio" 
 						name="paymentType_<%=i %>" 
 						id="paymentType_<%=i %>" 
-						value="cash" 
+						value="0" 
 						onChange="enableSupplierFields('_<%= i %>', false);"
 						checked> Cash &nbsp;&nbsp;
 						
 				<input 	type="radio" 
 						name="paymentType_<%=i %>" 
 						id="paymentType_<%=i %>" 
-						value="supplier" 
+						value="1" 
 						onChange="enableSupplierFields('_<%= i %>', true);"
-						> Paid to Supplier
+						> Paid to Supplier &nbsp;&nbsp;
+						
+				<input 	type="radio" 
+						name="paymentType_<%=i %>" 
+						id="paymentType_<%=i %>" 
+						value="-1" 
+						onChange="enableSupplierFields('_<%= i %>', false);"
+						> Adjustment &nbsp;&nbsp;
+						
+				<input 	type="radio" 
+						name="paymentType_<%=i %>" 
+						id="paymentType_<%=i %>" 
+						value="-2" 
+						onChange="enableSupplierFields('_<%= i %>', false);"
+						> RG
 				<% } else  {
 					if( paidToSupplier)
 					{
 						out.print("Paid To Supplier");
 					}
-					else
+					else if(detailBean.getSupplierCode() == 0)
 					{
 						out.print("Cash");
+					}
+					else if(detailBean.getSupplierCode() == -1)
+					{
+						out.print("Adjustment");
+					}
+					else if(detailBean.getSupplierCode() == -2)
+					{
+						out.print("RG");
 					}
 				  } %>
 			</td>
@@ -307,8 +369,9 @@ input.error {
 			<td nowrap>Paid Amount:</td>
 			<td nowrap colspan="2">
 				<% if(i==0) { %>
-					<input type="text" name="paidAmt_<%=i%>" required/>
+					<input type="text" name="paidAmt_<%=i%>"  class="number required"/>
 				<% } else { %>
+					<input type="hidden" name="paidAmt_<%=i%>" value="<%=detailBean.getPaidAmount()%>"/>
 					<span style="font-family: DejaVu Sans;">&#x20b9; </span> <%= DisplayUtil.getDisplayAmount(detailBean.getPaidAmount())%>
 				<% } %>
 			</td>
@@ -360,9 +423,9 @@ input.error {
   <% } %>
 </div>
 <div style="position:absolute; width:100%; padding:10px;">
-	<input type="submit" class="anyButton" onClick="saveChanges();" value="Save"/>
+	<button type="button" class="saveButton" onClick="saveChanges();">&nbsp;&nbsp;Save</button> 
 	&nbsp;&nbsp;
-	<input type="button" class="anyButton" onClick="window.close()" value="Cancel"/>
+	<button type="button" class="cancelButton" onClick="window.close();">&nbsp;&nbsp;Cancel</button> 
 </div>
 </form>
 

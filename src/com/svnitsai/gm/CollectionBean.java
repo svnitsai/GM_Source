@@ -8,6 +8,7 @@ import java.util.Date;
 public class CollectionBean implements Serializable 
 {
 	private long custCode;
+	
 	private long collectionId;
 	private long invoiceNumber;
 	private double invoiceAmount;
@@ -16,6 +17,7 @@ public class CollectionBean implements Serializable
 	private String custCity;
 	private String status;
 	private Date dueDate;
+	
 	private Date deferredDate;
 	private String deferredDateStr;
 	private String updatedBy;

@@ -88,7 +88,7 @@ public class DBHandler {
 					+ " ON C.custcode = CB.custcode "
 					+ "WHERE CustType='"
 					+ type
-					+ "' ORDER BY CustCode Desc";
+					+ "' ORDER BY C.CustName asc";
 
 			System.out.println(" SQL Customer query is : " + sql);
 			conn = getConnection();
@@ -203,11 +203,10 @@ public class DBHandler {
 
 					String formattedDate = dateParts[2] + dateParts[1]
 							+ dateParts[0];
-					sql += "where (DC.DeferredDate is not null and DC.DeferredDate <= '"
-							+ formattedDate
-							+ "') OR "
-							+ "(DC.DeferredDate is null and DC.PayCDueDate <= '"
-							+ formattedDate + "')";
+					sql += "where "
+							+ "((DC.DeferredDate is not null and DC.DeferredDate <= '" + formattedDate + "') OR "
+							+ "(DC.DeferredDate is null and DC.PayCDueDate <= '" + formattedDate + "')) "
+							+ "AND DC.PayCStatus <> 'CLOSED'";
 					whereClauseAdded = true;
 				}
 			}
@@ -534,6 +533,7 @@ public class DBHandler {
 			String password = "svnadmin";
 			Class.forName(driver).newInstance();
 			String dbURL = "jdbc:sqlserver://ADMIN-PC:49168;databaseName=PayC;instanceName=SQL2008R2;";
+	//		String dbURL = "jdbc:sqlserver://VANAVPR-PC:52471;databaseName=PayC;instanceName=SQLEXPRESS;";
 			conn = DriverManager.getConnection(dbURL, username, password);
 		} catch (Exception e) {
 			e.printStackTrace();

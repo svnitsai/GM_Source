@@ -507,6 +507,7 @@ input.error {
 							class="inputElements" id="custAccountType">
 								<option value="Savings">Savings</option>
 								<option value="Current">Current</option>
+								<option value="CC">CC</option>
 						</select></td>
 						<td align="left"><input type="text"
 							name="jspcustAccountNumber" placeholder="Account Number"
@@ -555,6 +556,7 @@ input.error {
 								<td align="left"><select name="jspcustAccountType" class="inputElements" id="custAccountType">
 									<option value="Savings"  <%if (dispAccountType.equalsIgnoreCase("Savings")) { %>selected="selected" <% } %>>Savings</option>
 									<option value="Current" <%if (dispAccountType.equalsIgnoreCase("Current")) { %>selected="selected" <% } %>>Current</option>
+									<option value="CC" <%if (dispAccountType.equalsIgnoreCase("CC")) { %>selected="selected" <% } %>>CC</option>
 									</select>
 								</td>
 								<td align="left">

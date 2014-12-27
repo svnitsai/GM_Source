@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-12-14T13:25:10 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_Evening_Final_Sub_new" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb05fc56-b900-40c7-b7c3-7329ef199cca">
+<!-- 2014-12-27T00:45:15 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_Evening_Final_Sub_new" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb05fc56-b900-40c7-b7c3-7329ef199cca">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="47"/>
 	<property name="ireport.y" value="451"/>
@@ -17,9 +17,8 @@
 		</conditionalStyle>
 	</style>
 	<subDataset name="PieChartDataset" uuid="98afad73-53c5-4434-bf7c-ddfb5cfc7fb2"/>
-	<parameter name="dateFrom" class="java.lang.String"/>
-	<parameter name="dateTo" class="java.lang.String"/>
-	<parameter name="selectedDate" class="java.lang.String"/>
+	<parameter name="dateFrom" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="selectedDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="supplierCode" class="java.math.BigDecimal" isForPrompting="false"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT DP.PayableDate
@@ -42,16 +41,13 @@ group by DP.SupplierCode, DP.PayableDate]]>
 	<variable name="subPayableDateFrom" class="java.lang.String">
 		<variableExpression><![CDATA[$P{dateFrom}]]></variableExpression>
 	</variable>
-	<variable name="subPayableDateTo" class="java.lang.String">
-		<variableExpression><![CDATA[$P{dateTo}]]></variableExpression>
-	</variable>
 	<group name="Group1">
 		<groupExpression><![CDATA[$F{PayableDate}]]></groupExpression>
 	</group>
 	<title>
 		<band height="50" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="1" y="0" width="800" height="50" forecolor="#F5C937" backcolor="#4D6637" uuid="6d12cfb7-a91a-4ffc-9979-ca8386584c36">
+				<reportElement mode="Opaque" x="1" y="0" width="800" height="50" forecolor="#080808" backcolor="#FFFFFF" uuid="6d12cfb7-a91a-4ffc-9979-ca8386584c36">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="local_mesure_unity" value="pixel"/>
@@ -59,11 +55,11 @@ group by DP.SupplierCode, DP.PayableDate]]>
 				</reportElement>
 			</frame>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement style="SubTitle" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" mode="Opaque" x="3" y="9" width="798" height="29" forecolor="#F5C937" backcolor="#4D6637" uuid="5b81c450-44c4-4004-8fbd-c079d786546c">
+				<reportElement style="SubTitle" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" mode="Opaque" x="4" y="9" width="566" height="29" forecolor="#080808" backcolor="#FFFFFF" uuid="5b81c450-44c4-4004-8fbd-c079d786546c">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<textElement>
+				<textElement textAlignment="Right">
 					<font fontName="Arial" size="24" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Suppliers Payment Report For " + $P{selectedDate}]]></textFieldExpression>
@@ -91,15 +87,15 @@ group by DP.SupplierCode, DP.PayableDate]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="1" y="0" width="377" height="24" backcolor="#FFFFCC" uuid="18e5a175-2aa4-4245-90bb-113b9cff9b6e">
+					<reportElement mode="Opaque" x="1" y="0" width="377" height="24" backcolor="#FFFFFF" uuid="18e5a175-2aa4-4245-90bb-113b9cff9b6e">
 						<property name="local_mesure_unitheight" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<box>
-						<topPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="true"/>
@@ -107,15 +103,15 @@ group by DP.SupplierCode, DP.PayableDate]]>
 					<text><![CDATA[Supplier Name]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="380" y="0" width="100" height="24" backcolor="#FFFFCC" uuid="4c00de2b-11f3-4484-842e-39809b0bfc55">
+					<reportElement mode="Opaque" x="380" y="0" width="100" height="24" backcolor="#FFFFFF" uuid="4c00de2b-11f3-4484-842e-39809b0bfc55">
 						<property name="local_mesure_unitheight" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<box>
-						<topPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="true"/>
@@ -123,20 +119,36 @@ group by DP.SupplierCode, DP.PayableDate]]>
 					<text><![CDATA[Payable Amount]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="480" y="0" width="100" height="24" backcolor="#FFFFCC" uuid="662a11fa-8428-4535-b075-746b989225be">
+					<reportElement mode="Opaque" x="480" y="0" width="100" height="24" backcolor="#FFFFFF" uuid="662a11fa-8428-4535-b075-746b989225be">
 						<property name="local_mesure_unitheight" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<box>
-						<topPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.1" lineStyle="Solid" lineColor="#000000"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Paid Amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="580" y="0" width="100" height="24" backcolor="#FFFFFF" uuid="1f014031-a46f-4ab9-b568-19df791227f6">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Balance Amount]]></text>
 				</staticText>
 			</frame>
 		</band>
@@ -156,9 +168,9 @@ group by DP.SupplierCode, DP.PayableDate]]>
 				<textElement>
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("\u20B9 ##,##,##0").format($F{payableAmount})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{payableAmount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="">
 				<reportElement mode="Opaque" x="481" y="3" width="100" height="24" backcolor="#FFFFFF" uuid="62aa523a-10b7-4857-9c12-05c562b7e3d6">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -168,7 +180,7 @@ group by DP.SupplierCode, DP.PayableDate]]>
 				<textElement>
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("\u20B9 ##,##,##0").format($F{paidAmount})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{paidAmount} == null ? 0 : $F{paidAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Opaque" x="0" y="3" width="379" height="24" backcolor="#FFFFFF" uuid="a095fa90-09bb-43db-b5a7-549347f90f23">
@@ -193,27 +205,45 @@ group by DP.SupplierCode, DP.PayableDate]]>
 				<subreportParameter name="supplierCode">
 					<subreportParameterExpression><![CDATA[$F{SupplierCode}]]></subreportParameterExpression>
 				</subreportParameter>
+				<subreportParameter name="dateFrom">
+					<subreportParameterExpression><![CDATA[$P{dateFrom}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="selectedDate">
+					<subreportParameterExpression><![CDATA[$P{selectedDate}]]></subreportParameterExpression>
+				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA["SP_Evening_Latest_sub.jasper"]]></subreportExpression>
 			</subreport>
 			<line>
-				<reportElement positionType="Float" x="1" y="70" width="799" height="1" uuid="c756863f-cc47-43e9-a411-2cf8c38f6b51"/>
+				<reportElement positionType="Float" x="1" y="70" width="799" height="1" forecolor="#050505" uuid="c756863f-cc47-43e9-a411-2cf8c38f6b51"/>
 			</line>
+			<textField pattern="">
+				<reportElement mode="Opaque" x="581" y="4" width="100" height="24" backcolor="#FFFFFF" uuid="0b7bfda5-9637-425c-a2e2-21c47c086db0">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[SUM($F{payableAmount}, $F{paidAmount})]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>
 		<band height="20" splitType="Stretch">
 			<frame>
-				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="0" y="2" width="800" height="16" forecolor="#D0B48E" backcolor="#4D6637" uuid="0d2d005b-5381-4309-939e-c0f820d9baa0"/>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="0" y="2" width="800" height="16" forecolor="#050505" backcolor="#FFFFFF" uuid="0d2d005b-5381-4309-939e-c0f820d9baa0"/>
 				<textField evaluationTime="Report">
-					<reportElement style="Column header" x="753" y="0" width="40" height="16" forecolor="#FFFFFF" uuid="4603537b-873e-4068-ae07-322a2e969beb"/>
+					<reportElement style="Column header" x="753" y="0" width="40" height="16" forecolor="#050505" uuid="4603537b-873e-4068-ae07-322a2e969beb"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
 					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement style="Column header" x="673" y="0" width="80" height="16" forecolor="#FFFFFF" uuid="c4aae682-3f5b-4fcb-a0ba-40578029b607"/>
+					<reportElement style="Column header" x="673" y="0" width="80" height="16" forecolor="#050505" uuid="c4aae682-3f5b-4fcb-a0ba-40578029b607"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
@@ -221,7 +251,7 @@ group by DP.SupplierCode, DP.PayableDate]]>
 				</textField>
 			</frame>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement style="Column header" x="4" y="2" width="378" height="16" forecolor="#FFFFFF" uuid="0c14d1a2-966a-4834-9bfa-8671b4fdaa92"/>
+				<reportElement style="Column header" x="4" y="2" width="378" height="16" forecolor="#050505" uuid="0c14d1a2-966a-4834-9bfa-8671b4fdaa92"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
@@ -229,4 +259,15 @@ group by DP.SupplierCode, DP.PayableDate]]>
 			</textField>
 		</band>
 	</pageFooter>
+	<noData>
+		<band height="56">
+			<textField>
+				<reportElement x="1" y="10" width="800" height="30" uuid="3cda282f-4409-4c98-b883-ddcfe1a03f59"/>
+				<textElement>
+					<font fontName="Arial" size="24"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Suppliers Payments report - No details found for " + $P{selectedDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
 </jasperReport>

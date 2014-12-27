@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-12-14T12:29:47 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_M_Final" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb05fc56-b900-40c7-b7c3-7329ef199cca">
+<!-- 2014-12-26T23:27:57 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_M_Final" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb05fc56-b900-40c7-b7c3-7329ef199cca">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="47"/>
 	<property name="ireport.y" value="451"/>
@@ -21,7 +21,9 @@
 	<parameter name="dateFrom" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
-	<parameter name="selectedDate" class="java.lang.String"/>
+	<parameter name="selectedDate" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
 	<queryString language="SQL">
 		<![CDATA[SELECT [PayableDate]
       ,[PayableAmount]
@@ -47,22 +49,32 @@ where CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)]]>
 	<title>
 		<band height="52" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="1" y="0" width="800" height="50" forecolor="#F5C937" backcolor="#4D6637" uuid="6d12cfb7-a91a-4ffc-9979-ca8386584c36">
+				<reportElement mode="Opaque" x="1" y="0" width="800" height="50" forecolor="#080807" backcolor="#FFFFFF" uuid="6d12cfb7-a91a-4ffc-9979-ca8386584c36">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="local_mesure_unity" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="SubTitle" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" mode="Opaque" x="345" y="9" width="337" height="29" forecolor="#080807" backcolor="#FFFFFF" uuid="d8b433f6-65b4-4e87-8081-ae3fe827ba4a">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Left">
+						<font fontName="Arial" size="24" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{selectedDate}]]></textFieldExpression>
+				</textField>
 			</frame>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement style="SubTitle" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" mode="Opaque" x="3" y="9" width="798" height="29" forecolor="#F5C937" backcolor="#4D6637" uuid="5b81c450-44c4-4004-8fbd-c079d786546c">
+				<reportElement style="SubTitle" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" mode="Opaque" x="3" y="9" width="337" height="29" forecolor="#080807" backcolor="#FFFFFF" uuid="5b81c450-44c4-4004-8fbd-c079d786546c">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Left">
+				<textElement textAlignment="Right">
 					<font fontName="Arial" size="24" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Suppliers Payable Report For " + $P{selectedDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Daily Payables Report for "]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -74,42 +86,68 @@ where CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)]]>
 			<frame>
 				<reportElement x="0" y="0" width="802" height="24" uuid="580efa31-7236-40bd-9857-20023d852e08"/>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" mode="Opaque" x="31" y="0" width="339" height="24" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFCC" uuid="e86c2c06-a898-461e-ac2d-be4558e9d68a">
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="31" y="0" width="339" height="24" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="e86c2c06-a898-461e-ac2d-be4558e9d68a">
 						<property name="local_mesure_unitwidth" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="local_mesure_unitx" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
 					</textElement>
-					<text><![CDATA[Supplier Name, Location, Phone ]]></text>
+					<text><![CDATA[  Supplier Details]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" mode="Opaque" x="370" y="0" width="140" height="24" forecolor="#000000" backcolor="#FFFFCC" uuid="c38497a3-86ed-4615-b007-b8adfd5f5ccf">
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="370" y="0" width="140" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="c38497a3-86ed-4615-b007-b8adfd5f5ccf">
 						<property name="local_mesure_unitwidth" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
 					</textElement>
 					<text><![CDATA[Payable Amount]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" mode="Opaque" x="510" y="0" width="291" height="24" forecolor="#000000" backcolor="#FFFFCC" uuid="6b518130-05a1-4f98-9536-36779426310b">
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="510" y="0" width="291" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="6b518130-05a1-4f98-9536-36779426310b">
 						<property name="local_mesure_unitwidth" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
 					</textElement>
 					<text><![CDATA[Payment Instructions]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="1" y="0" width="30" height="24" backcolor="#FFFFCC" uuid="40ba4452-6741-45fe-b2a9-d236943b38b0">
+					<reportElement mode="Opaque" x="1" y="0" width="30" height="24" backcolor="#FFFFFF" uuid="40ba4452-6741-45fe-b2a9-d236943b38b0">
 						<property name="local_mesure_unitheight" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 						<property name="local_mesure_unitx" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
@@ -126,6 +164,8 @@ where CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)]]>
 					<reportElement style="Detail" positionType="Float" x="31" y="0" width="339" height="30" uuid="d29c24fb-22e2-40c9-ac5f-4571bdf15e47">
 						<property name="local_mesure_unitwidth" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="local_mesure_unitx" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					</reportElement>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
@@ -140,7 +180,7 @@ where CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)]]>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new java.text.DecimalFormat("\u20B9 ##,##,##0").format($F{PayableAmount})]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{PayableAmount}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement style="Detail" positionType="Float" x="510" y="1" width="291" height="29" uuid="024b07fe-32d6-47e4-a1f8-ca8b097f9f69">
@@ -247,7 +287,7 @@ where CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)]]>
 	<pageFooter>
 		<band height="22" splitType="Stretch">
 			<frame>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="1" y="1" width="800" height="20" forecolor="#D0B48E" backcolor="#4D6637" uuid="0d2d005b-5381-4309-939e-c0f820d9baa0">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="1" y="1" width="800" height="20" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="0d2d005b-5381-4309-939e-c0f820d9baa0">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="local_mesure_unitx" value="pixel"/>
@@ -256,21 +296,21 @@ where CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)]]>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textField evaluationTime="Report">
-					<reportElement style="Column header" x="753" y="0" width="40" height="16" forecolor="#F5C937" uuid="4603537b-873e-4068-ae07-322a2e969beb"/>
+					<reportElement style="Column header" x="753" y="0" width="40" height="16" forecolor="#080807" uuid="4603537b-873e-4068-ae07-322a2e969beb"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
 					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement style="Column header" x="673" y="0" width="80" height="16" forecolor="#F5C937" backcolor="#F5C937" uuid="c4aae682-3f5b-4fcb-a0ba-40578029b607"/>
+					<reportElement style="Column header" x="673" y="0" width="80" height="16" forecolor="#080807" backcolor="#F5C937" uuid="c4aae682-3f5b-4fcb-a0ba-40578029b607"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
 					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 				</textField>
 				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement style="Column header" x="2" y="0" width="368" height="16" forecolor="#F5C937" uuid="0c14d1a2-966a-4834-9bfa-8671b4fdaa92"/>
+					<reportElement style="Column header" x="2" y="0" width="368" height="16" forecolor="#080807" uuid="0c14d1a2-966a-4834-9bfa-8671b4fdaa92"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
@@ -282,4 +322,15 @@ where CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)]]>
 	<summary>
 		<band splitType="Stretch"/>
 	</summary>
+	<noData>
+		<band height="51">
+			<textField>
+				<reportElement x="-1" y="10" width="795" height="30" uuid="281cd90a-86ae-40a2-bd60-5e6224a75bbc"/>
+				<textElement>
+					<font fontName="Arial" size="24" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Daily Payables Report - No details found for " + $P{selectedDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
 </jasperReport>

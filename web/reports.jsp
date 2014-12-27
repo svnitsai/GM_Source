@@ -27,7 +27,7 @@ function saveChanges()
 </script>
   <div id="two">
     <div class="item">    
-      <form action="/gm/servlet/report" id="editForm">
+      <form action="/gm/servlet/report" id="editForm" target="_blank">
       	<table cellspacing="5" cellpadding="5">
       		<tr>
       			<td>

@@ -27,8 +27,8 @@ public class ReportGeneratorServlet extends HttpServlet {
 		PayableMorning("Daily Payables", "SP_M_Final.jasper",
 				"DailyPayables.pdf"), SupplierEvening("Supplier Payments",
 				"SP_Evening_Final.jasper", "DailySupplierPayments.pdf"), CollectionsMorning(
-				"Invoice Report", "Daily_Collection_Morning.jasper",
-				"DailyInvoices.pdf"), CollectionsEvening("Collections Report",
+				"Credit Sales Report", "Daily_Collection_Morning.jasper",
+				"CreditSales.pdf"), CollectionsEvening("Collections Report",
 				"Daily_Collection_Evening.jasper", "DailyCollections.pdf"), LedgerReport(
 				"Ledger Report", "Payment_Collection_Main.jasper",
 				"LedgerReport.pdf");
@@ -98,11 +98,10 @@ public class ReportGeneratorServlet extends HttpServlet {
 
 			Map parameters = new HashMap();
 			if (formattedDate.length() > 0) {
-				String startDate = formattedDate + " 00:00:00";
-				String endDate = formattedDate + " 23:59:59";
-
+				String startDate = formattedDate;
+				
 				parameters.put("dateFrom", startDate);
-				parameters.put("dateTo", endDate);
+				//parameters.put("dateTo", endDate);
 				parameters.put("selectedDate", displayDate);
 			}
 

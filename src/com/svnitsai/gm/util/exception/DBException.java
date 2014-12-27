@@ -13,9 +13,9 @@ public class DBException {
 	public static final int DB_OTHER_HIBERNATE_EXCEPTION = 2;
 	
 	public static int HandleJDBCException(JDBCException e) {
-		LogUtil.log(Message_Type.Error, " SQL State is " + e.getSQLState());
-		LogUtil.log(Message_Type.Error, e.getSQLException().getNextException().getMessage());
-		LogUtil.log(Message_Type.Error, e.getCause().getMessage());
+		LogUtil.log(Message_Type.Error, " SQL State is " + e.getSQLState() + " SQL error code is " + e.getErrorCode());
+		//LogUtil.log(Message_Type.Error, e.getSQLException().getNextException().getMessage());
+		//LogUtil.log(Message_Type.Error, e.getCause().getMessage());
 		e.printStackTrace();
 		return DB_SQL_EXCEPTION;
 	}

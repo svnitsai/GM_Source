@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-12-13T23:24:45 -->
+<!-- 2014-12-27T14:46:04 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Payment_Collection_Sub" pageWidth="280" pageHeight="100" orientation="Landscape" columnWidth="280" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c0615eae-68dc-4072-8429-7dd22b02c30a">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GarmentMantraDB"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -13,15 +13,69 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<parameter name="SupplierCode" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="paycRefNum" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="paycRefSubNum" class="java.lang.Integer" isForPrompting="false"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT DCD.PaidAmount, DCD.SupplierCode, S.CustName AS SupplierName, CB1.CustBank AS SupplierBank, 
+		<![CDATA[SELECT dcd.PaidAmount, 
+DCD.SupplierCode, 
+'RG' AS SupplierName, 
+NULL AS SupplierBank, 
+NULL AS SupplierBankBranch, 
+NULL AS SupplierAcctNum, 
+NULL AS SupplierBankAccountType, 
+NULL AS SupplierBankAccountName
+FROM DailyPayC DC 
+join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber 
+left join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId and DCD.SupplierCode = cb1.custcode
+left join Customer s on s.custcode = dcd.suppliercode and s.custtype = 'Supplier' 
+where dcd.suppliercode = -2
+AND DCD.PayCReferenceNumber = $P{paycRefNum} 
+      AND DCD.PayCReferenceSubNumber = $P{paycRefSubNum}
+union
+SELECT DCD.PaidAmount, 
+DCD.SupplierCode, 
+'Adjustment' AS SupplierName, 
+NULL AS SupplierBank, 
+NULL AS SupplierBankBranch, 
+NULL AS SupplierAcctNum, 
+NULL AS SupplierBankAccountType, 
+NULL AS SupplierBankAccountName
+FROM DailyPayC DC 
+join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber 
+left join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId and DCD.SupplierCode = cb1.custcode
+left join Customer s on s.custcode = dcd.suppliercode and s.custtype = 'Supplier' 
+where dcd.suppliercode = -1
+AND DCD.PayCReferenceNumber = $P{paycRefNum} 
+      AND DCD.PayCReferenceSubNumber = $P{paycRefSubNum}
+union
+SELECT DCD.PaidAmount, 
+DCD.SupplierCode, 
+'Cash Payment' AS SupplierName, 
+NULL AS SupplierBank, 
+NULL AS SupplierBankBranch, 
+NULL AS SupplierAcctNum, 
+NULL AS SupplierBankAccountType, 
+NULL AS SupplierBankAccountName
+FROM DailyPayC DC 
+join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber 
+left join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId and DCD.SupplierCode = cb1.custcode
+left join Customer s on s.custcode = dcd.suppliercode and s.custtype = 'Supplier' 
+where dcd.suppliercode = 0
+AND DCD.PayCReferenceNumber = $P{paycRefNum} 
+      AND DCD.PayCReferenceSubNumber = $P{paycRefSubNum}
+union
+SELECT DCD.PaidAmount, DCD.SupplierCode, S.CustName AS SupplierName, CB1.CustBank AS SupplierBank, 
 CB1.CustBankBranch AS SupplierBankBranch, CB1.CustBankAccountNumber AS SupplierAcctNum, 
 CB1.CustBankAccountType AS SupplierBankAccountType, CB1.CustBankAccountName AS SupplierBankAccountName
 FROM DailyPayC DC 
 join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber 
-join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId and s.custcode = cb1.custcode
+left join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId and DCD.SupplierCode = cb1.custcode
 left join Customer s on s.custcode = dcd.suppliercode and s.custtype = 'Supplier' 
-where dcd.suppliercode = $P{SupplierCode}]]>
+where dcd.suppliercode = $P{SupplierCode}
+and dcd.suppliercode > 0
+AND DCD.PayCReferenceNumber = $P{paycRefNum} 
+      AND DCD.PayCReferenceSubNumber = $P{paycRefSubNum}
+]]>
 	</queryString>
 	<field name="SupplierName" class="java.lang.String"/>
 	<field name="SupplierBank" class="java.lang.String"/>

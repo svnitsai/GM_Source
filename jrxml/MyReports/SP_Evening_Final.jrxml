@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-12-27T00:45:15 -->
+<!-- 2014-12-27T13:06:23 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_Evening_Final_Sub_new" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb05fc56-b900-40c7-b7c3-7329ef199cca">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="47"/>
@@ -28,9 +28,10 @@
 ,sum(DCD.PaidAmount) as paidAmount
   FROM DailyPayable DP
 join Customer s on s.custcode = DP.suppliercode and s.custtype = 'Supplier'
-join DailyPayCDetails DCD ON DCD.SupplierCode = DP.SupplierCode 
+left join DailyPayCDetails DCD ON DCD.SupplierCode = DP.SupplierCode 
 						AND DCD.PayCDate = DP.PayableDate
 WHERE CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)
+AND DP.PayableAmount  > 0
 group by DP.SupplierCode, DP.PayableDate]]>
 	</queryString>
 	<field name="PayableDate" class="java.sql.Timestamp"/>
@@ -227,7 +228,7 @@ group by DP.SupplierCode, DP.PayableDate]]>
 				<textElement>
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[SUM($F{payableAmount}, $F{paidAmount})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[SUM($F{payableAmount}, ($F{paidAmount} == null ? 0 : PRODUCT($F{paidAmount},-1)))]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

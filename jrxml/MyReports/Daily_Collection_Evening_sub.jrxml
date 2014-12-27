@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-12-13T22:02:45 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Daily_Collection_Evening_sub" pageWidth="600" pageHeight="70" orientation="Landscape" columnWidth="600" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3e5942da-375b-4100-bdaf-113dabda71c5">
+<!-- 2014-12-27T11:56:31 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Daily_Collection_Evening_sub" pageWidth="600" pageHeight="100" orientation="Landscape" columnWidth="600" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3e5942da-375b-4100-bdaf-113dabda71c5">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GarmentMantraDB"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -15,9 +15,53 @@
 	<parameter name="paycRefNum" class="java.lang.Integer" isForPrompting="false"/>
 	<parameter name="paycRefSubNum" class="java.lang.Integer" isForPrompting="false"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT DCD.PaidAmount, DCD.SupplierCode, S.CustName AS SupplierName, CB1.CustBank AS SupplierBank, 
-CB1.CustBankBranch AS SupplierBankBranch, CB1.CustBankAccountNumber AS SupplierAcctNum, 
-CB1.CustBankAccountType AS SupplierBankAccountType, CB1.CustBankAccountName AS SupplierBankAccountName
+		<![CDATA[SELECT DCD.PaidAmount, 
+SupplierCode, 
+'RG' AS SupplierName, 
+NULL AS SupplierBank, 
+NULL AS SupplierBankBranch, 
+NULL AS SupplierAcctNum, 
+NULL AS SupplierBankAccountType, 
+NULL AS SupplierBankAccountName
+FROM DailyPayCDetails DCD 
+WHERE DCD.PayCReferenceNumber = $P{paycRefNum} 
+      AND DCD.PayCReferenceSubNumber = $P{paycRefSubNum}
+      AND DCD.Deleted <> 1 and DCD.SupplierCode = -2
+union
+SELECT DCD.PaidAmount, 
+SupplierCode, 
+'Adjustments' AS SupplierName, 
+NULL AS SupplierBank, 
+NULL AS SupplierBankBranch, 
+NULL AS SupplierAcctNum, 
+NULL AS SupplierBankAccountType, 
+NULL AS SupplierBankAccountName
+FROM DailyPayCDetails DCD 
+WHERE DCD.PayCReferenceNumber = $P{paycRefNum} 
+      AND DCD.PayCReferenceSubNumber = $P{paycRefSubNum}
+      AND DCD.Deleted <> 1 and DCD.SupplierCode = -1
+union
+SELECT DCD.PaidAmount, 
+SupplierCode, 
+'Paid by Cash' AS SupplierName, 
+NULL AS SupplierBank, 
+NULL AS SupplierBankBranch, 
+NULL AS SupplierAcctNum, 
+NULL AS SupplierBankAccountType, 
+NULL AS SupplierBankAccountName
+FROM DailyPayCDetails DCD 
+WHERE DCD.PayCReferenceNumber = $P{paycRefNum} 
+      AND DCD.PayCReferenceSubNumber = $P{paycRefSubNum}
+      AND DCD.Deleted <> 1 and DCD.SupplierCode = 0
+union
+SELECT DCD.PaidAmount, 
+DCD.SupplierCode AS SupplierCode, 
+S.CustName AS SupplierName, 
+CB1.CustBank AS SupplierBank, 
+CB1.CustBankBranch AS SupplierBankBranch, 
+CB1.CustBankAccountNumber AS SupplierAcctNum, 
+CB1.CustBankAccountType AS SupplierBankAccountType, 
+CB1.CustBankAccountName AS SupplierBankAccountName
 FROM DailyPayCDetails DCD 
 left join Customer s on s.custcode = dcd.suppliercode and s.custtype = 'Supplier' 
 join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId and s.custcode = cb1.custcode
@@ -34,7 +78,7 @@ WHERE DCD.PayCReferenceNumber = $P{paycRefNum}
 	<field name="SupplierCode" class="java.math.BigDecimal"/>
 	<field name="SupplierBankAccountName" class="java.lang.String"/>
 	<detail>
-		<band height="49" splitType="Stretch">
+		<band height="74" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
 				<reportElement x="352" y="0" width="100" height="20" uuid="155276dd-1157-4bc2-896c-626cb1448a57">
 					<property name="local_mesure_unitx" value="pixel"/>
@@ -44,7 +88,7 @@ WHERE DCD.PayCReferenceNumber = $P{paycRefNum}
 					<font fontName="Arial" size="12"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("\u20B9##,##,##0").format($F{PaidAmount}) + "\n"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{PaidAmount}== null ? 0 : $F{PaidAmount} + "\n"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="0" y="0" width="352" height="20" uuid="bbdef44a-4c27-42fd-90ad-bfd440809b82"/>
@@ -52,14 +96,22 @@ WHERE DCD.PayCReferenceNumber = $P{paycRefNum}
 					<font fontName="Arial" size="12"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{SupplierName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[TRIM($F{SupplierName})]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="0" y="20" width="450" height="26" uuid="79d9c152-11d6-4c9d-8ea9-d5fe8a065343"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="20" width="300" height="26" uuid="79d9c152-11d6-4c9d-8ea9-d5fe8a065343"/>
 				<textElement>
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[TRIM($F{SupplierBank}) + "\n" + TRIM($F{SupplierBankBranch}) + "\n A/C Type: " + TRIM($F{SupplierBankAccountType}) + "\nA/C No.: " + TRIM($F{SupplierAcctNum}) + "\n A/C Name: " + TRIM($F{SupplierBankAccountName})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{SupplierBank} == null ? " " : TRIM($F{SupplierBank})) + " " + ($F{SupplierBankBranch} == null ? " " : TRIM($F{SupplierBankBranch}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="46" width="300" height="26" uuid="7973b03d-8749-453f-8418-3b6675e63eb4"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{SupplierBankAccountName} == null ? " " : ("A/C Name: " + TRIM($F{SupplierBankAccountName}))) + ($F{SupplierAcctNum} == null ? " " : (" A/C No.: " + TRIM($F{SupplierAcctNum}))) + ($F{SupplierBankAccountType} == null ? " " : ("A/C Type: " + TRIM($F{SupplierBankAccountType})))
+]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

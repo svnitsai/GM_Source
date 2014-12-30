@@ -31,14 +31,14 @@
 			rowBeingEdited = true;
 		}
 	}
-	System.out.println (" JSP - customerBankInfoId " + customerBankInfoId);
+	//System.out.println (" JSP - customerBankInfoId " + customerBankInfoId);
 	session.removeAttribute("customerBankInfoId"); //So that page will refresh next time around
 
 	//Add option has 0 in customerBankInfoId
 	if (customerBankInfoId.equals("0")) {
 		addOptionClicked=true;
 	}
-	System.out.println (" JSP - addOptionClicked " + addOptionClicked);
+	//System.out.println (" JSP - addOptionClicked " + addOptionClicked);
 	
 	//Get CustId from request - first time around; in Save it session for future use
 	String custIdFromCustomerScreen = (String) request.getParameter("custId");
@@ -121,9 +121,44 @@ input.error {
 			$(".nosorting").each(function() {
 				$(this).removeClass("sorting");
 			})
+
+// 			//Put the curtain on Customer Screen
+// 			if (window.opener != null) {
+// 				console.log (' load modal inside ready');
+// 				window.opener.loadModalDiv();
+// 			}
 	});
 	//End of document ready
 
+	//When EDIT button is pressed first
+	function startUpdate(rowActionIn) {
+		$.ajax({
+			type : "POST",
+			url : '/gm/web/CustomerBankInfoServlet',
+			data : {
+				rowAction : rowActionIn
+			},
+			success : function(returnData) {
+				var returnCode = returnData.charAt(11); //servlet data "ReturnCode_" + returnCode
+				if (returnCode == '0') { //Successful return
+					location.reload(true);
+				} else { //Unsuccessful return
+						$("#error-message").dialog({
+						modal : true,
+						buttons : [ {
+							id : "okButton",
+							text : "Ok",
+							click : function() {
+								//Reload page with DB updates
+								location.reload(true);
+							}
+						} ]
+					});
+				}
+			}
+		})
+	}
+	
 	//When SAVE button pressed on update; following function handles it
 	function saveUpdateChanges(currentDispKey) {
 		form_valid = "true";
@@ -221,6 +256,35 @@ input.error {
 		}
 	}
 
+	//When ADD button is pressed first
+	function startAdd(rowActionIn) {
+		$.ajax({
+			type : "POST",
+			url : '/gm/web/CustomerBankInfoServlet',
+			data : {
+				rowAction : rowActionIn
+			},
+			success : function(returnData) {
+				var returnCode = returnData.charAt(11); //servlet data "ReturnCode_" + returnCode
+				if (returnCode == '0') { //Successful return
+					location.reload(true);
+				} else { //Unsuccessful return
+						$("#error-message").dialog({
+						modal : true,
+						buttons : [ {
+							id : "okButton",
+							text : "Ok",
+							click : function() {
+								//Reload page with DB updates
+								location.reload(true);
+							}
+						} ]
+					});
+				}
+			}
+		})
+	}
+	
 	//When SAVE button pressed on ADD; following function handles it
 	function saveAddChanges(currentDispKey) {
 		form_valid = "true";
@@ -384,15 +448,24 @@ input.error {
 			});
 	}
 
-// 	function OnClose()
-// 	{
-// 	    if(window.opener != null && !window.opener.closed) 
-// 	    {
-// 	    	window.opener.location.reload(false);
-// 	       window.opener.hideModalDiv();
-// 	    }
-// 	}
-// 	window.onunload = OnClose;
+	//Put the curtain on Customer Screen
+	if (window.opener != null) {
+	/* Following reload option reloads parent screen aka Customer Screen */
+ //     window.opener.location.reload(false);
+		window.opener.loadModalDiv();
+	}
+	
+	//Hide the curtain when CustomerBankInfo screen is closed
+ 	function OnClose()
+ 	{
+ 	    if(window.opener != null && !window.opener.closed)
+ 	    {
+ 	   	/* Following reload option reloads parent screen aka Customer Screen */
+ //	       window.opener.location.reload(false);
+ 	       window.opener.hideModalDiv();
+ 	    }
+ 	}
+ 	window.onunload = OnClose;
 	
 </script>
 
@@ -463,7 +536,7 @@ input.error {
 						%>
 							<td style="width: 220px; text-align: right;">
 							<button type="submit" class="addButton" name="rowAction"
-									value="customerBankInfoAdd">&nbsp;
+									value="customerBankInfoAdd" onClick="startAdd('customerBankInfoAdd'); return false;">&nbsp;
 							</button>&nbsp;&nbsp;&nbsp;Add Bank Information</td>
 						<%
 						}
@@ -612,7 +685,7 @@ input.error {
 								</td>
 								<td style="width: 30px" align="center" title="Edit Bank Information">
 									<button type="submit" class="editButtonNolabel" name="rowAction"
-										value="customerBankInfoUpdate_<%=dispKey%>">&nbsp;</button>
+										value="customerBankInfoUpdate_<%=dispKey%>" onClick="startUpdate('customerBankInfoUpdate_<%=dispKey%>'); return false;">&nbsp;</button>
 								</td>
 								<%
 								}

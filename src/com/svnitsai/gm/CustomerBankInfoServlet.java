@@ -17,7 +17,7 @@ import com.svnitsai.gm.util.log.LogUtil;
  * 
  * @author: 	SVN Systems and Innovations
  * 
- * @purpose: 	Invoked by editCustomerBankInfo.jsp to do CRUD operation on CustomerBanks table
+ * @purpose: 	Invoked by editCustomerBankInfo.jsp to do CRUD operation on CustomerBanks table.
  * 
  */
 
@@ -30,7 +30,6 @@ public class CustomerBankInfoServlet extends HttpServlet {
 			action = inString;
 		else
 			action = inString.substring(0, underScorePosition);
-		System.out.println(" action is " + action);
 		return action.trim();
 	}
 
@@ -48,17 +47,15 @@ public class CustomerBankInfoServlet extends HttpServlet {
 		} else
 			dispKey = inString.substring(underScorePosition + 1,
 					inString.length());
-		System.out.println(" disp key is " + dispKey);
 		return dispKey.trim();
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, java.io.IOException {
-		System.out.println(" inside doGET ***************");
 		doPost(request, response);
 	}
 
-		public void doPost(HttpServletRequest request, HttpServletResponse response)
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, java.io.IOException {
 
 		try {
@@ -66,11 +63,6 @@ public class CustomerBankInfoServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			String userName = (String) session.getAttribute("User");
 
-			//TODO: Delme
-			System.out.println(" ");
-			System.out.println(" ");
-			System.out.println(" ");
-			LogUtil.log(LogUtil.Message_Type.Information, " Inside Customer bank info request ");
 			String rowAction = request.getParameter("rowAction");
 			LogUtil.log(LogUtil.Message_Type.Information, " Value of Customer bank info request is : " + rowAction);
 
@@ -87,12 +79,6 @@ public class CustomerBankInfoServlet extends HttpServlet {
 				String inCustAccountNumber = request.getParameter("jspcustAccountNumber");
 				String inCustCode = request.getParameter("jspcustIdFromCustomerScreen");
 				
-				//TODO: Delme
-				System.out.println("Add from edit servlet Bank : " + inCustBank
-						+ " Branch : " + inCustBranch + " Account Name : "
-						+ inCustAccountName + " Account Type : "
-						+ inCustAccountType + " Account Number : "
-						+ inCustAccountNumber);
 				CustomerBanks customerBank = new CustomerBanks();
 				CustomerBanksId customerBankId = new CustomerBanksId();
 
@@ -112,6 +98,7 @@ public class CustomerBankInfoServlet extends HttpServlet {
 
 				CustomerBankInfoCRUDProvider customerBankInfoCrud = new CustomerBankInfoCRUDProvider();
 				returnCode = customerBankInfoCrud.createCustomerBank(customerBank);
+				LogUtil.log(LogUtil.Message_Type.Information, " Add done in CustomerBankInfoServlet; return code from CRUD provider is " + returnCode);
 			}
 
 			//Handle update existing record
@@ -124,14 +111,6 @@ public class CustomerBankInfoServlet extends HttpServlet {
 				String inCustCode = request.getParameter("jspcustIdFromCustomerScreen");
 				String inCustBankId = request.getParameter("jspcustBankId");
 
-				//TODO: Delme
-				System.out.println("Update from edit servlet Bank : "
-						+ inCustBank + " Branch : " + inCustBranch
-						+ " Account Name : " + inCustAccountName
-						+ " Account Type : " + inCustAccountType
-						+ " Account Number : " + inCustAccountNumber
-						+ " Cust Bank Id : " + inCustBankId + " Cust Code : "
-						+ inCustCode);
 				CustomerBanks customerBank = new CustomerBanks();
 				CustomerBanksId customerBankId = new CustomerBanksId();
 
@@ -152,7 +131,7 @@ public class CustomerBankInfoServlet extends HttpServlet {
 
 				CustomerBankInfoCRUDProvider customerBankInfoCrud = new CustomerBankInfoCRUDProvider();
 				returnCode = customerBankInfoCrud.updateCustomerBank(customerBank);
-				System.out.println (" return code from crud update is " + returnCode);
+				LogUtil.log(LogUtil.Message_Type.Information, " Update done in CustomerBankInfoServlet; return code from CRUD provider is " + returnCode);
 			}
 
 			//Handle delete record
@@ -165,15 +144,6 @@ public class CustomerBankInfoServlet extends HttpServlet {
 				String inCustCode = request.getParameter("jspcustIdFromCustomerScreen");
 				String inCustBankId = request.getParameter("jspcustBankId");
 
-				//TODO: Delme
-				System.out.println("Delete from edit servlet Bank : "
-						+ inCustBank + " Branch : " + inCustBranch
-						+ " Account Name : " + inCustAccountName
-						+ " Account Type : " + inCustAccountType
-						+ " Account Number : " + inCustAccountNumber
-						+ " Cust Bank Id : " + inCustBankId + " Cust Code : "
-						+ inCustCode);
-				
 				CustomerBanks customerBank = new CustomerBanks();
 				CustomerBanksId customerBankId = new CustomerBanksId();
 
@@ -183,23 +153,21 @@ public class CustomerBankInfoServlet extends HttpServlet {
 
 				CustomerBankInfoCRUDProvider customerBankInfoCrud = new CustomerBankInfoCRUDProvider();
 				returnCode = customerBankInfoCrud.deleteCustomerBank(customerBank);
+				LogUtil.log(LogUtil.Message_Type.Information, " Delete done in CustomerBankInfoServlet; return code from CRUD provider is " + returnCode);
 			}
 
 			session.setAttribute("customerBankInfoId", dispKey);
 			if ("customerBankInfoUpdate".equals(action)) {
-				System.out.println(" inside Customer Bankinfoservlet - Customer Bank info update "
-								+ dispKey);
-				response.sendRedirect("editCustomerBankInfo.jsp");
-			} // used
+		        response.setContentType("text/html;charset=UTF-8");
+		        response.getWriter().write("ReturnCode_" + 0);
+			} // used for update when pressed first time
 
 			else if ("customerBankInfoAdd".equals(action)) {
-				System.out.println(" inside Customer Bankinfoservlet - Customer Bank info add "
-								+ dispKey);
-				response.sendRedirect("editCustomerBankInfo.jsp");
-			} // used
+		        response.setContentType("text/html;charset=UTF-8");
+		        response.getWriter().write("ReturnCode_" + 0);
+			} // used for add when pressed first time
 
 			else {
-				System.out.println(" outsid else ");
 		        response.setContentType("text/html;charset=UTF-8");
 		        response.getWriter().write("ReturnCode_" + returnCode);
 			} // used by add save, update save, delete

@@ -45,7 +45,6 @@ List customerInfoList = (List) customerInfoProvider.getCustomerInfoList(customer
 
 	});
 
-	//TODO: Fix Modal issue
 	var popUpObj;
 	function addCustBank(custId, custName, custCity, custProcType) 
 	{
@@ -53,21 +52,6 @@ List customerInfoList = (List) customerInfoProvider.getCustomerInfoList(customer
 		    "Edit Customer Bank Details",
 		    "toolbar=no, scrollbars=no,location=no,statusbar=no,menubar=no,status=no,resizable=no,width=950,height=500,left=350,top=150" );
 	    	popUpObj.focus(); 
-			loadModalDiv();
-// 			popUpObj.onbeforeunload = function () {
-// 			    console.log("popup before unload");
-// 			    //if (popUpObj.closed) hideModalDiv();
-// 			    hideModalDiv();
-// 			}
- 			popUpObj.onunload = function () {
- 			    console.log("popup unload");
- 			    //if (popUpObj.closed) hideModalDiv();
- 			    hideModalDiv();
- 			}
-// 			popUpObj.onload = function () {
-// 				loadModalDiv();
-// 			    console.log("popup loaded");
-// 			}
 	}
 	
 	function loadModalDiv()

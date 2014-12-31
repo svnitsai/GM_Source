@@ -12,6 +12,7 @@ public class CollectionBean implements Serializable
 	private long collectionId;
 	private long invoiceNumber;
 	private double invoiceAmount;
+	private Date invoiceDate;
 	private String custName;
 	private String custPhoneNumber;
 	private String custCity;
@@ -54,6 +55,15 @@ public class CollectionBean implements Serializable
 	}
 	public void setInvoiceAmount(double invoiceAmount) {
 		this.invoiceAmount = invoiceAmount;
+	}
+	public String getInvoiceDateStr() {
+		return Util.getFormattedDate(invoiceDate);
+	}
+	public Date getInvoiceDate() {
+		return invoiceDate;
+	}
+	public void setInvoiceDate(Date invoiceDate) {
+		this.invoiceDate = invoiceDate;
 	}
 	public double getTotalPaidAmount() {
 		double totalCollectionAmount = 0;
@@ -141,7 +151,11 @@ public class CollectionBean implements Serializable
 		String defStr = getDeferredDateStr();
 		if(defStr.length() > 0)
 		{
-			str += "<br> Deferred To " + defStr;
+			str += "<br> DEFERRED To <br>" + defStr;
+		}
+		else
+		{
+			str += "<br>" + getStatus();
 		}
 		return str;
 	}

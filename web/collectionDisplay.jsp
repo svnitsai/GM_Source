@@ -211,7 +211,7 @@ var popUpObj;
 				<td <%= rowspanStr%>><%= serialNum %></td>
 				<td <%= rowspanStr%> nowrap><%=bean.getCustName()%><br/>Phone: <%=bean.getCustPhoneNumber()%></td>
 				<td <%= rowspanStr%> align="right"><%= bean.getInvoiceNumber() %> </td>
-				<td <%= rowspanStr%> nowrap><%= bean.getDueDateForDisplay() %><br/><%= bean.getStatus() %></td>
+				<td <%= rowspanStr%> nowrap><%= bean.getDueDateForDisplay() %></td>
 				<td <%= rowspanStr%> align="right"><span style="font-family: DejaVu Sans;">&#x20b9; </span><%=dispInvoiceAmount %> </td>
 				
 				

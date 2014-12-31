@@ -1,0 +1,77 @@
+1. Reports fix - formatting
+2. screen changes - in screen changes (a. radio button for Return Goods (RG) and adjustments & b. need a new screen to add banks and delete incase of not required)
+3. new report for weekly supplier pending balance payables
+4. Automate stored procedures and tomcat service - for #4, some times there are instances I need to restart tomcat
+5. locking issue in hibernate
+6. more testing
+7. User help and tools if any
+
+
+
+In Github, I have checked in changes made to GM Prod machine code directly (as of Wednesday Morning 11.00 a.m.), excluding jrxml & report related changes.
+
+I have also updated "login" related changes to Github (which were lost/overwritten) during your last check-in.
+
+Following were the steps I followed
+
+1. "Pull" ed in all files from Github afresh.
+
+2. Inspected & applied the necessary changes for the files that were changed after 9.03 a.m. Monday (excluding report related changes).  Note: 9.03 a.m is the time I downloaded from Github before boarding to Tiruppur
+
+3. Ensured the changes (as shown by Github compare report) are relevant.
+
+4. "Committed and Pushed" the changes to Github.
+
+Can you please do the needful to keep the report related changes & other changes you made on that GM m/c after Wednesday 11.30 a.m. (My thumb drive backup is taken at that time).  
+
+Please do not overwrite hibernate pkg, or login related jsps even if they have a changed timestamp after Wednesday 11.30 a.m.
+
+Also, please apply all your fixes to screens using the latest code in Github (as they have fixes I made directly on GM m/c).
+
+
+Thanks,
+Siva
+
+21-Dec-2014
+-----------
+1. Proc PARTYEXTRACT changed for SET @EXISTINGPARTYCODE = 0
+2. 
+3. Company name update
+4. Banks upload - done
+5. Bug fixes - changes are done
+6. Backup and running the procedure every day automatically
+7. RIGHT and RTRIM for phone numbers
+8.
+
+
+24-Dec-2014
+-----------
+1. Removed Unique constraint from DailyPayC and should make paycrefnum and invoicerefnum as unique
+2. Create a job for partyextract
+3. Check why partyextract running new every time
+4. Check 21st updates
+
+
+26-12-2014
+----------
+1. Check SQL Server Browser running and also execution of Stored procedure in inside computer
+2. Running of reports
+3. Priya - Bank account name should be displayed and report not appearing in another tab and date must is not working
+
+4. Self - Customer table changes
+	a. Contact number 1, 2, 3, 4 and message number and owner name
+5. Self - Report testing
+6. 7263
+7. Report changes to 3 reports - both morning reports and supplier payments report are done
+
+
+
+Changes agreed 
+--------------
+1. Invoice date display in UI and differed / commited date
+2.--
+3. How this invoice date will be reflected in various reports
+4. Weekly payable report
+5. Phone numbers upload - create a view or alter the existing table
+6. Differed date is not getting the update in DailyPayC table
+7.

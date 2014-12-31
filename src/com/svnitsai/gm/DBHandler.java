@@ -176,14 +176,15 @@ public class DBHandler {
 		try {
 			// select and read collection data
 			String sql = "SELECT DC.PayCReferenceNumber, DC.PayCDueDate, DC.CustCode, DC.InvoiceAmount, "
-					+ "DC.PayCStatus, DC.InvoiceReferenceNumber, DCD.PayCReferenceSubNumber, "
+					+ "DC.PayCStatus, DC.InvoiceReferenceNumber, DC.InvoiceDate, DCD.PayCReferenceSubNumber, "
 					+ "DC.DeferredDate, DCD.PayCDate, DCD.SupplierCode, DCD.SupplierBankId, "
 					+ "DCD.PaidAmount, DCD.AccountLocationCode, DCD.LedgerPageNumber, "
-					+ "C.CustName, C.CustContactNumber, C.CustCity, "
+					+ "C.CustName, RTRIM(PCD.PHONE1) AS CustContactNumber, C.CustCity, "
 					+ "CO.CustName AS CompanyName, s.CustName AS SupplierName, CB1.CustBank AS SupplierBank, "
 					+ "CB1.CustBankBranch AS SupplierBankBranch, CB1.CustBankAccountNumber AS SupplierAcctNum "
 					+ "FROM DailyPayC DC "
 					+ "join Customer c on c.custcode = dc.custcode and c.custtype = 'Merchant' "
+					+ "join PartyContactDetails PCD on PCD.PTYCODE = c.custcode "
 					+ "left join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber ";
 
 			if (!showDeleted) {
@@ -246,8 +247,10 @@ public class DBHandler {
 					bean = new CollectionBean();
 					bean.setCollectionId(rs.getLong("PayCReferenceNumber"));
 					bean.setDueDate(rs.getDate("PayCDueDate"));
+					bean.setDeferredDate(rs.getDate("DeferredDate"));
 					bean.setInvoiceAmount(rs.getDouble("InvoiceAmount"));
 					bean.setInvoiceNumber(id);
+					bean.setInvoiceDate(rs.getDate("InvoiceDate"));
 					bean.setCustCity(rs.getString("CustCity"));
 					bean.setCustPhoneNumber(rs.getString("CustContactNumber"));
 					bean.setCustCode(rs.getLong("CustCode"));
@@ -399,7 +402,7 @@ public class DBHandler {
 			String updateCollectionSql = "UPDATE DailyPayC SET PayCStatus='"
 					+ status + "' ";
 			if (!"".equals(bean.getDeferredDateStr())) {
-				updateCollectionSql += ", PayCDueDate='"
+				updateCollectionSql += ", DeferredDate='"
 						+ Util.getFormattedDateForDB(bean.getDeferredDateStr())
 						+ "' ";
 			}

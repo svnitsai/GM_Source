@@ -190,7 +190,13 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 <form action="/gm/servlet/collection" id="editForm">
        
 <div id="contentDiv" style="width: auto; min-height: 0px; max-height: none; height: 470px; overflow:auto; padding:10px; background-color:white"> 
-<% if(bean != null) { %>
+<% if(bean != null) { 
+	String deferredDate = "";
+	if(bean.getDeferredDate() != null)
+	{
+		deferredDate = new SimpleDateFormat("dd/MM/yyyy").format(bean.getDeferredDate());
+	}
+%>
 	
 	<input type="hidden" name="action" value="saveCollection" /> 
 	<input type="hidden" name="collectionRefId" value="<%= bean.getCollectionId() %>"/>
@@ -213,6 +219,10 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 			<td><%= bean.getInvoiceNumber() %></td>
 		</tr>
 		<tr>
+			<td>Invoice Date:</td>
+			<td><%= bean.getInvoiceDateStr() %></td>
+		</tr>
+		<tr>
 			<td>Invoice Amount:</td>
 			<td><span style="font-family: DejaVu Sans;">&#x20b9; </span> <%= DisplayUtil.getDisplayAmount(bean.getInvoiceAmount())%></td>
 		</tr>
@@ -222,7 +232,7 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 		</tr>
 		<tr>
 			<td>Deferred Date:</td>
-			<td><input type="text" name="deferredDate" id="deferredDate" value="<%= bean.getDeferredDateStr() %>" readonly="true">
+			<td><input type="text" name="deferredDate" id="deferredDate" value="<%= deferredDate %>" readonly="true">
 			</td>
 		</tr>
 		<tr>

@@ -433,7 +433,7 @@ public class DBHandler {
 			   String sql = "SELECT PayableReferenceNumber, PayableDate, PayableAmount, PaidAmount, PayableStatus, SupplierCode, Instructions "
 					        + "FROM DailyPayable "
 					   		+ "WHERE PayableDate>='" + Util.getFormattedDateForDB(payableDate) + "' "
-					   		+ "ORDER BY PayableDate";
+					   		+ "ORDER BY PayableDate, PayableReferenceNumber";
 			   conn = getConnection();
 	           stmt = conn.createStatement();
 			   rs = stmt.executeQuery(sql);

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
-<!-- 2014-12-27T17:12:53 -->
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2015-01-05T11:41:10 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SP_M_Final" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb05fc56-b900-40c7-b7c3-7329ef199cca">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="47"/>
 	<property name="ireport.y" value="451"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Check Data Adapter DB"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TestGarmentMantraDB"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -24,7 +24,7 @@
 	<parameter name="selectedDate" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
-	<queryString>
+	<queryString language="SQL">
 		<![CDATA[SELECT [PayableDate]
       ,[PayableAmount]
       ,[SupplierCode]
@@ -32,9 +32,11 @@
 ,[CustName]
 ,[CustCity]
 ,[CustContactNumber]
+,[PayableReferenceNumber]
   FROM [DailyPayable]
 join [Customer] on suppliercode = custcode and custtype = 'Supplier'
-where CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)]]>
+where CONVERT(varchar,PayableDate, 112) = CONVERT(varchar, $P{dateFrom}, 112)
+Order by PayableDate, PayableReferenceNumber]]>
 	</queryString>
 	<field name="CustName" class="java.lang.String"/>
 	<field name="PayableAmount" class="java.math.BigDecimal"/>

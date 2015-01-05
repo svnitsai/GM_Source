@@ -107,7 +107,7 @@ navigation ul li a.hoover, #navigation ul li a.active{
 	margin: 0;
 	background: #738F11;
 	padding: 4px;
-	border-radius: 5px
+	border-radius: 5px;
 }
 
 .menu .active{
@@ -124,6 +124,15 @@ navigation ul li a.hoover, #navigation ul li a.active{
 	margin: 0px;
 	float: left;
 	background: #FFF;
+}
+
+#oneSMS {
+	color: #333;
+	width: 930px;
+	padding: 10px;
+	float: left;
+	background: none repeat scroll 0% 0% #FFF;
+	margin-top: 15px;
 }
 
 .hide-label {
@@ -149,11 +158,131 @@ navigation ul li a.hoover, #navigation ul li a.active{
 	background-color: #EAF2D3;
 }
 
+#smsSubMenu {
+    height:auto;
+    list-style:none;
+    background-color: #556B0A;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+    //margin: 30px 373px 0px;
+    //margin: 32px 365px 0px;
+    margin: 30px 390px 0px;
+    opacity: 0.9;
+}
+
+#smsSubMenu li {
+	//border-radius: 5px;
+	height: 25px;
+    margin: 0;
+    padding: 5px 0;
+    //background-color: #607A00;
+    //background-color: #556B0A;
+    border: none;
+    text-align: left;
+    font-size: 1.2em;
+	font-family: "Trebuchet MS",Arial,Helvetica,sans-serif;
+    //display: inline-block;
+    //float: left;
+    min-width: 130px;
+    border-bottom: 1px solid #fff;
+}
+
+#smsSubMenu a {
+	margin: 0;
+	color: #FFF;
+	text-decoration: none;
+	padding: 4px 15px 4px 15px;
+	font-weight: bold;
+}
+
+/* .smsSubMenuDiv a:hover{ */
+/* 	margin: 0; */
+/* 	background: #738F11; */
+/* 	padding: 4px; */
+/* 	border-radius: 5px; */
+/* } */
+
+/* .smsSubMenuDiv li hover{ */
+/* 	margin: 0; */
+/* 	background: #738F11; */
+/* 	padding: 4px; */
+/* 	border-radius: 5px; */
+/*}*/
+
+#navigation .navMenu {
+	padding: 4px;
+}
+
+.hover {
+	margin: 0;
+	background: #738F11;
+	padding: 4px;
+	border-radius: 5px;
+}
+
+.inputBoxBorder {
+	border: 1px solid #085903;
+	border-radius: 5px;
+}
+
+.borderLessBox {
+	border: none;
+}
+
+.paddedColumn {
+	padding-left: 20px;
+	height: 8px;	
+}
+
+#oneSMS .ui-widget {
+	font-family: inherit;
+}
+
+#oneSMS .ui-widget-content {
+	background-color: #FFF;
+	border-color: #738F11;
+	background: none;
+}
+
+#oneSMS .ui-widget-header {
+	background: #FFF;
+	border-color: #E4DD97;
+}
+
+#oneSMS .item {
+	padding: 10px;
+	margin: 0 0 10px 0;
+	background: #FFF;
+	border: 1px solid #E4DD97;
+}
+
+#waterMark {
+	position: fixed; width: 100%; height: 100%; 
+	z-index: 99999; pointer-events: none; 
+	font-size: 60px; margin-top: 300px; margin-left: 200px; 
+	opacity: 0.2;
+}
+
 #one .item {
 	padding: 10px;
 	margin: 0 0 10px 0;
 	background: #FFF;
 	border: 1px solid #E4DD97;
+}
+
+#sendActionTable img {
+    float: left;
+    border: medium none;
+    display: block;
+    background: none;
+    margin: 0;
+    padding: 0;
+}
+
+#scrollSMSSelectedRecipientTable_wrapper {
+	width: 550px;
+	margin-left: 30px;
+	border-radius: 5px;
 }
 
 #two {

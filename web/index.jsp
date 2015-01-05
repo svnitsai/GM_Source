@@ -74,7 +74,13 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 		$('#scrollCreditSalesTable').dataTable({
 			"scrollY" : "200px",
 			"scrollCollapse" : true,
-			"paging" : false
+			"paging" : false,
+			"aoColumns": [
+                          {"bSortable": true},
+                          {"iDataSort": 2},
+                          {"bVisible": false},
+                          {"bSortable": true}
+			              ]
 		});
 	});
 
@@ -82,7 +88,7 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 <!-- Begin Column One-->
 <!-- Balance Payable Window - Begin -->
 <div id="one" style="width: 460px">
-	<div class="item" style="height: 350px">
+	<div class="item" style="height: 360px">
 		<h2><%=balancePaymentDue%></h2>
 		<table id="scrollBalanceDueTable" class="display" cellspacing="0"
 			width="100%">
@@ -172,7 +178,7 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 
 <!-- Credit Sales Window - Begin -->
 <div id="two" style="width: 450px;">
-	<div class="item" style="height: 350px">
+	<div class="item" style="height: 360px">
 		<h2><%=creditSalesPaymentDue%></h2>
 		<table id="scrollCreditSalesTable" class="display" cellspacing="0"
 			width="100%">
@@ -180,6 +186,7 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 				<tr>
 					<th>Merchant Name</th>
 					<th>Due Date</th>
+					<th>Sortable Due Date</th>
 					<th>Pending Amount</th>
 				</tr>
 			</thead>
@@ -196,11 +203,13 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 							String dispAdjustedDueDate = DisplayUtil.getDisplayDate(row
 									.get("AdjustedDueDate").toString(),
 									new SimpleDateFormat("yyyy/MM/dd"));
+							String sortAdjustedDueDate = row.get("AdjustedDueDate").toString(); //Use yyyy/mm/dd date for sorting
 				%>
 				<tr>
 					<td style="width: 160px" align="left"><%=row.get("CustomerName")%>
 					</td>
 					<td style="width: 160px" align="left"><%=dispAdjustedDueDate%></td>
+					<td style="width: 160px" align="left"><%=sortAdjustedDueDate%></td>
 					<td style="width: 110px" align="right"><span style="font-family: DejaVu Sans;">&#x20b9;</span><%=dispReceivableBalanceDue%></td>
 				</tr>
 				<%

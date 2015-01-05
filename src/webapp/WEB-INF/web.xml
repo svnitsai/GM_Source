@@ -43,6 +43,16 @@
 	</servlet>
 
 	<servlet-mapping>
+		<servlet-name>SMS Template Servlet</servlet-name>
+		<url-pattern>/web/SMSTemplateServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SMS Template Servlet</servlet-name>
+		<servlet-class>com.svnitsai.gm.SMSTemplateServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
 		<servlet-name>Customer Information Servlet</servlet-name>
 		<url-pattern>/web/CustomerServlet</url-pattern>
 	</servlet-mapping>

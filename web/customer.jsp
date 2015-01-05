@@ -36,12 +36,18 @@ List customerInfoList = (List) customerInfoProvider.getCustomerInfoList(customer
 		$('#scrollCustomerInfoTable').dataTable({
 			"scrollY" : "250px", //Height of the table
 			"scrollCollapse" : true,
-			"paging" : true
+			"paging" : true,
+			"aoColumns": [
+                          {"bSortable": true},
+                          {"bSortable": true},
+                          {"bSortable": true},
+                          {"bSortable": false}
+			              ]
 		});
 		
-		$(".nosorting").each(function() {
-			$(this).removeClass("sorting");
-		})
+// 		$(".nosorting").each(function() {
+// 			$(this).removeClass("sorting");
+// 		})
 
 	});
 

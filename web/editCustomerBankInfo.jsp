@@ -95,7 +95,16 @@ input.error {
 			$('#scrollCustomerBankInfoTable').dataTable({
 				"scrollY" : "250px", //Height of the table
 				"scrollCollapse" : true,
-				"paging" : false
+				"paging" : false,
+				"aoColumns": [
+	                          {"bSortable": true},
+	                          {"bSortable": true},
+	                          {"bSortable": true},
+	                          {"bSortable": true},
+	                          {"bSortable": true},
+	                          {"bSortable": false},
+	                          {"bSortable": false}
+				              ]
 			});
 			
 			//Check if input elements were changed by the user	
@@ -117,16 +126,6 @@ input.error {
 					});
 			});
 			
-			// remove sorting for ICON columns in DATATABLE
-			$(".nosorting").each(function() {
-				$(this).removeClass("sorting");
-			})
-
-// 			//Put the curtain on Customer Screen
-// 			if (window.opener != null) {
-// 				console.log (' load modal inside ready');
-// 				window.opener.loadModalDiv();
-// 			}
 	});
 	//End of document ready
 
@@ -568,23 +567,23 @@ input.error {
 					<tr>
 						<td align="left"><input type="text" name="jspcustBankName"
 							placeholder="Bank Name" maxlength="50" id="custBankName"
-							class="inputElements"> <label id="custBankName-mesg"
+							class="inputElements inputBoxBorder"> <label id="custBankName-mesg"
 							class="hide-label err-mesg-font">Bank Name Required</label></td>
 						<td align="left"><input type="text" name="jspcustBankBranch"
-							placeholder="Bank Branch" maxlength="50" class="inputElements"
+							placeholder="Bank Branch" maxlength="50" class="inputElements  inputBoxBorder"
 							id="custBankBranch"></td>
 						<td align="left"><input type="text" name="jspcustAccountName"
-							placeholder="Account Name" maxlength="30" class="inputElements"
+							placeholder="Account Name" maxlength="30" class="inputElements  inputBoxBorder"
 							id="custAccountName"></td>
 						<td align="left"><select name="jspcustAccountType"
-							class="inputElements" id="custAccountType">
+							class="inputElements  inputBoxBorder" id="custAccountType">
 								<option value="Savings">Savings</option>
 								<option value="Current">Current</option>
 								<option value="CC">CC</option>
 						</select></td>
 						<td align="left"><input type="text"
 							name="jspcustAccountNumber" placeholder="Account Number"
-							maxlength="50" class="inputElements" id="custAccountNumber"></td>
+							maxlength="50" class="inputElements  inputBoxBorder" id="custAccountNumber"></td>
 						<td style="width: 30px" align="center" title="Cancel Bank Information">
 							<button type="submit" class="cancelButton" name="rowAction"
 								value="customerBankInfoAddCancel_0" onclick="cancelAddChanges('0'); return false;"
@@ -616,17 +615,17 @@ input.error {
 					<!-- Fill the table with existing bank information.  If edit is clicked on that row, open it up for edit -->
 							<tr>
 								<td align="left">
-									<input type="text" name="jspcustBankName" value="<%=dispBankName%>" class="inputElements" maxlength="50" id="custBankName"> 
+									<input type="text" name="jspcustBankName" value="<%=dispBankName%>" class="inputElements  inputBoxBorder" maxlength="50" id="custBankName"> 
 									<label id="custBankName-mesg" class="hide-label err-mesg-font">Bank Name Required</label>
 									<input type="hidden" id="custBankId" value="<%=dispKey%>">
 								</td>
 								<td align="left"><input type="text" name="jspcustBankBranch"
-									value="<%=dispBankBranch%>" class="inputElements" maxlength="50" id="custBankBranch">
+									value="<%=dispBankBranch%>" class="inputElements  inputBoxBorder" maxlength="50" id="custBankBranch">
 								</td>
 								<td align="left"><input type="text" name="jspcustAccountName"
-									value="<%=dispAccountName%>" class="inputElements" maxlength="30" id="custAccountName">
+									value="<%=dispAccountName%>" class="inputElements  inputBoxBorder" maxlength="30" id="custAccountName">
 								</td>
-								<td align="left"><select name="jspcustAccountType" class="inputElements" id="custAccountType">
+								<td align="left"><select name="jspcustAccountType" class="inputElements  inputBoxBorder" id="custAccountType">
 									<option value="Savings"  <%if (dispAccountType.equalsIgnoreCase("Savings")) { %>selected="selected" <% } %>>Savings</option>
 									<option value="Current" <%if (dispAccountType.equalsIgnoreCase("Current")) { %>selected="selected" <% } %>>Current</option>
 									<option value="CC" <%if (dispAccountType.equalsIgnoreCase("CC")) { %>selected="selected" <% } %>>CC</option>
@@ -634,7 +633,7 @@ input.error {
 								</td>
 								<td align="left">
 									<input type="text" name="jspcustAccountNumber" value="<%=dispAccountNumber%>"
-									class="inputElements" maxlength="50" id="custAccountNumber">
+									class="inputElements  inputBoxBorder" maxlength="50" id="custAccountNumber">
 								</td>
 								<td style="width: 30px" align="center" title="Cancel Update">
 									<button type="submit" class="cancelButton" name="rowAction" value="customerBankInfoCancel_<%=dispKey%>"

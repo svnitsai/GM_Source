@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-12-27T11:42:17 -->
+<!-- 2015-01-06T14:02:07 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Daily_Collection_Evening" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="71e4abbb-2429-45da-8447-f8cda65ba808">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="47"/>
 	<property name="ireport.y" value="451"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GarmentMantraDB"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TestGarmentMantraDB"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -25,11 +25,13 @@
 	<queryString language="SQL">
 		<![CDATA[SELECT distinct DC.PayCDueDate, DC.PayCStatus, C.CustName, C.CustCity, 
 DC.InvoiceReferenceNumber, C.CustContactNumber, DC.InvoiceAmount, DC.DeferredDate, 
-DCD.PayCReferenceSubNumber, DCD.PayCDate, DCD.SupplierCode, DCD.SupplierBankId,
+DCD.PayCDate, 
 DC.PayCReferenceNumber, DC.CustCode, 
 (select SUM(PaidAmount) From DailyPayCDetails 
-	WHERE PayCReferenceNumber=DC.PayCReferenceNumber AND Deleted <> 1
-) AS TotalPaidAmount
+	WHERE PayCReferenceNumber=DC.PayCReferenceNumber AND Deleted <> 1 and SupplierCode <> -1
+) AS TotalPaidAmount, (select SUM(PaidAmount) From DailyPayCDetails 
+	WHERE PayCReferenceNumber=DC.PayCReferenceNumber AND Deleted <> 1 and SupplierCode = -1
+) AS TotalAdjustedAmount
 FROM DailyPayC DC
 join Customer c on c.custcode = dc.custcode and c.custtype = 'Merchant'
 left join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber AND DCD.Deleted <> 1
@@ -52,12 +54,10 @@ ORDER BY PayCDueDate]]>
 	<field name="InvoiceAmount" class="java.math.BigDecimal"/>
 	<field name="DeferredDate" class="java.sql.Timestamp"/>
 	<field name="PayCDate" class="java.sql.Timestamp"/>
-	<field name="PayCReferenceSubNumber" class="java.lang.Integer"/>
-	<field name="SupplierCode" class="java.math.BigDecimal"/>
-	<field name="SupplierBankId" class="java.math.BigDecimal"/>
 	<field name="PayCReferenceNumber" class="java.lang.Integer"/>
 	<field name="CustCode" class="java.math.BigDecimal"/>
 	<field name="TotalPaidAmount" class="java.math.BigDecimal"/>
+	<field name="TotalAdjustedAmount" class="java.math.BigDecimal"/>
 	<background>
 		<band height="555" splitType="Stretch"/>
 	</background>
@@ -257,14 +257,17 @@ ORDER BY PayCDueDate]]>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<staticText>
-					<reportElement style="Column header" positionType="Float" x="209" y="32" width="359" height="20" forecolor="#665D5D" uuid="a9bcc3ff-1390-478a-ac36-28f667dc7db2"/>
+					<reportElement style="Column header" positionType="Float" x="30" y="32" width="359" height="20" forecolor="#665D5D" uuid="a9bcc3ff-1390-478a-ac36-28f667dc7db2">
+						<property name="local_mesure_unitx" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					</reportElement>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="true" isItalic="true" pdfFontName="Helvetica"/>
+						<font fontName="Arial" size="12" isBold="true" isItalic="true" isUnderline="true" pdfFontName="Helvetica"/>
 					</textElement>
 					<text><![CDATA[Payment Details]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="568" y="32" width="101" height="20" forecolor="#615E5E" uuid="fd510f39-3324-4840-8451-b8517cb618c4">
+					<reportElement x="389" y="32" width="101" height="20" forecolor="#615E5E" uuid="fd510f39-3324-4840-8451-b8517cb618c4">
 						<property name="local_mesure_unitx" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.x" value="px"/>
 						<property name="local_mesure_unitwidth" value="pixel"/>
@@ -273,17 +276,14 @@ ORDER BY PayCDueDate]]>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="true" isItalic="true"/>
+						<font fontName="Arial" size="12" isBold="true" isItalic="true" isUnderline="true"/>
 					</textElement>
 					<text><![CDATA[Paid Amount]]></text>
 				</staticText>
 				<subreport>
-					<reportElement x="210" y="52" width="459" height="25" uuid="c448838c-c61d-48e5-b70e-6655c8fe92bc"/>
+					<reportElement x="30" y="52" width="700" height="25" uuid="c448838c-c61d-48e5-b70e-6655c8fe92bc"/>
 					<subreportParameter name="paycRefNum">
 						<subreportParameterExpression><![CDATA[$F{PayCReferenceNumber}]]></subreportParameterExpression>
-					</subreportParameter>
-					<subreportParameter name="paycRefSubNum">
-						<subreportParameterExpression><![CDATA[$F{PayCReferenceSubNumber}]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					<subreportExpression><![CDATA["Daily_Collection_Evening_sub.jasper"]]></subreportExpression>
@@ -357,7 +357,7 @@ ORDER BY PayCDueDate]]>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
-					<textFieldExpression><![CDATA[(SUM($F{InvoiceAmount}, PRODUCT($F{TotalPaidAmount} == null ? 0 : $F{TotalPaidAmount}, -1)))]]></textFieldExpression>
+					<textFieldExpression><![CDATA[(SUM($F{InvoiceAmount},PRODUCT($F{TotalPaidAmount} == null ? 0 : $F{TotalPaidAmount}, -1),PRODUCT($F{TotalAdjustedAmount} == null ? 0 : $F{TotalAdjustedAmount}, -1)))]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement style="Detail" positionType="Float" x="649" y="0" width="81" height="14" uuid="23fdc8d9-e243-4935-bada-4ba91b81873e">
@@ -386,8 +386,22 @@ ORDER BY PayCDueDate]]>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
-					<textFieldExpression><![CDATA[TRIM($F{CustCity})]]></textFieldExpression>
+					<textFieldExpression><![CDATA[TRIM($F{CustCity}) + "\n"]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement x="490" y="31" width="101" height="20" forecolor="#615E5E" uuid="179c4f6a-99e4-4ec1-ad11-2c1a0b3f38b4">
+						<property name="local_mesure_unitx" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Remarks]]></text>
+				</staticText>
 			</frame>
 		</band>
 	</detail>

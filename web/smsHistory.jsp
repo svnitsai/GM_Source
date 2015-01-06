@@ -126,7 +126,7 @@ input.error {
 						<th>Sent Date</th>
 						<th>Sortable Date</th>
 						<th>Message</th>
-						<th  class="nosorting">&nbsp;&nbsp;&nbsp;</th>
+						<th>&nbsp;&nbsp;&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -138,7 +138,7 @@ input.error {
 						<td style="width: 300px" align="left">Dear Mr.Samy, with reference to invoice number 123456. Your Rs.12,000 payment which was due on 12 Dec. 2014 is not settled.  Pls. settle.</td>
 						<td style="width: 30px" align="center"
 							title="Customer Contact History"><button type="button"
-								class="infoButton" onClick="addCustBank('');">&nbsp;</button></td>
+								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">94428 12345</td>
@@ -148,7 +148,7 @@ input.error {
 						<td style="width: 300px" align="left">Dear Mr.Samy, with reference to invoice number 123456. Your Rs.12,000 payment which was due on 12 Dec. 2014 is not settled.  Pls. settle.</td>
 						<td style="width: 30px" align="center"
 							title="Customer Contact History"><button type="button"
-								class="infoButton" onClick="addCustBank('');">&nbsp;</button></td>
+								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">94428 12345</td>
@@ -158,7 +158,7 @@ input.error {
 						<td style="width: 300px" align="left">Dear Mr.Samy, with reference to invoice number 123456. Your Rs.12,000 payment which was due on 12 Dec. 2014 is not settled.  Pls. settle.</td>
 						<td style="width: 30px" align="center"
 							title="Customer Contact History"><button type="button"
-								class="infoButton" onClick="addCustBank('');">&nbsp;</button></td>
+								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">94428 54321</td>
@@ -168,7 +168,7 @@ input.error {
 						<td style="width: 300px" align="left">Dear Mr.Ram, with reference to invoice number 22256. Your Rs.82,000 payment which was due on 9 Dec. 2014 is not settled.  Pls. settle.</td>
 						<td style="width: 30px" align="center"
 							title="Customer Contact History"><button type="button"
-								class="infoButton" onClick="addCustBank('');">&nbsp;</button></td>
+								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">94428 54321</td>
@@ -178,7 +178,7 @@ input.error {
 						<td style="width: 300px" align="left">Dear Mr.Ram, with reference to invoice number 22256. Your Rs.82,000 payment which was due on 9 Dec. 2014 is not settled.  Pls. settle.</td>
 						<td style="width: 30px" align="center"
 							title="Customer Contact History"><button type="button"
-								class="infoButton" onClick="addCustBank('');">&nbsp;</button></td>
+								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">94428 54321</td>
@@ -188,7 +188,7 @@ input.error {
 						<td style="width: 300px" align="left">Dear Mr.Ram, with reference to invoice number 22256. Your Rs.82,000 payment which was due on 9 Dec. 2014 is not settled.  Pls. settle.</td>
 						<td style="width: 30px" align="center"
 							title="Customer Contact History"><button type="button"
-								class="infoButton" onClick="addCustBank('');">&nbsp;</button></td>
+								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
 					</tr>
 					<tr>
 						<td style="width: 160px" align="left">94428 54321</td>
@@ -198,7 +198,7 @@ input.error {
 						<td style="width: 300px" align="left">Dear Mr.Ram, with reference to invoice number 22256. Your Rs.82,000 payment which was due on 9 Dec. 2014 is not settled.  Pls. settle.</td>
 						<td style="width: 30px" align="center"
 							title="Customer Contact History"><button type="button"
-								class="infoButton" onClick="addCustBank('');">&nbsp;</button></td>
+								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
 					</tr>
 				</tbody>
 			</table>

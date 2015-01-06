@@ -84,6 +84,11 @@
 				primary: "ui-icon-pencil"
 			}
 		});
+		$( ".clockButton" ).button({
+			icons: {
+				primary: "ui-icon-clock"
+			}
+		});
 		$( ".anyButton" ).button();
 	});
 	

@@ -381,9 +381,9 @@ input.error {
 							<td style="width: 250px; text-align: center; padding-left: 20px;">
 								<select id="sendOption" style="width: 180px;"
 								class="inputBoxBorder">
-									<option value="SMSVender1" selected="selected">SMS
-										Vender 1</option>
-									<option value="SMSVender2">SMS Vender 2</option>
+									<option value="SMSVendor1" selected="selected">SMS
+										Vendor 1</option>
+									<option value="SMSVendor2">SMS Vendor 2</option>
 							</select>
 							</td>
 							<td style="width: 150px;"></td>

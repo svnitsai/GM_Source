@@ -21,6 +21,7 @@ public class CollectionDetailBean implements Serializable
 	private String collectionDateStr;
 	private String updatedBy;
 	private Date updatedDate;
+	private String paymentRemarks;
 
 	public String getUpdatedBy() {
 		return updatedBy;
@@ -91,6 +92,12 @@ public class CollectionDetailBean implements Serializable
 	}
 	public void setPaidAmount(double paidAmount) {
 		this.paidAmount = paidAmount;
+	}
+	public String getPaymentRemarks() {
+		return (paymentRemarks != null) ? paymentRemarks : "";
+	}
+	public void setPaymentRemarks(String paymentRemarks) {
+		this.paymentRemarks = paymentRemarks;
 	}
 	public String getCollectionDateStr() {
 		return (this.collectionDateStr != null )

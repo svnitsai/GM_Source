@@ -178,7 +178,7 @@ public class DBHandler {
 			String sql = "SELECT DC.PayCReferenceNumber, DC.PayCDueDate, DC.CustCode, DC.InvoiceAmount, "
 					+ "DC.PayCStatus, DC.InvoiceReferenceNumber, DC.InvoiceDate, DCD.PayCReferenceSubNumber, "
 					+ "DC.DeferredDate, DCD.PayCDate, DCD.SupplierCode, DCD.SupplierBankId, "
-					+ "DCD.PaidAmount, DCD.AccountLocationCode, DCD.LedgerPageNumber, "
+					+ "DCD.PaidAmount, DCD.AccountLocationCode, DCD.LedgerPageNumber, DCD.Comments, "
 					+ "C.CustName, RTRIM(PCD.PHONE1) AS CustContactNumber, C.CustCity, "
 					+ "CO.CustName AS CompanyName, s.CustName AS SupplierName, CB1.CustBank AS SupplierBank, "
 					+ "CB1.CustBankBranch AS SupplierBankBranch, CB1.CustBankAccountNumber AS SupplierAcctNum "
@@ -270,6 +270,7 @@ public class DBHandler {
 							.setCompanyCode(rs.getLong("AccountLocationCode"));
 					detailBean.setCompanyName(rs.getString("CompanyName"));
 					detailBean.setPaidAmount(paidAmt);
+					detailBean.setPaymentRemarks(rs.getString("Comments"));
 					detailBean.setCollectionDate(rs.getDate("PayCDate"));
 					detailBean.setLedgerNumber(rs.getInt("LedgerPageNumber"));
 					//detailBean
@@ -332,7 +333,7 @@ public class DBHandler {
 					// insert new entry
 					String insertDetailSql = "INSERT INTO DailyPayCDetails (PayCReferenceNumber, PayCDate, "
 							+ "SupplierCode, SupplierBankId, PaidAmount, AccountLocationCode, LedgerPageNumber, "
-							+ "CreatedDate, CreatedBy) values("
+							+ "Comments, CreatedDate, CreatedBy) values("
 							+ bean.getCollectionId()
 							+ ","
 							+ "'"
@@ -351,7 +352,9 @@ public class DBHandler {
 							+ detailBean.getCompanyCode()
 							+ ", "
 							+ detailBean.getLedgerNumber()
-							+ ", GETDATE(), 'UI Admin')";
+							+ ", '"
+							+ detailBean.getPaymentRemarks()
+							+ "', GETDATE(), 'UI Admin')";
 					System.out.println(insertDetailSql);
 
 					stmt.executeUpdate(insertDetailSql);
@@ -363,8 +366,9 @@ public class DBHandler {
 							+ detailBean.getCompanyCode()
 							+ ", LedgerPageNumber="
 							+ detailBean.getLedgerNumber()
-
-							+ " WHERE PayCReferenceNumber="
+							+ ", Comments='"
+							+ detailBean.getPaymentRemarks()
+							+ "' WHERE PayCReferenceNumber="
 							+ bean.getCollectionId()
 							+ " AND PayCReferenceSubNumber=" + detailID;
 					System.out.println(updateDetailSql);
@@ -535,7 +539,7 @@ public class DBHandler {
 			String username = "admin";
 			String password = "svnadmin";
 			Class.forName(driver).newInstance();
-			String dbURL = "jdbc:sqlserver://ADMIN-PC:49168;databaseName=PayC;instanceName=SQL2008R2;";
+	 		String dbURL = "jdbc:sqlserver://ADMIN-PC:49168;databaseName=PayC;instanceName=SQL2008R2;";
 	//		String dbURL = "jdbc:sqlserver://VANAVPR-PC:52471;databaseName=PayC;instanceName=SQLEXPRESS;";
 			conn = DriverManager.getConnection(dbURL, username, password);
 		} catch (Exception e) {

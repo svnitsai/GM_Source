@@ -388,6 +388,13 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 			 
 		</tr>
 		<tr>
+			<td nowrap>Comments:</td>
+			<td nowrap colspan="2">
+				<input type="text" name="comments_<%=i%>" value="<%=detailBean.getPaymentRemarks()%>"/>
+			</td>
+			 
+		</tr>
+		<tr>
 			<td nowrap>Payment Date:</td>
 			<td nowrap colspan="2">
 			<% if(i == 0) { %>

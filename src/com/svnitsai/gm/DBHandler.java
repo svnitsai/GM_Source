@@ -175,12 +175,14 @@ public class DBHandler {
 
 		try {
 			// select and read collection data
+			// added agentname
 			String sql = "SELECT DC.PayCReferenceNumber, DC.PayCDueDate, DC.CustCode, DC.InvoiceAmount, "
 					+ "DC.PayCStatus, DC.InvoiceReferenceNumber, DC.InvoiceDate, DCD.PayCReferenceSubNumber, "
 					+ "DC.DeferredDate, DCD.PayCDate, DCD.SupplierCode, DCD.SupplierBankId, "
 					+ "DCD.PaidAmount, DCD.AccountLocationCode, DCD.LedgerPageNumber, DCD.Comments, "
 					+ "C.CustName, RTRIM(PCD.PHONE1) AS CustContactNumber, C.CustCity, "
 					+ "CO.CustName AS CompanyName, s.CustName AS SupplierName, CB1.CustBank AS SupplierBank, "
+					+ " DC.AgentCode AS AgentCode, a.CustName AS AgentName, "
 					+ "CB1.CustBankBranch AS SupplierBankBranch, CB1.CustBankAccountNumber AS SupplierAcctNum "
 					+ "FROM DailyPayC DC "
 					+ "join Customer c on c.custcode = dc.custcode and c.custtype = 'Merchant' "
@@ -192,6 +194,7 @@ public class DBHandler {
 			}
 
 			sql += "left join Customer s on s.custcode = dcd.suppliercode and s.custtype = 'Supplier' "
+					+ "left join Customer a on a.custcode = dc.agentcode and a.custtype = 'Agent' "
 					+ "left join CustomerBanks CB1 on CB1.CustBankId = DCD.SupplierBankId and s.custcode = cb1.custcode "
 					+ "left join Customer CO on CO.custcode = dcd.accountlocationcode and CO.custtype = 'Company' ";
 
@@ -256,6 +259,9 @@ public class DBHandler {
 					bean.setCustCode(rs.getLong("CustCode"));
 					bean.setCustName(rs.getString("CustName"));
 					bean.setStatus(rs.getString("PayCStatus"));
+					// added agentname
+					bean.setAgentCode(rs.getLong("AgentCode"));
+					bean.setAgentName(rs.getString("AgentName"));
 					resultMap.put(id, bean);
 				}
 				bean = resultMap.get(id);
@@ -311,6 +317,7 @@ public class DBHandler {
 			// TODO: HibernateME
 			System.out.println("ID: " + bean.getCollectionId());
 			double balanceAmount = bean.getInvoiceAmount();
+			long agentCode = bean.getAgentCode();
 			System.out.println("Balance: " + balanceAmount);
 
 			// Get list of existing IDs to identify when user deletes any entry
@@ -402,16 +409,17 @@ public class DBHandler {
 			} else {
 				status = "CLOSED";
 			}
+			if (agentCode == 0) {
+				agentCode = 0;
+			}
 			System.out.println("Setting status to " + status);
-			String updateCollectionSql = "UPDATE DailyPayC SET PayCStatus='"
-					+ status + "' ";
+			String updateCollectionSql = "UPDATE DailyPayC SET PayCStatus='" + status + "', AgentCode= " + bean.getAgentCode();
 			if (!"".equals(bean.getDeferredDateStr())) {
 				updateCollectionSql += ", DeferredDate='"
 						+ Util.getFormattedDateForDB(bean.getDeferredDateStr())
-						+ "' ";
+						+ "'";
 			}
-			updateCollectionSql += "WHERE PayCReferenceNumber="
-					+ bean.getCollectionId();
+			updateCollectionSql += " WHERE PayCReferenceNumber=" + bean.getCollectionId();
 			System.out.println(updateCollectionSql);
 			stmt.executeUpdate(updateCollectionSql);
 		} catch (Exception e) {

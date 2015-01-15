@@ -86,4 +86,8 @@ public class CustomerBean implements Serializable
 		return ("company".equalsIgnoreCase(getType()));
 	}
 	
+	public boolean isAgent()
+	{
+		return ("Agent".equalsIgnoreCase(getType()));
+	}
 }

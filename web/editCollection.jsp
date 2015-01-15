@@ -30,6 +30,8 @@
 	LinkedHashMap<Long, CustomerBean> supplierMap = DBHandler.getSuppliers();
 	
 	LinkedHashMap<Long, String> companyMap = DBHandler.getCustomerIdMap("Company");
+	
+	LinkedHashMap<Long, String> agentMap = DBHandler.getCustomerIdMap("Agent");
 %>
 <script>
 
@@ -206,6 +208,21 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
  	<fieldset>
 	<legend>&nbsp;Invoice Details</legend>
 	<table  cellspacing="5" cellpadding="5">
+	<tr>
+		<td nowrap>Agent Name:</td>
+		<td nowrap colspan="2">
+			<select name="agentCode" 
+					id="agentCode">
+				<option value="" selected disabled>Select Agent</option>
+				<% for(Entry<Long, String> entry : agentMap.entrySet()) { %>
+				<option value="<%= entry.getKey() %>"
+							<%if(entry.getKey() == bean.getAgentCode()) {%> selected <%} %>>
+							<%= entry.getValue() %>
+				</option>
+				<% } %>
+			</select>
+		</td>
+	</tr>
 		<tr>
 			<td>Merchant Name:</td>
 			<td><%=bean.getCustName()%></td>

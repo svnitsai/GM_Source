@@ -1,4 +1,4 @@
-﻿ï»¿<%@ page language="java" %>
+﻿<%@ page language="java" %>
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.Map.Entry" %>
@@ -17,6 +17,7 @@
 	String merchantName = (String) request.getAttribute("merchantName");
 	
 	LinkedHashMap<Long, String> merchantMap = DBHandler.getMerchants();
+	LinkedHashMap<Long, String> agentMap = DBHandler.getCustomerIdMap("Agent");
 	
 	boolean isMerchantSelected = false;
 	String displayStr = "";
@@ -205,11 +206,23 @@ var popUpObj;
 				}
 				/* Format Amounts to display */
 				String dispInvoiceAmount = " " + DisplayUtil.getDisplayAmount(bean.getInvoiceAmount());
+				
+				/* Format customer info display */
+				String customerInfo = "";
+				if(bean.getAgentCode() > 0)
+				{
+					String agentName = agentMap.get(bean.getAgentCode());
+					if(agentName != null)
+					{
+						customerInfo += "Agent: " + agentName + "<br/>";
+					}
+				}
+				customerInfo += bean.getCustName() + "<br/>Phone: " + bean.getCustPhoneNumber();
 
 		%>
 			<tr>
 				<td <%= rowspanStr%>><%= serialNum %></td>
-				<td <%= rowspanStr%> nowrap><%=bean.getCustName()%><br/>Phone: <%=bean.getCustPhoneNumber()%></td>
+				<td <%= rowspanStr%>><%= customerInfo %></td>
 				<td <%= rowspanStr%> align="right"><%= bean.getInvoiceNumber() %> </td>
 				<td <%= rowspanStr%> nowrap><%= bean.getDueDateForDisplay() %></td>
 				<td <%= rowspanStr%> align="right"><span style="font-family: DejaVu Sans;">&#x20b9; </span><%=dispInvoiceAmount %> </td>

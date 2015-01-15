@@ -8,7 +8,7 @@ import java.util.Date;
 public class CollectionBean implements Serializable 
 {
 	private long custCode;
-	
+	private long agentCode;
 	private long collectionId;
 	private long invoiceNumber;
 	private double invoiceAmount;
@@ -18,7 +18,7 @@ public class CollectionBean implements Serializable
 	private String custCity;
 	private String status;
 	private Date dueDate;
-	
+	private String agentName;
 	private Date deferredDate;
 	private String deferredDateStr;
 	private String updatedBy;
@@ -37,6 +37,12 @@ public class CollectionBean implements Serializable
 	}
 	public void setCustCode(long partyId) {
 		this.custCode = partyId;
+	}
+	public long getAgentCode() {
+		return agentCode;
+	}
+	public void setAgentCode(long agentId) {
+		this.agentCode = agentId;
 	}
 	public long getCollectionId() {
 		return collectionId;
@@ -82,6 +88,12 @@ public class CollectionBean implements Serializable
 	}
 	public void setCustName(String custName) {
 		this.custName = custName;
+	}
+	public String getAgentName() {
+		return agentName;
+	}
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
 	}
 	public String getCustPhoneNumber() {
 		return custPhoneNumber;

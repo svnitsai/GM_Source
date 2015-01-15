@@ -77,6 +77,10 @@ public class CollectionServlet extends HttpServlet
 			{
 				bean.setInvoiceAmount(Util.convertToDouble(request.getParameter(name)));
 			}
+			else if(name.equals("agentCode"))
+			{
+				bean.setAgentCode(Util.convertToLong(request.getParameter(name)));
+			}
 			else if(name.startsWith("detailRefID_") && !name.equals("detailRefID_0"))
 			{
 				// check if this is an existing payment (where detail ID is set) 

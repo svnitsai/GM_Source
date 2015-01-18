@@ -6,9 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.svnitsai.gm.database.provider.CustomerBankInfoCRUDProvider;
-import com.svnitsai.gm.database.generated.CustomerBanks;
-import com.svnitsai.gm.database.generated.CustomerBanksId;
+import com.svnitsai.gm.database.provider.SMSTemplateCRUDProvider;
+import com.svnitsai.gm.database.generated.Smstemplate;
 import com.svnitsai.gm.util.date.DateUtil;
 import com.svnitsai.gm.util.log.LogUtil;
 
@@ -23,33 +22,6 @@ import com.svnitsai.gm.util.log.LogUtil;
 
 public class SMSTemplateServlet extends HttpServlet {
 
-	private String getAction(String inString) {
-		int underScorePosition = inString.indexOf("_");
-		String action = "";
-		if (underScorePosition < 0)
-			action = inString;
-		else
-			action = inString.substring(0, underScorePosition);
-		return action.trim();
-	}
-
-	private String getKey(String inString) {
-		int underScorePosition = inString.indexOf("_");
-		String dispKey = "";
-		if (underScorePosition < 0) {
-			dispKey = "0";
-			if (   getAction(inString).equalsIgnoreCase("add")
-				|| getAction(inString).equalsIgnoreCase("update")	
-				|| getAction(inString).equalsIgnoreCase("delete")	
-				) {
-				dispKey = "";
-			}
-		} else
-			dispKey = inString.substring(underScorePosition + 1,
-					inString.length());
-		return dispKey.trim();
-	}
-
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, java.io.IOException {
 		doPost(request, response);
@@ -62,111 +34,69 @@ public class SMSTemplateServlet extends HttpServlet {
 			//Get user from session to identify the user who updates CustomerBank info
 			HttpSession session = request.getSession(false);
 			String userName = (String) session.getAttribute("User");
+			System.out.println(" Inside SMSTemplateServlet...");
 
 			String templateAction = request.getParameter("templateAction");
 			LogUtil.log(LogUtil.Message_Type.Information, " Value of TEMPLATE action request is : " + templateAction);
 
-			String action = getAction(templateAction);
-			String dispKey = getKey(templateAction);
 			int returnCode = 0;
-			
-			//Handle create new record
+
+			String inTemplateName = request.getParameter("jsptemplateName");
+			String inTemplateMessage = request.getParameter("jsptemplateMessage");
+			String inTemplateId = request.getParameter("jsptemplateId");
+
+			//Add
 			if (templateAction.equalsIgnoreCase("add")) {
-				String inCustBank = request.getParameter("jspCustBankName");
-				String inCustBranch = request.getParameter("jspcustBankBranch");
-				String inCustAccountName = request.getParameter("jspcustAccountName");
-				String inCustAccountType = request.getParameter("jspcustAccountType");
-				String inCustAccountNumber = request.getParameter("jspcustAccountNumber");
-				String inCustCode = request.getParameter("jspcustIdFromCustomerScreen");
-				
-				CustomerBanks customerBank = new CustomerBanks();
-				CustomerBanksId customerBankId = new CustomerBanksId();
+				SMSTemplateCRUDProvider SMSTemplateInfoCrud = new SMSTemplateCRUDProvider();
 
-				customerBankId.setCustCode(Util.convertToInt(inCustCode));
-				customerBank.setId(customerBankId);
+				Smstemplate SMSTemplate = new Smstemplate();
+				SMSTemplate.setTemplateName(inTemplateName);
+				SMSTemplate.setTemplate(inTemplateMessage);
+				SMSTemplate.setCreatedDate(DateUtil.getCurrentTimestamp());
+				SMSTemplate.setCreatedBy(userName);
+				SMSTemplate.setUpdatedDate(DateUtil.getCurrentTimestamp());
+				SMSTemplate.setUpdatedBy(userName);
 
-				customerBank.setCustBank(inCustBank);
-				customerBank.setCustBankBranch(inCustBranch);
-				customerBank.setCustBankAccountName(inCustAccountName);
-				customerBank.setCustBankAccountType(inCustAccountType);
-				customerBank.setCustBankAccountNumber(inCustAccountNumber);
-				customerBank.setCustBankAccountName(inCustAccountName);
-				customerBank.setCreatedDate(DateUtil.getCurrentTimestamp());
-				customerBank.setCreatedBy(userName);
-				customerBank.setUpdatedDate(DateUtil.getCurrentTimestamp());
-				customerBank.setUpdatedBy(userName);
+				returnCode = SMSTemplateInfoCrud.createSMSTemplate(SMSTemplate);
+				LogUtil.log(LogUtil.Message_Type.Information, " Add done in SMSTemplate table; return code from CRUD provider is " + returnCode);
 
-				CustomerBankInfoCRUDProvider customerBankInfoCrud = new CustomerBankInfoCRUDProvider();
-				returnCode = customerBankInfoCrud.createCustomerBank(customerBank);
-				LogUtil.log(LogUtil.Message_Type.Information, " Add done in CustomerBankInfoServlet; return code from CRUD provider is " + returnCode);
 			}
 
-			//Handle update existing record
+			//Update
 			if (templateAction.equalsIgnoreCase("update")) {
-				String inCustBank = request.getParameter("jspCustBankName");
-				String inCustBranch = request.getParameter("jspcustBankBranch");
-				String inCustAccountName = request.getParameter("jspcustAccountName");
-				String inCustAccountType = request.getParameter("jspcustAccountType");
-				String inCustAccountNumber = request.getParameter("jspcustAccountNumber");
-				String inCustCode = request.getParameter("jspcustIdFromCustomerScreen");
-				String inCustBankId = request.getParameter("jspcustBankId");
+				SMSTemplateCRUDProvider SMSTemplateInfoCrud = new SMSTemplateCRUDProvider();
 
-				CustomerBanks customerBank = new CustomerBanks();
-				CustomerBanksId customerBankId = new CustomerBanksId();
+				Smstemplate SMSTemplate = new Smstemplate();
+				SMSTemplate.setTemplateId(Util.convertToInt(inTemplateId));
+				SMSTemplate.setTemplateName(inTemplateName);
+				SMSTemplate.setTemplate(inTemplateMessage);
+				SMSTemplate.setUpdatedDate(DateUtil.getCurrentTimestamp());
+				SMSTemplate.setUpdatedBy(userName);
 
-				customerBankId.setCustCode(Util.convertToInt(inCustCode));
-				customerBankId.setCustBankId(Util.convertToInt(inCustBankId));
-				customerBank.setId(customerBankId);
-
-				customerBank.setCustBank(inCustBank);
-				customerBank.setCustBankBranch(inCustBranch);
-				customerBank.setCustBankAccountName(inCustAccountName);
-				customerBank.setCustBankAccountType(inCustAccountType);
-				customerBank.setCustBankAccountNumber(inCustAccountNumber);
-				customerBank.setCustBankAccountName(inCustAccountName);
-				// customerBank.setCreatedDate(DateUtil.getCurrentTimestamp());
-				// customerBank.setCreatedBy(userName);
-				customerBank.setUpdatedDate(DateUtil.getCurrentTimestamp());
-				customerBank.setUpdatedBy(userName);
-
-				CustomerBankInfoCRUDProvider customerBankInfoCrud = new CustomerBankInfoCRUDProvider();
-				returnCode = customerBankInfoCrud.updateCustomerBank(customerBank);
-				LogUtil.log(LogUtil.Message_Type.Information, " Update done in CustomerBankInfoServlet; return code from CRUD provider is " + returnCode);
+				returnCode = SMSTemplateInfoCrud.updateSMSTemplate(SMSTemplate);
+				LogUtil.log(LogUtil.Message_Type.Information, " Update done in SMSTemplate table for template " + inTemplateName
+						+ "; return code from CRUD provider is " + returnCode);
 			}
 
 			//Handle delete record
 			if (templateAction.equalsIgnoreCase("delete")) {
-				String inCustBank = request.getParameter("jspCustBankName");
-				String inCustBranch = request.getParameter("jspcustBankBranch");
-				String inCustAccountName = request.getParameter("jspcustAccountName");
-				String inCustAccountType = request.getParameter("jspcustAccountType");
-				String inCustAccountNumber = request.getParameter("jspcustAccountNumber");
-				String inCustCode = request.getParameter("jspcustIdFromCustomerScreen");
-				String inCustBankId = request.getParameter("jspcustBankId");
+				SMSTemplateCRUDProvider SMSTemplateInfoCrud = new SMSTemplateCRUDProvider();
 
-				CustomerBanks customerBank = new CustomerBanks();
-				CustomerBanksId customerBankId = new CustomerBanksId();
+				Smstemplate SMSTemplate = new Smstemplate();
+				SMSTemplate.setTemplateId(Util.convertToInt(inTemplateId));
+				SMSTemplate.setTemplateName(inTemplateName);
+				SMSTemplate.setTemplate(inTemplateMessage);
 
-				customerBankId.setCustCode(Util.convertToInt(inCustCode));
-				customerBankId.setCustBankId(Util.convertToInt(inCustBankId));
-				customerBank.setId(customerBankId);
-
-				CustomerBankInfoCRUDProvider customerBankInfoCrud = new CustomerBankInfoCRUDProvider();
-				returnCode = customerBankInfoCrud.deleteCustomerBank(customerBank);
-				LogUtil.log(LogUtil.Message_Type.Information, " Delete done in CustomerBankInfoServlet; return code from CRUD provider is " + returnCode);
+				returnCode = SMSTemplateInfoCrud.deleteSMSTemplate(SMSTemplate);
+				LogUtil.log(LogUtil.Message_Type.Information, " Delete done in SMSTemplate table for template " + inTemplateName
+						+ "; return code from CRUD provider is " + returnCode);
 			}
 
-			session.setAttribute("templateName", "0");
 			if ("templateAdd".equals(templateAction)) {
+				session.setAttribute("templateName", "0");
 		        response.setContentType("text/html;charset=UTF-8");
 		        response.getWriter().write("ReturnCode_" + 0);
-			} // used for template add
-
-			else if ("customerBankInfoAdd".equals(action)) {
-		        response.setContentType("text/html;charset=UTF-8");
-		        response.getWriter().write("ReturnCode_" + 0);
-			} // used for add when pressed first time
-
+			} // used for template add first time
 			else {
 		        response.setContentType("text/html;charset=UTF-8");
 		        response.getWriter().write("ReturnCode_" + returnCode);

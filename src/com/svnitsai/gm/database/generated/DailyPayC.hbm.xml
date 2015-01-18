@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Dec 13, 2014 2:45:34 PM by Hibernate Tools 4.0.0 -->
+<!-- Generated Jan 9, 2015 6:40:56 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="com.svnitsai.gm.database.generated.DailyPayC" table="DailyPayC" catalog="PayC">
+    <class name="com.svnitsai.gm.database.generated.DailyPayC" table="DailyPayC" catalog="ProdPayC">
         <id name="payCreferenceNumber" type="int">
             <column name="PayCReferenceNumber" />
             <generator class="assigned" />

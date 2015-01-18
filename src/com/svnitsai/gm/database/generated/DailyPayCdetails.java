@@ -1,6 +1,6 @@
 package com.svnitsai.gm.database.generated;
 
-// Generated Dec 13, 2014 2:45:34 PM by Hibernate Tools 4.0.0
+// Generated Jan 9, 2015 6:40:55 PM by Hibernate Tools 4.0.0
 
 import java.math.BigDecimal;
 import java.util.Date;

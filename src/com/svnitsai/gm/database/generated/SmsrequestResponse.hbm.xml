@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 17, 2015 10:18:43 AM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.svnitsai.gm.database.generated.SmsrequestResponse" table="SMSRequestResponse" catalog="ProdPayC">
+        <id name="requestResponseId" type="int">
+            <column name="RequestResponseId" />
+            <generator class="assigned" />
+        </id>
+        <property name="requestInitiatedTs" type="string">
+            <column name="RequestInitiatedTS" length="25" not-null="true" />
+        </property>
+        <property name="request" type="string">
+            <column name="Request" length="800" not-null="true" />
+        </property>
+        <property name="response" type="string">
+            <column name="Response" length="800" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

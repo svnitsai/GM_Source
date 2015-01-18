@@ -31,7 +31,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response)
 try
 {	
 	//User authenticated?
-	boolean isValidUser = true;
+	boolean isValidUser = false;
 	
 	// Use providerImpl to validate user
 	UserAccessProviderImpl userAPI = new UserAccessProviderImpl();

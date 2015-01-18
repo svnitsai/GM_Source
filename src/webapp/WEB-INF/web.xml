@@ -43,6 +43,11 @@
 	</servlet>
 
 	<servlet-mapping>
+		<servlet-name>Customer Information Servlet</servlet-name>
+		<url-pattern>/web/CustomerServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
 		<servlet-name>SMS Template Servlet</servlet-name>
 		<url-pattern>/web/SMSTemplateServlet</url-pattern>
 	</servlet-mapping>
@@ -53,9 +58,24 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>Customer Information Servlet</servlet-name>
-		<url-pattern>/web/CustomerServlet</url-pattern>
+		<servlet-name>SMS History Servlet</servlet-name>
+		<url-pattern>/web/SMSHistoryServlet</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SMS History Servlet</servlet-name>
+		<servlet-class>com.svnitsai.gm.SMSHistoryServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SMS Send Servlet</servlet-name>
+		<url-pattern>/web/SMSSendServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SMS Send Servlet</servlet-name>
+		<servlet-class>com.svnitsai.gm.SMSSendServlet</servlet-class>
+	</servlet>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

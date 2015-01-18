@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 17, 2015 10:18:43 AM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.svnitsai.gm.database.generated.SmscontactHistory" table="SMSContactHistory" catalog="ProdPayC">
+        <id name="historyId" type="int">
+            <column name="HistoryId" />
+            <generator class="assigned" />
+        </id>
+        <property name="requestInitiatedTs" type="string">
+            <column name="RequestInitiatedTS" length="25" not-null="true" />
+        </property>
+        <property name="requestVendorReferrence" type="string">
+            <column name="RequestVendorReferrence" length="50" />
+        </property>
+        <property name="payCreferenceNumber" type="long">
+            <column name="PayCReferenceNumber" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="custId" type="long">
+            <column name="CustId" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="custCode" type="int">
+            <column name="CustCode" precision="9" scale="0" not-null="true" />
+        </property>
+        <property name="custName" type="string">
+            <column name="CustName" length="50" not-null="true" />
+        </property>
+        <property name="smsmobileNumber" type="long">
+            <column name="SMSMobileNumber" precision="16" scale="0" not-null="true" />
+        </property>
+        <property name="smsmobileOwnerName" type="string">
+            <column name="SMSMobileOwnerName" length="50" not-null="true" />
+        </property>
+        <property name="smsmessage" type="string">
+            <column name="SMSMessage" length="200" not-null="true" />
+        </property>
+        <property name="smsvendor" type="string">
+            <column name="SMSVendor" length="50" not-null="true" />
+        </property>
+        <property name="sentTimeStamp" type="timestamp">
+            <column name="SentTimeStamp" length="23" />
+        </property>
+        <property name="failedReason" type="string">
+            <column name="FailedReason" length="200" />
+        </property>
+        <property name="status" type="string">
+            <column name="Status" length="30" not-null="true" />
+        </property>
+        <property name="statusUpdatedTs" type="timestamp">
+            <column name="StatusUpdatedTS" length="23" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

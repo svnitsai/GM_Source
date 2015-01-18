@@ -1,8 +1,8 @@
 package com.svnitsai.gm.util.date;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /*
@@ -60,5 +60,32 @@ public class DateUtil {
 	    }
 		return "";
 		
+	}
+	/*
+	 * Get Date x weeks before...
+	 */
+	public static Timestamp getTSWeekBefore(int weeksBefore) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.WEEK_OF_YEAR, -weeksBefore);
+		java.util.Date result = calendar.getTime();
+		return new Timestamp(result.getTime());
+	}
+	/*
+	 * Get Date x weeks before...
+	 */
+	public static String getDateWeeksBefore(int weeksBefore) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.WEEK_OF_YEAR, -weeksBefore);
+		java.util.Date result = calendar.getTime();
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	    return dateFormat.format(result);
+	}
+	/*
+	 * Get Date x weeks before...
+	 */
+	public static String getTodayDate() {
+		Date now = new Date();
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	    return dateFormat.format(now);
 	}
 }

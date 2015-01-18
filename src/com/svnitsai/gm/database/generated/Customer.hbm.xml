@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Dec 13, 2014 2:45:34 PM by Hibernate Tools 4.0.0 -->
+<!-- Generated Jan 9, 2015 6:40:56 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="com.svnitsai.gm.database.generated.Customer" table="Customer" catalog="PayC">
+    <class name="com.svnitsai.gm.database.generated.Customer" table="Customer" catalog="ProdPayC">
         <id name="custId" type="int">
             <column name="CustId" />
             <generator class="assigned" />
@@ -55,6 +55,21 @@
         </property>
         <property name="updatedBy" type="string">
             <column name="UpdatedBy" length="50" not-null="true" />
+        </property>
+        <property name="secondaryPhoneNumber" type="java.lang.Long">
+            <column name="SecondaryPhoneNumber" precision="16" scale="0" />
+        </property>
+        <property name="residencePhoneNumber" type="java.lang.Long">
+            <column name="ResidencePhoneNumber" precision="16" scale="0" />
+        </property>
+        <property name="mobileNumber" type="java.lang.Long">
+            <column name="MobileNumber" precision="16" scale="0" />
+        </property>
+        <property name="smsmobileNumber" type="java.lang.Long">
+            <column name="SMSMobileNumber" precision="16" scale="0" />
+        </property>
+        <property name="smsmobileOwnerName" type="string">
+            <column name="SMSMobileOwnerName" length="50" />
         </property>
     </class>
 </hibernate-mapping>

@@ -1,6 +1,6 @@
 package com.svnitsai.gm.database.generated;
 
-// Generated Dec 13, 2014 2:45:34 PM by Hibernate Tools 4.0.0
+// Generated Jan 9, 2015 6:40:55 PM by Hibernate Tools 4.0.0
 
 import java.util.Date;
 
@@ -26,6 +26,11 @@ public class Customer implements java.io.Serializable {
 	private String createdBy;
 	private Date updatedDate;
 	private String updatedBy;
+	private Long secondaryPhoneNumber;
+	private Long residencePhoneNumber;
+	private Long mobileNumber;
+	private Long smsmobileNumber;
+	private String smsmobileOwnerName;
 
 	public Customer() {
 	}
@@ -48,7 +53,9 @@ public class Customer implements java.io.Serializable {
 			String custAddress4, String custCity, String custState,
 			String custCountry, Long custContactNumber, Integer custExtension,
 			Date createdDate, String createdBy, Date updatedDate,
-			String updatedBy) {
+			String updatedBy, Long secondaryPhoneNumber,
+			Long residencePhoneNumber, Long mobileNumber, Long smsmobileNumber,
+			String smsmobileOwnerName) {
 		this.custId = custId;
 		this.custCode = custCode;
 		this.custType = custType;
@@ -66,6 +73,11 @@ public class Customer implements java.io.Serializable {
 		this.createdBy = createdBy;
 		this.updatedDate = updatedDate;
 		this.updatedBy = updatedBy;
+		this.secondaryPhoneNumber = secondaryPhoneNumber;
+		this.residencePhoneNumber = residencePhoneNumber;
+		this.mobileNumber = mobileNumber;
+		this.smsmobileNumber = smsmobileNumber;
+		this.smsmobileOwnerName = smsmobileOwnerName;
 	}
 
 	public int getCustId() {
@@ -202,6 +214,46 @@ public class Customer implements java.io.Serializable {
 
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public Long getSecondaryPhoneNumber() {
+		return this.secondaryPhoneNumber;
+	}
+
+	public void setSecondaryPhoneNumber(Long secondaryPhoneNumber) {
+		this.secondaryPhoneNumber = secondaryPhoneNumber;
+	}
+
+	public Long getResidencePhoneNumber() {
+		return this.residencePhoneNumber;
+	}
+
+	public void setResidencePhoneNumber(Long residencePhoneNumber) {
+		this.residencePhoneNumber = residencePhoneNumber;
+	}
+
+	public Long getMobileNumber() {
+		return this.mobileNumber;
+	}
+
+	public void setMobileNumber(Long mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	public Long getSmsmobileNumber() {
+		return this.smsmobileNumber;
+	}
+
+	public void setSmsmobileNumber(Long smsmobileNumber) {
+		this.smsmobileNumber = smsmobileNumber;
+	}
+
+	public String getSmsmobileOwnerName() {
+		return this.smsmobileOwnerName;
+	}
+
+	public void setSmsmobileOwnerName(String smsmobileOwnerName) {
+		this.smsmobileOwnerName = smsmobileOwnerName;
 	}
 
 }

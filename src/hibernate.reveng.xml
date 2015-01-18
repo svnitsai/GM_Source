@@ -9,4 +9,7 @@
   <table-filter match-catalog="PayC" match-name="DailyPayable"/>
   <table-filter match-catalog="PayC" match-name="DataExtracted"/>
   <table-filter match-catalog="PayC" match-name="UserAccess"/>
+  <table-filter match-catalog="PayC" match-name="SMSContactHistory"/>
+  <table-filter match-catalog="PayC" match-name="SMSTemplate"/>
+  <table-filter match-catalog="PayC" match-name="SMSRequestResponse"/>
 </hibernate-reverse-engineering>

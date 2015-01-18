@@ -5,7 +5,7 @@
  <session-factory>
   <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
   <property name="hibernate.connection.password">svnadmin</property>
-  <property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;DatabaseName=ProdPayC;instanceName=SQLEXPRESS;</property>
+  <property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;DatabaseName=PayC;instanceName=SQLEXPRESS;</property>
   <property name="hibernate.connection.username">admin</property>
   <property name="hibernate.default_schema">dbo</property>
   <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
@@ -22,6 +22,9 @@
   <mapping resource="com/svnitsai/gm/database/generated/DailyPayC.hbm.xml"/>
   <mapping resource="com/svnitsai/gm/database/generated/DailyPayCdetails.hbm.xml"/>
   <mapping resource="com/svnitsai/gm/database/generated/UserAccess.hbm.xml"/>
+  <mapping resource="com/svnitsai/gm/database/generated/SmscontactHistory.hbm.xml"/>
+  <mapping resource="com/svnitsai/gm/database/generated/SmsrequestResponse.hbm.xml"/>
+  <mapping resource="com/svnitsai/gm/database/generated/Smstemplate.hbm.xml"/>
   <!--   <mapping class="com.svnitsai.gm.database.generated.UserAccess"/>
   <mapping class="com.svnitsai.gm.database.generated.Customer"/>
   <mapping class="com.svnitsai.gm.database.generated.CustomerBanks"/>

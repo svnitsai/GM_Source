@@ -2,10 +2,13 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 
 <jsp:include page="header.jsp?hideHeader=true" />
-<%@ page import="com.svnitsai.gm.database.provider.CustomerInfoProvider" %>
+<%@ page import="com.svnitsai.gm.database.provider.SMSContactHistoryCRUDProvider" %>
 <%@ page import="com.svnitsai.gm.util.display.DisplayUtil" %>
+<%@ page import="com.svnitsai.gm.util.date.DateUtil" %>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Map"%>
+<%@ page import="java.sql.Date"%>
+<%@ page import="java.text.SimpleDateFormat"%>
 
 
 <!-- 
@@ -18,17 +21,57 @@
 -->
 
 <%
-//Default (on first entry), screen will show customerType of SUPPLIER
-//Second time around, customerServlet will pass radio button clicked in session variable
-String customerTypeProc = "supplier";
-if (session.getAttribute("customerTypeProc") != null) {
-	customerTypeProc = (String) session.getAttribute("customerTypeProc");
+System.out.println("Inside smsHistory.jsp...");
+
+String chFromDate = ""; //TS
+String chToDate = "";
+
+if (session.getAttribute("jspCHFromDate") != null) { //First time around this will be null
+	chFromDate = (String) session.getAttribute("jspCHFromDate");
+}
+session.removeAttribute("jspCHFromDate"); //So that page will refresh next time around with default
+
+if (session.getAttribute("jspCHToDate") != null) {
+	chToDate = (String) session.getAttribute("jspCHToDate");
+}
+session.removeAttribute("jspCHToDate"); //So that page will refresh next time around
+
+SMSContactHistoryCRUDProvider contactHistoryCRUDProvider = new SMSContactHistoryCRUDProvider();
+List result = null;
+String chFromDateddmmyyyy = null;
+String chToDateddmmyyyy = null;
+if (chFromDate == "") { // get default - last one week history
+	result = (List) contactHistoryCRUDProvider.getSMSContactHistoryList_OneWeek();
+	chFromDateddmmyyyy = DateUtil.getDateWeeksBefore(1);
+	chToDateddmmyyyy = DateUtil.getTodayDate();
+} else {
+	chFromDateddmmyyyy = chFromDate.substring(8,10) + "/" + chFromDate.substring(5, 7) + "/" + chFromDate.substring(0, 4);
+	chToDateddmmyyyy = chToDate.substring(8,10) + "/" + chToDate.substring(5, 7) + "/" + chToDate.substring(0, 4);
+	result = (List) contactHistoryCRUDProvider.getSMSContactHistoryList
+			(chFromDate + " 00:00:00.000", chToDate + " 23:59:00.000"); //Get records for the date range
 }
 
-CustomerInfoProvider customerInfoProvider = new CustomerInfoProvider();
-/* Get Customer Information for Customer aka merchants */
-List customerInfoList = (List) customerInfoProvider.getCustomerInfoList(customerTypeProc);
-
+//   if ((result != null) && (result.size() > 0)) { 
+// 	  for (Object object : result) { 
+// 		  Map row = (Map) object; System.out.println(" ");
+// 		  System.out.println(" HistoryId: " + row.get("HistoryId")
+// 				  + " RequestInitiatedTS: " + row.get("RequestInitiatedTS")
+// 				  + " RequestVendorReferrence: " + row.get("RequestVendorReferrence")
+// 				  + " CustId: " + row.get("CustId")
+// 				  + " CustCode: " + row.get("CustCode")
+// 				  + " CustName: " + row.get("CustName")
+// 				  + " SMSMobileNumber: " + row.get("SMSMobileNumber")
+// 				  + " SMSMobileOwnerName: " + row.get("SMSMobileOwnerName")
+// 				  + " SMSMessage: " + row.get("SMSMessage")
+// 				  + " SMSVendor: " + row.get("SMSVendor")
+// 				  + " SentTimeStamp: " + row.get("SentTimeStamp")
+// 				  + " FailedReason: " + row.get("FailedReason")
+// 				  + " PayCReferenceNumber: " + row.get("PayCReferenceNumber")
+// 				  + " Status: " + row.get("Status")
+// 				  + " StatusUpdatedTS: " + row.get("StatusUpdatedTS")
+// 				  ); 
+// 		  } 
+// 	  }
 %>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -37,6 +80,7 @@ List customerInfoList = (List) customerInfoProvider.getCustomerInfoList(customer
 		$('#breadCrumps').show();
 		
 		$('#scrollSMSHistoryTable').dataTable({
+			"order" : [ [ 2, "desc" ] ],
 			"scrollY" : "250px", //Height of the table
 			"scrollCollapse" : true,
 			"paging" : true,
@@ -50,17 +94,15 @@ List customerInfoList = (List) customerInfoProvider.getCustomerInfoList(customer
 			              ]
 		});
 		
-		$(".nosorting").each(function() {
-			$(this).removeClass("sorting");
-		})
-
+		$.datepicker.setDefaults({dateFormat:"dd/mm/yy", maxDate:0});//Prevent future dates
+	    
 	});
 
 	var popUpObj;
-	function addCustBank(custId, custName, custCity, custProcType) 
+	function getContactHistory(custId, custName) 
 	{
-		popUpObj=window.open("/gm/web/editCustomerBankInfo.jsp?custId=" + custId + "&custName=" + custName + "&custCity=" + custCity + "&custProcType=" + custProcType,
-		    "Edit Customer Bank Details",
+		popUpObj=window.open("/gm/web/customerContactHistory.jsp?custId=" + custId + "&custName=" + custName,
+		    "Customer SMS Contact History",
 		    "toolbar=no, scrollbars=no,location=no,statusbar=no,menubar=no,status=no,resizable=no,width=950,height=500,left=350,top=150" );
 	    	popUpObj.focus(); 
 	}
@@ -76,6 +118,62 @@ List customerInfoList = (List) customerInfoProvider.getCustomerInfoList(customer
 	        var bcgDiv = document.getElementById("overlay");
 	        bcgDiv.style.display="none";
 	}
+	
+	//Handle adding a new template CLICK
+ 	function getContactHistoryDateRange() {
+		var chFromDate = $("#selectedFromDate").val(); //20/01/2015
+		var chToDate = $("#selectedtoDate").val();
+		var editError = false;
+		$("#dateErrorMessage").hide();
+		$("#selectedFromDate").removeClass('error');
+		//from date has to be <= to date
+		if (chFromDate.substring(6,10) > chToDate.substring(6,10)) {
+			editError = true;
+		} else if (chFromDate.substring(6,10) == chToDate.substring(6,10)) {
+			if (chFromDate.substring(3,5) > chToDate.substring(3,5)) {
+				editError = true;
+			} else if (chFromDate.substring(3,5) == chToDate.substring(3,5)) {
+				if (chFromDate.substring(0,2) > chToDate.substring(0,2)) {
+					editError = true;
+				}
+			}
+		}
+		var chFromDateYYYYMMDD = chFromDate.substring(6,10) + '-' + chFromDate.substring(3,5) + '-' +chFromDate.substring(0,2)
+		var chToDateYYYYMMDD = chToDate.substring(6,10) + '-' + chToDate.substring(3,5) + '-' + chToDate.substring(0,2)
+		if (editError) {
+			$("#dateErrorMessage").show();
+			$("#selectedFromDate").addClass('error');
+		} else {
+			$.ajax({
+				type : "POST",
+				url : '/gm/web/SMSHistoryServlet',
+				data : {
+					historyAction : 'getHistory',
+					jspCHFromDate : chFromDateYYYYMMDD,
+					jspCHToDate   : chToDateYYYYMMDD
+				},
+				success : function(returnData) {
+					var returnCode = returnData.charAt(11); //servlet data "ReturnCode_" + returnCode
+					if (returnCode == '0') { //Successful return
+						location.reload(true);
+					} else { //Unsuccessful return
+							$("#error-message").dialog({
+							modal : true,
+							buttons : [ {
+								id : "okButton",
+								text : "Ok",
+								click : function() {
+									//Reload page with DB updates
+									location.reload(true);
+								}
+							} ]
+						});
+					}
+				}
+			})
+		}
+ 	}
+
 		
 </script>
 
@@ -91,6 +189,13 @@ input.error {
 }
 </style>
 
+<div id="error-message" title="Error!" class="hide-label">
+	<p>
+		<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 50px 0;"></span> 
+		<span style="color: red;">Request could not be completed at this time. Please try after some time. If this continues, contact System Administrator!</span>
+	</p>
+</div>
+
 <div id="oneSMS">
 	<div class="item" id="contentDiv" name="contentDiv">
 		<!-- Customer Filter by Supplier / Merchant -->
@@ -98,23 +203,28 @@ input.error {
 			<form action="/gm/web/smsHistoryServlet" method="post">
 				<table style="border-collapse: collapse; height: 50px;">
 					<tr style="background-color: rgba(241, 245, 235, 0.61);">
-						<td style="width:250px; text-align: right; ">SMS History date from&nbsp;&nbsp;</td>
+						<td style="width:250px; text-align: right; ">SMS History from&nbsp;&nbsp;</td>
 						<td style="width:150px; text-align: left;">
-							<input type="text" name="selectedFromDate" id="selectedFromDate" class="datepicker inputBoxBorder" value="07/12/2014"
+							<input type="text" name="selectedFromDate" id="selectedFromDate" class="datepicker inputBoxBorder" value="<%=chFromDateddmmyyyy %>"
 							  style="text-align: center;">
 						</td>
 						<td style="width:250px; text-align: center;">&nbsp;&nbsp;to&nbsp;&nbsp;
-							<input type="text" name="selectedtoDate" id="selectedtoDate" class="datepicker inputBoxBorder" value="06/01/2015"
+							<input type="text" name="selectedtoDate" id="selectedtoDate" class="datepicker inputBoxBorder" value="<%=chToDateddmmyyyy%>"
 							  style="text-align: center;">
 						</td>
-						<td style="width:320px; text-align: right;">&nbsp;&nbsp;&nbsp;
+						<td style="width:320px; text-align: left;">&nbsp;&nbsp;&nbsp;
+						  	<button type="button" title="Get History"
+								class="refreshButton" onClick="getContactHistoryDateRange();">&nbsp;</button>
 						</td>
 					</tr>
 				</table>
+				<div id="dateErrorMessage" style="width: 100%; margin-left: 200px;" class="hide-label err-mesg-font">
+					<label>From date should be before to date</label>
+				</div>
 			</form>
 		</div>
 
-		<!--  Customer info table - begins -->
+		<!--  SMS History table - begins -->
 		<form>
 			<input type="hidden" name="action" id="action" value="save">
 			<table id="scrollSMSHistoryTable" class="display" cellspacing="0"
@@ -130,79 +240,51 @@ input.error {
 					</tr>
 				</thead>
 				<tbody>
+					<%
+					  if ((result != null) && (result.size() > 0)) { 
+					  for (Object object : result) { 
+						  Map row = (Map) object; 
+//						  System.out.println(" ");
+// 						  System.out.println(" HistoryId: " + row.get("HistoryId")
+// 								  + " RequestInitiatedTS: " + row.get("RequestInitiatedTS")
+// 								  + " RequestVendorReferrence: " + row.get("RequestVendorReferrence")
+// 								  + " CustId: " + row.get("CustId")
+// 								  + " CustCode: " + row.get("CustCode")
+// 								  + " CustName: " + row.get("CustName")
+// 								  + " SMSMobileNumber: " + row.get("SMSMobileNumber")
+// 								  + " SMSMobileOwnerName: " + row.get("SMSMobileOwnerName")
+// 								  + " SMSMessage: " + row.get("SMSMessage")
+// 								  + " SMSVendor: " + row.get("SMSVendor")
+// 								  + " SentTimeStamp: " + row.get("SentTimeStamp")
+// 								  + " FailedReason: " + row.get("FailedReason")
+// 								  + " PayCReferenceNumber: " + row.get("PayCReferenceNumber")
+// 								  + " Status: " + row.get("Status")
+// 								  + " StatusUpdatedTS: " + row.get("StatusUpdatedTS")
+// 								  ); 
+						   String sortRequestInitDate =  row.get("RequestInitiatedTS").toString().substring(0,10);
+						   String dispRequestInitDate =  DisplayUtil.getDisplayDate(sortRequestInitDate, new SimpleDateFormat("yyyy-MM-dd"));
+// 						   System.out.println(" sort date " + sortRequestInitDate + " disp date " + dispRequestInitDate);
+						   boolean isSent = false;
+						   if (row.get("Status").toString().equalsIgnoreCase("sent")) isSent = true;
+					%>
 					<tr>
-						<td style="width: 160px" align="left">94428 12345</td>
-						<td style="width: 160px" align="left">Sridevi Textiles</td>
-						<td style="width: 110px" align="left">14 Dec. 2014</td>
-						<td>20141214</td>
-						<td style="width: 300px" align="left">Dear Mr.Samy, with reference to invoice number 123456. Your Rs.12,000 payment which was due on 12 Dec. 2014 is not settled.  Pls. settle.</td>
+						<td <% if(isSent) { %>style="width: 160px; color:green;" <% } else { %>style="width: 160px; color:red;" 
+						       title="<%=row.get("FailedReason")%>" <% } %>align="left"><%=row.get("SMSMobileNumber")%></td>
+						<td style="width: 160px" align="left"><%=row.get("CustName") %></td>
+						<td style="width: 110px" align="left"><%=dispRequestInitDate %></td>
+						<td><%=sortRequestInitDate %></td>
+						<td style="width: 300px" align="left"><%=row.get("SMSMessage") %></td>
 						<td style="width: 30px" align="center"
 							title="Customer Contact History"><button type="button"
-								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
+								class="clockButton" onClick="getContactHistory('<%=row.get("CustId")%>', '<%=row.get("CustName")%>');">&nbsp;</button></td>
 					</tr>
-					<tr>
-						<td style="width: 160px" align="left">94428 12345</td>
-						<td style="width: 160px" align="left">Sridevi Textiles</td>
-						<td style="width: 110px" align="left">21 Dec. 2014</td>
-						<td>20141221</td>
-						<td style="width: 300px" align="left">Dear Mr.Samy, with reference to invoice number 123456. Your Rs.12,000 payment which was due on 12 Dec. 2014 is not settled.  Pls. settle.</td>
-						<td style="width: 30px" align="center"
-							title="Customer Contact History"><button type="button"
-								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">94428 12345</td>
-						<td style="width: 160px" align="left">Sridevi Textiles</td>
-						<td style="width: 110px" align="left">28 Dec. 2014</td>
-						<td>20141228</td>
-						<td style="width: 300px" align="left">Dear Mr.Samy, with reference to invoice number 123456. Your Rs.12,000 payment which was due on 12 Dec. 2014 is not settled.  Pls. settle.</td>
-						<td style="width: 30px" align="center"
-							title="Customer Contact History"><button type="button"
-								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">94428 54321</td>
-						<td style="width: 160px" align="left">Raman Textiles</td>
-						<td style="width: 110px" align="left">12 Dec. 2014</td>
-						<td>20141212</td>
-						<td style="width: 300px" align="left">Dear Mr.Ram, with reference to invoice number 22256. Your Rs.82,000 payment which was due on 9 Dec. 2014 is not settled.  Pls. settle.</td>
-						<td style="width: 30px" align="center"
-							title="Customer Contact History"><button type="button"
-								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">94428 54321</td>
-						<td style="width: 160px" align="left">Raman Textiles</td>
-						<td style="width: 110px" align="left">19 Dec. 2014</td>
-						<td>20141219</td>
-						<td style="width: 300px" align="left">Dear Mr.Ram, with reference to invoice number 22256. Your Rs.82,000 payment which was due on 9 Dec. 2014 is not settled.  Pls. settle.</td>
-						<td style="width: 30px" align="center"
-							title="Customer Contact History"><button type="button"
-								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">94428 54321</td>
-						<td style="width: 160px" align="left">Raman Textiles</td>
-						<td style="width: 110px" align="left">26 Dec. 2014</td>
-						<td>20141226</td>
-						<td style="width: 300px" align="left">Dear Mr.Ram, with reference to invoice number 22256. Your Rs.82,000 payment which was due on 9 Dec. 2014 is not settled.  Pls. settle.</td>
-						<td style="width: 30px" align="center"
-							title="Customer Contact History"><button type="button"
-								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
-					</tr>
-					<tr>
-						<td style="width: 160px" align="left">94428 54321</td>
-						<td style="width: 160px" align="left">Raman Textiles</td>
-						<td style="width: 110px" align="left">1 Jan. 2015</td>
-						<td>20150101</td>
-						<td style="width: 300px" align="left">Dear Mr.Ram, with reference to invoice number 22256. Your Rs.82,000 payment which was due on 9 Dec. 2014 is not settled.  Pls. settle.</td>
-						<td style="width: 30px" align="center"
-							title="Customer Contact History"><button type="button"
-								class="clockButton" onClick="addCustBank('');">&nbsp;</button></td>
-					</tr>
+					<%
+						  } 
+					  }
+					%>
 				</tbody>
 			</table>
-			<!--  Customer info table ends -->
+			<!--  Contact History table ends -->
 		</form>
 	</div>
 	<!-- Overlay transparent screen to implement modal window -->
@@ -210,5 +292,5 @@ input.error {
 	
 </div>
 <!--  TODO: delme -->
-<div id="waterMark"> SAMPLE ONLY </div>
+<div id="waterMark" class="hide-label"> SAMPLE ONLY </div>
 <jsp:include page="footer.jsp" />

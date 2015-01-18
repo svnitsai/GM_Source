@@ -147,6 +147,41 @@ navigation ul li a.hoover, #navigation ul li a.active{
 	color: #F00;
 }
 
+#Send .error {
+	border: 1px solid red;
+}
+
+#oneSMS #errorDiv .err-mesg-font {
+	font-size: 12px;
+	font-family: "Trebuchet MS",sans-serif;
+	font-weight: bold;
+	font-style: italic;
+	color: #F00;
+	margin-left: 50px;
+}
+
+#dateErrorMessage {
+	font-size: 12px;
+	font-family: "Trebuchet MS",sans-serif;
+	font-weight: bold;
+	font-style: italic;
+	color: #F00;
+	margin-left: 50px;
+}
+
+#Send #errorDiv #errorMesg {
+	font-size: 16px;
+	font-family: "Trebuchet MS",sans-serif;
+	font-weight: bold;
+	font-style: italic;
+	color: #F00;
+	margin-left: 30px;
+}
+
+#templateDiv .error {
+	border: 1px solid red;
+}
+
 .ui-dialog-title {
 	text-align: center;
 	letter-spacing: 6px;

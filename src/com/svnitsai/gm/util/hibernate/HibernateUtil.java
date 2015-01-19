@@ -76,7 +76,6 @@ public class HibernateUtil {
 
 	public static SessionFactory getSessionFactory() {
 		// Alternatively, you could look up in JNDI here
-		System.out.println(" inside Hibernate.Util.getSessionFactory ");
 		if (isSessionFactoryAvailable()) createSessionFactory();
 		return sessionFactory;
 	}
@@ -86,7 +85,6 @@ public class HibernateUtil {
 	 */
 
 	public static Session getSession() {
-		System.out.println(" inside Hibernate.Util.getSession ");
 		createSessionFactory();
 		if (!session.isOpen()) session = sessionFactory.openSession();
 		return session;
@@ -98,7 +96,6 @@ public class HibernateUtil {
 
 	public static void shutdown() {
 		// Close caches and connection pools
-		System.out.println(" inside Hibernate.Util.shutdown ");
 
 		getSession().close();
 		getSessionFactory().close();

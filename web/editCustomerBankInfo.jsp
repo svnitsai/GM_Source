@@ -69,10 +69,6 @@
 		session.setAttribute("custProcTypeFromCustomerScreen", custProcTypeFromCustomerScreen);
 	}
 	
-	//TODO: Delete me
-	System.out.println (" from edit cust bank jsp; id : " + custIdFromCustomerScreen  + "name: " + custNameFromCustomerScreen + " city: " + custCityFromCustomerScreen
-	 + " Customer Type:  " + custProcTypeFromCustomerScreen);
-
 	//Get Customer Banks for a given customer 
      CustomerBankInfoCRUDProvider customerBankInfoCrud = new CustomerBankInfoCRUDProvider();
      List result = (List) customerBankInfoCrud.getCustomerBankList(Util.convertToLong(custIdFromCustomerScreen));

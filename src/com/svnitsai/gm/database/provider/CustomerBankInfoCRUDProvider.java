@@ -133,7 +133,6 @@ public class CustomerBankInfoCRUDProvider {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
-			System.out.println(" System session closed in getCustomerBankInfo (SELECT) ");
 			session.close();
 			return result;
 		}

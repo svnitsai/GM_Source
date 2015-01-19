@@ -34,7 +34,6 @@ public class SMSTemplateServlet extends HttpServlet {
 			//Get user from session to identify the user who updates CustomerBank info
 			HttpSession session = request.getSession(false);
 			String userName = (String) session.getAttribute("User");
-			System.out.println(" Inside SMSTemplateServlet...");
 
 			String templateAction = request.getParameter("templateAction");
 			LogUtil.log(LogUtil.Message_Type.Information, " Value of TEMPLATE action request is : " + templateAction);

@@ -30,7 +30,6 @@ public class SMSHistoryServlet extends HttpServlet {
 		try {
 			//Get user from session to identify the user 
 			HttpSession session = request.getSession(false);
-			System.out.println(" Inside SMSHistoryServlet...");
 
 			String historyAction = request.getParameter("historyAction");
 			LogUtil.log(LogUtil.Message_Type.Information, " Value of HISTORY action request is : " + historyAction);

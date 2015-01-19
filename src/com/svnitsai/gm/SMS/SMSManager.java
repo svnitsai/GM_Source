@@ -175,10 +175,6 @@ public class SMSManager {
 		//Call SMSCommunicator Send method
 		int returnCode = smsCommunicator.submitSendSMS(sendRequestList, sendResponse);
 		if (returnCode != 0) {
-			//TODO: Delme
-//			System.out.println (" from SMS Manager : " + sendResponse.getFailureReason());
-//			System.out.println ("      return code : " + sendResponse.getReturnCode());
-//			System.out.println ("      message id  : " + sendResponse.getSuccessReferenceId());
 			LogUtil.log(LogUtil.Message_Type.Error, " Call to smsCommunicator for vendor " + smsCommunicator.getName() + " failed!");
 			LogUtil.log(LogUtil.Message_Type.Error, " Return Code:  " + sendResponse.getReturnCode());
 			LogUtil.log(LogUtil.Message_Type.Error, " Failed Reason:  " + sendResponse.getFailureReason());
@@ -186,9 +182,9 @@ public class SMSManager {
 		}
 		
 		//Use Response Object
-		System.out.println (" from SMS Manager : " + sendResponse.getFailureReason());
-		System.out.println ("      return code : " + sendResponse.getReturnCode());
-		System.out.println ("      message id  : " + sendResponse.getSuccessReferenceId());
+//		System.out.println (" from SMS Manager : " + sendResponse.getFailureReason());
+//		System.out.println ("      return code : " + sendResponse.getReturnCode());
+//		System.out.println ("      message id  : " + sendResponse.getSuccessReferenceId());
 		//Return
 		
 		return 0;

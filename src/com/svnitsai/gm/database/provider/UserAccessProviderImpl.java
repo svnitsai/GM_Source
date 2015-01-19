@@ -37,7 +37,6 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 		Session session = HibernateUtil.getSession();
 
 		try {
-			System.out.println("Inside ReadById");
 			String SQL_QUERY = "Select userId, userName, password, role, createdDate, createdBy, updatedDate, updatedBy from UserAccess where UserId = :hostUserId";
 			Query query = session.createQuery(SQL_QUERY).setParameter(
 					"hostUserId", dataObjectId);
@@ -148,7 +147,6 @@ public class UserAccessProviderImpl implements IPostgresProvider {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
-			System.out.println(" System session closed in ReadByUserName");
 			
 			session.close();
 			return userAccess;

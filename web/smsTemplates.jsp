@@ -18,7 +18,6 @@
  * 
 -->
 <%
-	System.out.println("Inside smsTemplate.jsp...");
 
 	String templateName = "";
 	boolean addOptionClicked = false;
@@ -239,12 +238,6 @@
 					
 				} //Visible if ends
 			}
-			
-			console.log (" Key parameters...");
-			console.log ("   option: " + option);
-			console.log ("   message: " + smsTemplateMessage);
-			console.log ("   temp name: " + smsTemplateName );
-			console.log ("   temp id: " + smsTemplateId);
 		})
 
 		if (form_valid == "true") {
@@ -392,8 +385,6 @@
 						$(this).dialog("close");
 						//Just Close & undo dropdown SELECTION
 				 	     $(".templateMessage").each(function() {
-				 	    	 console.log('this template message name ' + $(this).attr('name'));
-				 	    	 console.log('previous template name ' + previousValueSelected);
 				 	    	 if ($(this).attr('name') == previousValueSelected) {
 				 	    		 $(this).removeClass("hide-label");
 				 	    	 } else $(this).addClass("hide-label");

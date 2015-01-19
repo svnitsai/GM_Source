@@ -61,7 +61,6 @@ public class CustomerInfoProvider {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
-			//System.out.println(" System session closed in getCustomerInfo");
 			
 			session.close();
 			return result;

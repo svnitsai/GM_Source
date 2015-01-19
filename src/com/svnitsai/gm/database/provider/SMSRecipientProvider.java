@@ -1,15 +1,12 @@
 package com.svnitsai.gm.database.provider;
 
 import java.util.List;
-import java.util.Map;
-
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.svnitsai.gm.Util;
 import com.svnitsai.gm.util.date.DateUtil;
 import com.svnitsai.gm.util.exception.DBException;
 import com.svnitsai.gm.util.hibernate.HibernateUtil;
@@ -149,71 +146,71 @@ public class SMSRecipientProvider {
 	 * ------------------------------------------------------------------------
 	 */
 
-	public static void main(String[] args) { // TODO
-		
-	  System.out.println(" Recipient list - main. "); 
-	  SMSRecipientProvider sMSRecipientProvider = new SMSRecipientProvider();
-	  
-	  List result = (List) sMSRecipientProvider.getSMSRecipientDue();
-	  if ((result != null) && (result.size() > 0)) 
-	  { for (Object object : result) { 
-		  Map row = (Map) object; System.out.println(" ");
-		  System.out.println ("    Receivable Amount: " + row.get("ReceivableAmount"));
-		  System.out.println ("    DeferredDate: " + row.get("DeferredDate"));
-		  System.out.println ("    DueDate: " + row.get("DueDate"));
-		  System.out.println ("    AdjustedDueDate: " + row.get("AdjustedDueDate"));
-		  System.out.println ("    ReceivedAmount: " + row.get("ReceivedAmount"));
-		  System.out.println ("    BalanceDue: " + row.get("BalanceDue"));
-		  System.out.println ("    InvoiceNumber: " + row.get("InvoiceNumber"));
-		  System.out.println ("    CustomerName: " + row.get("CustomerName"));
-		  System.out.println ("    SMSMobileNumber: " + row.get("SMSMobileNumber"));
-		  System.out.println ("    SMSMobileOwnerName: " + row.get("SMSMobileOwnerName"));
-		  System.out.println ("    MobileNumber: " + row.get("MobileNumber"));
-		  System.out.println ("    ResidencePhoneNumber: " + row.get("ResidencePhoneNumber"));
-		  System.out.println ("    CustId: " + row.get("CustId"));
-	  	} 
-	  }
-
-	  result = (List) sMSRecipientProvider.getSMSRecipientPastDue();
-	  if ((result != null) && (result.size() > 0)) 
-	  { for (Object object : result) { 
-		  Map row = (Map) object; System.out.println(" ");
-		  System.out.println ("    Receivable Amount: " + row.get("ReceivableAmount"));
-		  System.out.println ("    DeferredDate: " + row.get("DeferredDate"));
-		  System.out.println ("    DueDate: " + row.get("DueDate"));
-		  System.out.println ("    AdjustedDueDate: " + row.get("AdjustedDueDate"));
-		  System.out.println ("    ReceivedAmount: " + row.get("ReceivedAmount"));
-		  System.out.println ("    BalanceDue: " + row.get("BalanceDue"));
-		  System.out.println ("    InvoiceNumber: " + row.get("InvoiceNumber"));
-		  System.out.println ("    CustomerName: " + row.get("CustomerName"));
-		  System.out.println ("    SMSMobileNumber: " + row.get("SMSMobileNumber"));
-		  System.out.println ("    SMSMobileOwnerName: " + row.get("SMSMobileOwnerName"));
-		  System.out.println ("    MobileNumber: " + row.get("MobileNumber"));
-		  System.out.println ("    ResidencePhoneNumber: " + row.get("ResidencePhoneNumber"));
-		  System.out.println ("    CustId: " + row.get("CustId"));
-	  	} 
-	  }
-
-	  
-	  result = (List) sMSRecipientProvider.getSMSRecipientFutureDue();
-	  if ((result != null) && (result.size() > 0)) 
-	  { for (Object object : result) { 
-		  Map row = (Map) object; System.out.println(" ");
-		  System.out.println ("    Receivable Amount: " + row.get("ReceivableAmount"));
-		  System.out.println ("    DeferredDate: " + row.get("DeferredDate"));
-		  System.out.println ("    DueDate: " + row.get("DueDate"));
-		  System.out.println ("    AdjustedDueDate: " + row.get("AdjustedDueDate"));
-		  System.out.println ("    ReceivedAmount: " + row.get("ReceivedAmount"));
-		  System.out.println ("    BalanceDue: " + row.get("BalanceDue"));
-		  System.out.println ("    InvoiceNumber: " + row.get("InvoiceNumber"));
-		  System.out.println ("    CustomerName: " + row.get("CustomerName"));
-		  System.out.println ("    SMSMobileNumber: " + row.get("SMSMobileNumber"));
-		  System.out.println ("    SMSMobileOwnerName: " + row.get("SMSMobileOwnerName"));
-		  System.out.println ("    MobileNumber: " + row.get("MobileNumber"));
-		  System.out.println ("    ResidencePhoneNumber: " + row.get("ResidencePhoneNumber"));
-		  System.out.println ("    CustId: " + row.get("CustId"));
-	  	} 
-	  }
-
-	}
+//	public static void main(String[] args) { // TODO
+//		
+//	  System.out.println(" Recipient list - main. "); 
+//	  SMSRecipientProvider sMSRecipientProvider = new SMSRecipientProvider();
+//	  
+//	  List result = (List) sMSRecipientProvider.getSMSRecipientDue();
+//	  if ((result != null) && (result.size() > 0)) 
+//	  { for (Object object : result) { 
+//		  Map row = (Map) object; System.out.println(" ");
+//		  System.out.println ("    Receivable Amount: " + row.get("ReceivableAmount"));
+//		  System.out.println ("    DeferredDate: " + row.get("DeferredDate"));
+//		  System.out.println ("    DueDate: " + row.get("DueDate"));
+//		  System.out.println ("    AdjustedDueDate: " + row.get("AdjustedDueDate"));
+//		  System.out.println ("    ReceivedAmount: " + row.get("ReceivedAmount"));
+//		  System.out.println ("    BalanceDue: " + row.get("BalanceDue"));
+//		  System.out.println ("    InvoiceNumber: " + row.get("InvoiceNumber"));
+//		  System.out.println ("    CustomerName: " + row.get("CustomerName"));
+//		  System.out.println ("    SMSMobileNumber: " + row.get("SMSMobileNumber"));
+//		  System.out.println ("    SMSMobileOwnerName: " + row.get("SMSMobileOwnerName"));
+//		  System.out.println ("    MobileNumber: " + row.get("MobileNumber"));
+//		  System.out.println ("    ResidencePhoneNumber: " + row.get("ResidencePhoneNumber"));
+//		  System.out.println ("    CustId: " + row.get("CustId"));
+//	  	} 
+//	  }
+//
+//	  result = (List) sMSRecipientProvider.getSMSRecipientPastDue();
+//	  if ((result != null) && (result.size() > 0)) 
+//	  { for (Object object : result) { 
+//		  Map row = (Map) object; System.out.println(" ");
+//		  System.out.println ("    Receivable Amount: " + row.get("ReceivableAmount"));
+//		  System.out.println ("    DeferredDate: " + row.get("DeferredDate"));
+//		  System.out.println ("    DueDate: " + row.get("DueDate"));
+//		  System.out.println ("    AdjustedDueDate: " + row.get("AdjustedDueDate"));
+//		  System.out.println ("    ReceivedAmount: " + row.get("ReceivedAmount"));
+//		  System.out.println ("    BalanceDue: " + row.get("BalanceDue"));
+//		  System.out.println ("    InvoiceNumber: " + row.get("InvoiceNumber"));
+//		  System.out.println ("    CustomerName: " + row.get("CustomerName"));
+//		  System.out.println ("    SMSMobileNumber: " + row.get("SMSMobileNumber"));
+//		  System.out.println ("    SMSMobileOwnerName: " + row.get("SMSMobileOwnerName"));
+//		  System.out.println ("    MobileNumber: " + row.get("MobileNumber"));
+//		  System.out.println ("    ResidencePhoneNumber: " + row.get("ResidencePhoneNumber"));
+//		  System.out.println ("    CustId: " + row.get("CustId"));
+//	  	} 
+//	  }
+//
+//	  
+//	  result = (List) sMSRecipientProvider.getSMSRecipientFutureDue();
+//	  if ((result != null) && (result.size() > 0)) 
+//	  { for (Object object : result) { 
+//		  Map row = (Map) object; System.out.println(" ");
+//		  System.out.println ("    Receivable Amount: " + row.get("ReceivableAmount"));
+//		  System.out.println ("    DeferredDate: " + row.get("DeferredDate"));
+//		  System.out.println ("    DueDate: " + row.get("DueDate"));
+//		  System.out.println ("    AdjustedDueDate: " + row.get("AdjustedDueDate"));
+//		  System.out.println ("    ReceivedAmount: " + row.get("ReceivedAmount"));
+//		  System.out.println ("    BalanceDue: " + row.get("BalanceDue"));
+//		  System.out.println ("    InvoiceNumber: " + row.get("InvoiceNumber"));
+//		  System.out.println ("    CustomerName: " + row.get("CustomerName"));
+//		  System.out.println ("    SMSMobileNumber: " + row.get("SMSMobileNumber"));
+//		  System.out.println ("    SMSMobileOwnerName: " + row.get("SMSMobileOwnerName"));
+//		  System.out.println ("    MobileNumber: " + row.get("MobileNumber"));
+//		  System.out.println ("    ResidencePhoneNumber: " + row.get("ResidencePhoneNumber"));
+//		  System.out.println ("    CustId: " + row.get("CustId"));
+//	  	} 
+//	  }
+//
+//	}
 }

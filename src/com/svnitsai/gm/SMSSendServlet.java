@@ -104,7 +104,6 @@ public class SMSSendServlet extends HttpServlet {
 			//Get user from session to identify the user who updates CustomerBank info
 			HttpSession session = request.getSession(false);
 			String userName = (String) session.getAttribute("User");
-			System.out.println(" Inside SMSSendServlet...");
 
 			String smsAction = request.getParameter("smsAction");
 			LogUtil.log(LogUtil.Message_Type.Information, " Value of SEND action request is : " + smsAction);
@@ -137,23 +136,12 @@ public class SMSSendServlet extends HttpServlet {
 		        response.getWriter().write("ReturnCode_" + 0);
 			} else if ("sendSMS".equals(smsAction)) {
 				if (inCustIdArray!=null) {
-					System.out.println(" Array length " + inCustIdArray.length);
+					LogUtil.log(LogUtil.Message_Type.Information, " Number of SMS messages to send : " + inCustIdArray.length);
 					if (inCustIdArray.length > 0) {
 						String requestInitiatedTS = DateUtil.getCurrentTimestamp().toString(); //SMS group id
-						System.out.println ( " Req init ts " + requestInitiatedTS);
+						LogUtil.log(LogUtil.Message_Type.Information, " SMS Message grouping : " + requestInitiatedTS);
 
 						for (int i = 0; i < inCustIdArray.length; i++) {
-//							System.out.println(" Array val id: " + inCustIdArray [i] 
-//									+ " ref number: " + inReferenceNumberArray [i]
-//									+ " name : " + inCustNameArray [i]
-//									+ " Mobile owner: " + inSMSMobileOwnerNameArray [i]
-//									+ " Mobile # : " + inSMSMobileNumberArray [i]
-//									+ " Due Date : " + inDueDateArray [i]
-//									+ " Due Amount : " + inDueAmountArray [i]
-//									+ " InvoiceNumber : " + inInvoiceNumberArray [i]
-//									+ " Cust code : " + inCustCodeArray [i]
-//									+ " Message: " + inSMSMessage 
-//									);
 							String inflatedSMSMessage = inSMSMessage;
 							//Check if template used
 							StringBuffer sbVariable = new StringBuffer();

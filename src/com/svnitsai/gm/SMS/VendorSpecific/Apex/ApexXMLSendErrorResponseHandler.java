@@ -26,6 +26,18 @@ import com.svnitsai.gm.util.log.LogUtil;
 *				        <error-action>1</error-action>
 *				    </error>
 *				</smslist>
+*
+*
+*
+*				<?xml version="1.0" encoding="UTF-8"?><smslist>
+*				    <error>
+*				        <smsclientid>0</smsclientid>
+*				        <error-code>-10021</error-code>
+*				        <error-description>UserNameRequire</error-description>
+*						<mobile-no>9999</mobile-no>
+*				        <error-action>1</error-action>
+*				    </error>
+*				</smslist>
 * 
 */
 
@@ -83,7 +95,6 @@ public class ApexXMLSendErrorResponseHandler implements ContentHandler  {
 
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
-		// TODO Auto-generated method stub
 		switch (this.xmlStartElement) {
 		case "smslist": {
 			break;
@@ -97,6 +108,9 @@ public class ApexXMLSendErrorResponseHandler implements ContentHandler  {
 		}
 		case "error-code": {
 			this.setErrorInfo(new String(ch, start, length));
+			break;
+		}
+		case "mobile-no": {//do nothing
 			break;
 		}
 		case "error-description": {

@@ -22,7 +22,6 @@
 <%
 //Default (on first entry), screen will show recipient list of PAST_DUE
 //Second time around, SMSSendServlet will pass option selected in session variable
-System.out.println ("Inside smsSend.jsp...");
 String recipientList = "Past-due";
 if (session.getAttribute("recipientList") != null) {
 	recipientList = (String) session.getAttribute("recipientList");
@@ -143,12 +142,21 @@ $(document).ready(
 				activate: function (event, ui) {
 					var $activeTab = $('#tabs').tabs('option', 'active');
 
- 					if ($activeTab == 0) {//RECIPIENTS tab clicked
- 						jQuery('#dueDateHeader').trigger('click');
- 					}
+// 					if ($activeTab == 0) {//RECIPIENTS tab clicked
+// 						jQuery('#dueDateHeader').trigger('click');
+// 					}
 
 					if ($activeTab == 2) {//SEND tab clicked
 						selectTable.fnClearTable(); //Clear RECIPIENT selected table & rebuild
+						CustIdArray = []; //Clear All array elements
+						ReferenceNumberArray  = [];
+						CustNameArray = [];
+						SMSMobileOwnerNameArray = [];
+						SMSMobileNumberArray = [];
+						DueDateArray = [];
+						DueAmountArray = [];
+						InvoiceNumberArray = [];
+						CustCodeArray = [];
 						smsVendor = $('#sendOptionSelect').val();
 						$('#Recipient #scrollSMSRecipientTable tbody tr').each(function() {
 							if ($(this).hasClass("includeRow")) {
@@ -162,17 +170,6 @@ $(document).ready(
 							    var custCode = $(this).find(".custCodeCell").html();
 							    var customerName = $(this).find(".customerNameCell").html();
 							    var ReferencNumber = $(this).find(".ReferencNumberCell").html();
-							    
-// 							    console.log (' customerId: ' + customerId
-// 							    			+ ' customerName ' + customerName 	 
-// 							    			+ ' smsMobileOwnerName ' + smsMobileOwnerName 	 
-// 							    			+ ' smsMobileNumber ' + smsMobileNumber 	 
-// 							    			+ ' dueDate ' + dueDate 	 
-// 							    			+ ' dueAmount ' + dueAmount 	 
-// 							    			+ ' invoiceNumber ' + invoiceNumber 	 
-// 							    			+ ' custCode ' + custCode 	 
-// 							    			+ ' ReferencNumber ' + ReferencNumber 	 
-// 							     			);
 								if ($(this).find('#includeCheckBox').is(":checked")) {
 									selectTable.fnAddData( [
 							 								'<td align="left">' + customerName +'</td>',
@@ -248,7 +245,7 @@ $(document).ready(
 				}
 			})
 
-		jQuery('#dueDateHeader').trigger('click'); //TODO fix header positioning of recipient table in RECIPIENT tab
+		//jQuery('#dueDateHeader').trigger('click'); //TODO fix header positioning of recipient table in RECIPIENT tab
 		
 		$("#Message #customerCriteria").addClass("inputBoxBorder");
 		$('#messageBox').attr("disabled", "disabled");
@@ -362,7 +359,6 @@ $(document).ready(
 						},
 						success : function(returnData) {
 							var returnCode = returnData.charAt(11); //servlet data "ReturnCode_" + returnCode
-							console.log (' return data ' + returnData);
 							if (returnCode == '0') { //Successful return
 								$("#dynamic-info-message .textMsg").text(returnData.substring(13, returnData.length));
 								$("#dynamic-info-message").dialog({

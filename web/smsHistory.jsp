@@ -21,7 +21,6 @@
 -->
 
 <%
-System.out.println("Inside smsHistory.jsp...");
 
 String chFromDate = ""; //TS
 String chToDate = "";
@@ -50,28 +49,6 @@ if (chFromDate == "") { // get default - last one week history
 	result = (List) contactHistoryCRUDProvider.getSMSContactHistoryList
 			(chFromDate + " 00:00:00.000", chToDate + " 23:59:00.000"); //Get records for the date range
 }
-
-//   if ((result != null) && (result.size() > 0)) { 
-// 	  for (Object object : result) { 
-// 		  Map row = (Map) object; System.out.println(" ");
-// 		  System.out.println(" HistoryId: " + row.get("HistoryId")
-// 				  + " RequestInitiatedTS: " + row.get("RequestInitiatedTS")
-// 				  + " RequestVendorReferrence: " + row.get("RequestVendorReferrence")
-// 				  + " CustId: " + row.get("CustId")
-// 				  + " CustCode: " + row.get("CustCode")
-// 				  + " CustName: " + row.get("CustName")
-// 				  + " SMSMobileNumber: " + row.get("SMSMobileNumber")
-// 				  + " SMSMobileOwnerName: " + row.get("SMSMobileOwnerName")
-// 				  + " SMSMessage: " + row.get("SMSMessage")
-// 				  + " SMSVendor: " + row.get("SMSVendor")
-// 				  + " SentTimeStamp: " + row.get("SentTimeStamp")
-// 				  + " FailedReason: " + row.get("FailedReason")
-// 				  + " PayCReferenceNumber: " + row.get("PayCReferenceNumber")
-// 				  + " Status: " + row.get("Status")
-// 				  + " StatusUpdatedTS: " + row.get("StatusUpdatedTS")
-// 				  ); 
-// 		  } 
-// 	  }
 %>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -244,24 +221,7 @@ input.error {
 					  if ((result != null) && (result.size() > 0)) { 
 					  for (Object object : result) { 
 						  Map row = (Map) object; 
-//						  System.out.println(" ");
-// 						  System.out.println(" HistoryId: " + row.get("HistoryId")
-// 								  + " RequestInitiatedTS: " + row.get("RequestInitiatedTS")
-// 								  + " RequestVendorReferrence: " + row.get("RequestVendorReferrence")
-// 								  + " CustId: " + row.get("CustId")
-// 								  + " CustCode: " + row.get("CustCode")
-// 								  + " CustName: " + row.get("CustName")
-// 								  + " SMSMobileNumber: " + row.get("SMSMobileNumber")
-// 								  + " SMSMobileOwnerName: " + row.get("SMSMobileOwnerName")
-// 								  + " SMSMessage: " + row.get("SMSMessage")
-// 								  + " SMSVendor: " + row.get("SMSVendor")
-// 								  + " SentTimeStamp: " + row.get("SentTimeStamp")
-// 								  + " FailedReason: " + row.get("FailedReason")
-// 								  + " PayCReferenceNumber: " + row.get("PayCReferenceNumber")
-// 								  + " Status: " + row.get("Status")
-// 								  + " StatusUpdatedTS: " + row.get("StatusUpdatedTS")
-// 								  ); 
-						   String sortRequestInitDate =  row.get("RequestInitiatedTS").toString().substring(0,10);
+						   String sortRequestInitDate =  row.get("RequestInitiatedTS").toString();
 						   String dispRequestInitDate =  DisplayUtil.getDisplayDate(sortRequestInitDate, new SimpleDateFormat("yyyy-MM-dd"));
 // 						   System.out.println(" sort date " + sortRequestInitDate + " disp date " + dispRequestInitDate);
 						   boolean isSent = false;

@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Jan 17, 2015 10:18:43 AM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="com.svnitsai.gm.database.generated.SmscontactHistory" table="SMSContactHistory" catalog="ProdPayC">
+    <class name="com.svnitsai.gm.database.generated.SmscontactHistory" table="SMSContactHistory" catalog="PayC">
         <id name="historyId" type="int">
             <column name="HistoryId" />
             <generator class="assigned" />

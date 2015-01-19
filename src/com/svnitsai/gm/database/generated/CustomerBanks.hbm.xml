@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Jan 9, 2015 6:40:56 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="com.svnitsai.gm.database.generated.CustomerBanks" table="CustomerBanks" catalog="ProdPayC">
+    <class name="com.svnitsai.gm.database.generated.CustomerBanks" table="CustomerBanks" catalog="PayC">
         <composite-id name="id" class="com.svnitsai.gm.database.generated.CustomerBanksId">
             <key-property name="custCode" type="int">
                 <column name="CustCode" precision="9" scale="0" />

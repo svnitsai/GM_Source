@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Jan 9, 2015 6:40:56 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="com.svnitsai.gm.database.generated.DailyPayCdetails" table="DailyPayCDetails" catalog="ProdPayC">
+    <class name="com.svnitsai.gm.database.generated.DailyPayCdetails" table="DailyPayCDetails" catalog="PayC">
         <composite-id name="id" class="com.svnitsai.gm.database.generated.DailyPayCdetailsId">
             <key-property name="payCreferenceNumber" type="long">
                 <column name="PayCReferenceNumber" precision="10" scale="0" />

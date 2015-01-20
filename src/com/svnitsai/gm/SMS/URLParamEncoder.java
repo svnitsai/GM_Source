@@ -18,7 +18,11 @@ public class URLParamEncoder {
                 resultStr.append(toHex(ch / 16));
                 resultStr.append(toHex(ch % 16));
             } else {
-                resultStr.append(ch);
+            	if (ch == '\\') {
+            		resultStr.append('%');
+            		resultStr.append('5');
+            		resultStr.append('C');
+            	} else resultStr.append(ch);
             }
         }
         return resultStr.toString();
@@ -31,10 +35,11 @@ public class URLParamEncoder {
     private static boolean isUnsafe(char ch) {
         if (ch > 128 || ch < 0)
             return true;
-        return " %$&+,/:;=?@<>#%".indexOf(ch) >= 0;
+        return "`~^[]{}'|\" %$&+,/:;=?@<>#%".indexOf(ch) >= 0;
     }
 //	public static void main(String[] args) {
-//		String inString = "test message";
+//		//String inString = " \" < > & + # % * ! , \' \\ = $";
+//		String inString = "\\~!@#$%^&*()_+`-=<>,.:;?/\"'[]{}|\\";
 //		System.out.println(" in string: " + inString);
 //		System.out.println("out string: " + encode(inString));
 //	}

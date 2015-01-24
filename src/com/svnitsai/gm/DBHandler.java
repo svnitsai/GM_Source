@@ -154,8 +154,7 @@ public class DBHandler {
 	}
 
 	public static CollectionBean getCollectionInfo(String invoiceNumber) {
-		Collection<CollectionBean> list = getCollections(null, null,
-				invoiceNumber, false);
+		Collection<CollectionBean> list = getCollections(null, null, invoiceNumber, null, false);
 		if (list != null && list.size() > 0) {
 			return (CollectionBean) list.iterator().next();
 		}
@@ -163,7 +162,7 @@ public class DBHandler {
 	}
 
 	public static Collection<CollectionBean> getCollections(
-			String collectionDate, String merchantId, String invoiceNumber,
+			String collectionDate, String merchantId, String invoiceNumber, String agentCode,
 			boolean showDeleted) {
 		Connection conn = null;
 		Statement stmt = null;
@@ -182,7 +181,7 @@ public class DBHandler {
 					+ "DCD.PaidAmount, DCD.AccountLocationCode, DCD.LedgerPageNumber, DCD.Comments, "
 					+ "C.CustName, RTRIM(PCD.PHONE1) AS CustContactNumber, C.CustCity, "
 					+ "CO.CustName AS CompanyName, s.CustName AS SupplierName, CB1.CustBank AS SupplierBank, "
-					+ " DC.AgentCode AS AgentCode, a.CustName AS AgentName, "
+					+ " DC.AgentCode AS AgentCode, a.CustName AS AgentName, DC.FormNumber AS FormNumber, "
 					+ "CB1.CustBankBranch AS SupplierBankBranch, CB1.CustBankAccountNumber AS SupplierAcctNum "
 					+ "FROM DailyPayC DC "
 					+ "join Customer c on c.custcode = dc.custcode and c.custtype = 'Merchant' "
@@ -210,6 +209,7 @@ public class DBHandler {
 					sql += "where "
 							+ "((DC.DeferredDate is not null and DC.DeferredDate <= '" + formattedDate + "') OR "
 							+ "(DC.DeferredDate is null and DC.PayCDueDate <= '" + formattedDate + "')) "
+							+ "AND (DC.AgentCode = 0 OR DC.AgentCode is NULL)"
 							+ "AND DC.PayCStatus <> 'CLOSED'";
 					whereClauseAdded = true;
 				}
@@ -225,6 +225,16 @@ public class DBHandler {
 				whereClauseAdded = true;
 			}
 
+			if (agentCode != null && agentCode.length() > 0) {
+				if (whereClauseAdded) {
+					sql += " AND ";
+				} else {
+					sql += " WHERE ";
+				}
+				sql += "a.CustCode = " + agentCode;
+				whereClauseAdded = true;
+			}
+			
 			if (invoiceNumber != null) {
 				if (whereClauseAdded) {
 					sql += " AND ";
@@ -262,6 +272,7 @@ public class DBHandler {
 					// added agentname
 					bean.setAgentCode(rs.getLong("AgentCode"));
 					bean.setAgentName(rs.getString("AgentName"));
+					bean.setFormNumber(rs.getString("FormNumber"));
 					resultMap.put(id, bean);
 				}
 				bean = resultMap.get(id);
@@ -413,7 +424,7 @@ public class DBHandler {
 				agentCode = 0;
 			}
 			System.out.println("Setting status to " + status);
-			String updateCollectionSql = "UPDATE DailyPayC SET PayCStatus='" + status + "', AgentCode= " + bean.getAgentCode();
+			String updateCollectionSql = "UPDATE DailyPayC SET PayCStatus='" + status + "', FormNumber='" + bean.getFormNumber() +"', AgentCode= " + bean.getAgentCode();
 			if (!"".equals(bean.getDeferredDateStr())) {
 				updateCollectionSql += ", DeferredDate='"
 						+ Util.getFormattedDateForDB(bean.getDeferredDateStr())

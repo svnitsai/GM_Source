@@ -19,6 +19,7 @@ public class CollectionBean implements Serializable
 	private String status;
 	private Date dueDate;
 	private String agentName;
+	private String formNumber;
 	private Date deferredDate;
 	private String deferredDateStr;
 	private String updatedBy;
@@ -94,6 +95,12 @@ public class CollectionBean implements Serializable
 	}
 	public void setAgentName(String agentName) {
 		this.agentName = agentName;
+	}
+	public String getFormNumber() {
+		return formNumber;
+	}
+	public void setFormNumber(String formNumber) {
+		this.formNumber = formNumber;
 	}
 	public String getCustPhoneNumber() {
 		return custPhoneNumber;

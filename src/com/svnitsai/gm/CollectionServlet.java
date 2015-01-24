@@ -36,21 +36,32 @@ public class CollectionServlet extends HttpServlet
 		String selectedDate = request.getParameter("selectedDate");
 		String selectedMerchantId = request.getParameter("merchantId");
 		String selectedMerchantName = request.getParameter("merchantName");
+		String selectedAgentCode = request.getParameter("agentId");
+		String selectedAgentName = request.getParameter("agentName");
 		String filterBy = request.getParameter("filterBy");
 		if("merchant".equals(filterBy))
 		{
 			selectedDate = "";
+			selectedAgentCode = "";
 		}
-		else
+		else if("agent".equals(filterBy)) 
 		{
+			selectedDate = "";
 			selectedMerchantId = "";
 		}
+		else 
+		{
+			selectedMerchantId = "";
+			selectedAgentCode = "";
+		}
 		
-		Collection<CollectionBean> bean = DBHandler.getCollections(selectedDate, selectedMerchantId, null, false);
+		Collection<CollectionBean> bean = DBHandler.getCollections(selectedDate, selectedMerchantId, null, selectedAgentCode, false);
 		request.setAttribute("collectionData", bean);
 		request.setAttribute("selectedDate", selectedDate);
 		request.setAttribute("merchantId", selectedMerchantId);
 		request.setAttribute("merchantName", selectedMerchantName);
+		request.setAttribute("agentId", selectedAgentCode);
+		request.setAttribute("agentName", selectedAgentName);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/web/collectionDisplay.jsp");
 		dispatcher.forward(request, response);
@@ -80,6 +91,10 @@ public class CollectionServlet extends HttpServlet
 			else if(name.equals("agentCode"))
 			{
 				bean.setAgentCode(Util.convertToLong(request.getParameter(name)));
+			}
+			else if(name.equals("formNumber"))
+			{
+				bean.setFormNumber(request.getParameter(name));
 			}
 			else if(name.startsWith("detailRefID_") && !name.equals("detailRefID_0"))
 			{

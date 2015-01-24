@@ -19,6 +19,7 @@
 	String invoiceId = (String) request.getParameter("id");
 	String selectedDate = (String) request.getParameter("date");
 	String merchantId = (String) request.getParameter("merchantId");
+	String agentCode = (String) request.getParameter("agentCode");
 	
 	CollectionBean bean = DBHandler.getCollectionInfo(invoiceId);
 	if(bean != null)
@@ -193,10 +194,16 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
        
 <div id="contentDiv" style="width: auto; min-height: 0px; max-height: none; height: 470px; overflow:auto; padding:10px; background-color:white"> 
 <% if(bean != null) { 
+	
 	String deferredDate = "";
 	if(bean.getDeferredDate() != null)
 	{
 		deferredDate = new SimpleDateFormat("dd/MM/yyyy").format(bean.getDeferredDate());
+	}
+	String formNumber = "";
+	if(bean.getFormNumber() != null)
+	{
+		formNumber = bean.getFormNumber();
 	}
 %>
 	
@@ -205,6 +212,7 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 	<input type="hidden" name="selectedDate" value="<%= selectedDate %>"/>
 	<input type="hidden" name="merchantId" value="<%= merchantId %>"/>
 	<input type="hidden" name="invoiceAmt" value="<%= bean.getInvoiceAmount()  %>"/>
+
  	<fieldset>
 	<legend>&nbsp;Invoice Details</legend>
 	<table  cellspacing="5" cellpadding="5">
@@ -221,6 +229,10 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 				</option>
 				<% } %>
 			</select>
+		</td>
+		<td nowrap>Form Number:</td>
+		<td nowrap colspan="3">
+			<input type="text" name="formNumber" id="formNumber" value="<%= formNumber %>"/>
 		</td>
 	</tr>
 		<tr>

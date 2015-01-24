@@ -15,11 +15,14 @@
 	String selectedDate = (String) request.getAttribute("selectedDate");
 	String merchantId = (String) request.getAttribute("merchantId");
 	String merchantName = (String) request.getAttribute("merchantName");
+	String agentId = (String) request.getAttribute("agentId");
+	String agentName = (String) request.getAttribute("agentName");
 	
 	LinkedHashMap<Long, String> merchantMap = DBHandler.getMerchants();
 	LinkedHashMap<Long, String> agentMap = DBHandler.getCustomerIdMap("Agent");
 	
 	boolean isMerchantSelected = false;
+	boolean isAgentSelected = false;
 	String displayStr = "";
 	if(action != null)
 	{
@@ -34,6 +37,12 @@
 		displayStr = "Collection details for " + merchantName;
 		isMerchantSelected = true;
 	}
+	else if(agentName != null  && agentName.length() > 0)
+	{
+		displayStr = "Collection details for " + agentName;
+		isAgentSelected = true;
+	}
+	
 	
 	if(selectedDate == null)
 	{
@@ -44,6 +53,12 @@
 	{
 		merchantId = "";
 	}
+
+	if(agentId == null)
+	{
+		agentId = "";
+	}
+
 %>
 <script>
 $( document ).ready(function() {
@@ -71,6 +86,12 @@ function saveChanges()
 	{
 		var selectedMerchant = $( "#merchantId option:selected" ).text().trim();
 		nidsSetElementValue("merchantName", selectedMerchant);
+	}
+
+	function setAgentName()
+	{
+		var selectedAgent = $( "#agentId option:selected" ).text().trim();
+		nidsSetElementValue("agentName", selectedAgent);
 	}
 
 var popUpObj;
@@ -117,13 +138,20 @@ var popUpObj;
 		{
 			nidsEnableControl("selectedDate", true);
 			nidsEnableControl("merchantId", false);
+			nidsEnableControl("agentId", false);
+		}
+		else if(filter == 'merchant')
+		{
+			nidsEnableControl("selectedDate", false);
+			nidsEnableControl("merchantId", true);
+			nidsEnableControl("agentId", false);
 		}
 		else
 		{
 			nidsEnableControl("selectedDate", false);
-			nidsEnableControl("merchantId", true);
+			nidsEnableControl("merchantId", false);
+			nidsEnableControl("agentId", true);
 		}
-		
 	}
 	
 		
@@ -135,6 +163,7 @@ var popUpObj;
       <form action="/gm/servlet/collection" id="editForm">
       	<input type="hidden" name="action" value="getCollections" /> 
       	<input type="hidden" name="merchantName" id="merchantName"/>
+      	<input type="hidden" name="agentName" id="agentName"/>
       	<table cellspacing="5" cellpadding="5">
       		<tr>
       			<td>
@@ -167,6 +196,32 @@ var popUpObj;
       				</select>
       			</td>
       		</tr>
+
+      		<tr>
+      			<td>
+      				<label>
+      					<input 	type="radio" name="filterBy" id="filterBy" value="agent"
+      							<% if(agentMap.size() == 0) {%> disabled 
+      							<%} else if (isAgentSelected) { %> checked <%} %>
+      							 onclick="handleFilterChange();"
+      							> Agency:</label>
+      			</td>
+      			<td>
+      				<select name="agentId" id="agentId"
+      						onChange="setAgentName();" required>
+      					<option value="" selected disabled>Select Agency Name</option>
+      					<% for(Entry<Long, String> entry : agentMap.entrySet())
+      					   {
+      					%>
+      							<option value="<%= entry.getKey()%>"
+      								<% if(String.valueOf(entry.getKey()).equals(agentId)){ %> selected <%} %>>
+      								<%= entry.getValue() %>
+      							</option>
+      					<% } %>
+      				</select>
+      			</td>
+      		</tr>
+
       	</table>
       	<button type="submit" class="anyButton">Get Collection Details</button>
       </form>
@@ -211,10 +266,10 @@ var popUpObj;
 				String customerInfo = "";
 				if(bean.getAgentCode() > 0)
 				{
-					String agentName = agentMap.get(bean.getAgentCode());
-					if(agentName != null)
+					String agencyName = agentMap.get(bean.getAgentCode());
+					if(agencyName != null)
 					{
-						customerInfo += "Agent: " + agentName + "<br/>";
+						customerInfo += "Agency: " + agencyName + "<br/>";
 					}
 				}
 				customerInfo += bean.getCustName() + "<br/>Phone: " + bean.getCustPhoneNumber();

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2015-01-30T16:31:21 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Monthly_Agency_Report" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" uuid="71e4abbb-2429-45da-8447-f8cda65ba808">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="47"/>
+	<property name="ireport.y" value="451"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TestGarmentMantraDB"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="PieChartDataset" uuid="81414170-8766-4da2-9888-50db57d4b3cc"/>
+	<parameter name="dateFrom" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="selectedDate" class="java.lang.String"/>
+	<parameter name="AgencyCode" class="java.lang.integer" isForPrompting="false"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT distinct DC.AgentCode, A.CustName AS AgentName, 
+DATENAME(MM, CONVERT(varchar,DC.InvoiceDate,112)) AS  ReportingMonth
+,DATENAME(YEAR, CONVERT(varchar,DC.InvoiceDate,112)) AS  ReportingYear
+FROM DailyPayC DC
+join Customer A on A.CustCode = DC.AgentCode and A.CustType = 'Agent'
+WHERE 
+DATENAME(MM, CONVERT(varchar,DC.InvoiceDate,112)) = DATENAME(MM, CONVERT(date, $P{selectedDate},104))
+ORDER BY 1]]>
+	</queryString>
+	<field name="AgentCode" class="java.lang.Integer"/>
+	<field name="AgentName" class="java.lang.String"/>
+	<field name="ReportingMonth" class="java.lang.String"/>
+	<field name="ReportingYear" class="java.lang.String"/>
+	<background>
+		<band height="60" splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<frame>
+				<reportElement mode="Opaque" x="1" y="0" width="800" height="40" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="76c3778c-31f5-4335-a38b-391002b2b297">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="SubTitle" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" mode="Opaque" x="0" y="9" width="623" height="29" forecolor="#050505" backcolor="#FFFFFF" uuid="f682ea96-4f72-4813-95a2-36d96093d2fc">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Left">
+						<font fontName="Arial" size="24" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Agency Sales Report for " + $F{ReportingMonth} + ", " + $F{ReportingYear}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<frame>
+				<reportElement x="1" y="0" width="800" height="24" uuid="29a7708d-778c-4a42-bd2c-2c58220938e0">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="191" y="0" width="499" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="6fc3fed0-3dab-4e06-b7e6-ecf96eafe4ef">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Party Details]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="690" y="0" width="100" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="4b1d6e52-d827-40de-b730-872c536328f7">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Net Amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="1" y="0" width="30" height="24" backcolor="#FFFFFF" uuid="9a83a3d6-73fb-4278-b482-d2ce21294831">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="local_mesure_unitx" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[S.No]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="111" y="0" width="80" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="12c87b9f-8e01-4619-a437-7ee1bbb177a3">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Invoice No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" mode="Opaque" x="31" y="0" width="80" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="1b76a58a-9c09-40e8-9e78-8569883bc3c9">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[Invoice Date]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="64" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<frame>
+				<reportElement x="1" y="-1" width="800" height="60" uuid="df21fab5-fc73-429d-948d-d7199c1aa643"/>
+				<staticText>
+					<reportElement x="0" y="0" width="180" height="30" backcolor="#9E9999" uuid="3f915bff-5b90-441b-89b1-6fbf13b53121"/>
+					<textElement>
+						<font fontName="Arial" size="24" isBold="true" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Agency Name :]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="180" y="0" width="390" height="30" uuid="6ba745c8-9262-4576-bbab-48d7c3c71c19"/>
+					<textElement>
+						<font fontName="Arial" size="24" isBold="true" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{AgentName}]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement x="0" y="34" width="799" height="26" uuid="f1b061f0-8262-4e33-9b2f-9939c0d26c7c"/>
+					<subreportParameter name="dateFrom">
+						<subreportParameterExpression><![CDATA[$P{selectedDate}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="AgencyCode">
+						<subreportParameterExpression><![CDATA[$F{AgentCode}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA["Monthly_Agency_Report_sub.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+			<line>
+				<reportElement positionType="Float" x="2" y="63" width="800" height="1" uuid="d9ef93fd-2bb4-4070-bdb6-4cf6a0a5d652"/>
+				<graphicElement>
+					<pen lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="16" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="2" y="0" width="800" height="16" forecolor="#D0B48E" backcolor="#FFFFFF" uuid="2078db66-32b1-43f1-ae09-d4f93b7adc15"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="753" y="0" width="40" height="16" forecolor="#0A0A0A" uuid="603edd6a-8af6-488b-bfaa-3380ab113891"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" mode="Transparent" x="673" y="0" width="80" height="16" forecolor="#080807" uuid="ddcf9801-4312-48cd-b66b-fc1ea441821c"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="0" width="378" height="16" forecolor="#080807" uuid="b30f1874-498c-4143-ae50-038deb8af27d"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Report Generated on " + new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="51">
+			<textField>
+				<reportElement x="0" y="10" width="800" height="30" uuid="c655c923-4154-43e0-bee2-adefd52250a2"/>
+				<textElement>
+					<font fontName="Arial" size="24" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Agency Sales Report - No details found for " + $P{selectedDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>

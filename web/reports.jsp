@@ -51,6 +51,9 @@ function saveChanges()
       					<option value="<%= ReportType.LedgerReport.name()%>">
       						<%= ReportType.LedgerReport.getDisplayName() %>
       					</option>
+      					<option value="<%= ReportType.AgencyMonthlyReport.name()%>">
+      						<%= ReportType.AgencyMonthlyReport.getDisplayName() %>
+      					</option>
       				</select>
       			</td>
       		</tr>

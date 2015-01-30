@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2015-01-30T15:30:04 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Monthly_Agency_Report_sub" pageWidth="790" pageHeight="65" orientation="Landscape" columnWidth="790" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3e5942da-375b-4100-bdaf-113dabda71c5">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TestGarmentMantraDB"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="dateFrom" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="AgencyCode" class="java.lang.Integer" isForPrompting="false"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT distinct C.CustName, C.CustCity, DC.InvoiceReferenceNumber, C.CustContactNumber, DC.InvoiceAmount,  
+DC.CustCode, CONVERT(varchar,DC.InvoiceDate,107) AS InvoiceDate,
+(select SUM(ISNULL(DCDD.PaidAmount, 0)) From DailyPayCDetails DCDD 
+	WHERE DCDD.PayCReferenceNumber=DCD.PayCReferenceNumber and DCD.Deleted <> 1
+) AS TotalPaidAmount
+FROM DailyPayC DC
+join Customer C on C.CustCode = DC.CustCode and C.CustType = 'Merchant'
+join PartyContactDetails PCD on PCD.PTYCODE = c.custcode
+left join DailyPayCDetails DCD ON DC.PayCReferenceNumber = DCD.PayCReferenceNumber AND DCD.Deleted <> 1
+WHERE 
+DATENAME(MM, CONVERT(varchar,DC.InvoiceDate,112)) = DATENAME(MM, CONVERT(date, $P{dateFrom},104))
+and
+DATENAME(YEAR, CONVERT(varchar,DC.InvoiceDate,112)) = DATENAME(YEAR, CONVERT(date, $P{dateFrom},104))
+AND
+DC.AgentCode = $P{AgencyCode}
+AND 
+DC.PayCStatus <> 'CLOSED'
+ORDER BY InvoiceDate, CustCode]]>
+	</queryString>
+	<field name="CustName" class="java.lang.String"/>
+	<field name="CustCity" class="java.lang.String"/>
+	<field name="InvoiceReferenceNumber" class="java.math.BigDecimal"/>
+	<field name="CustContactNumber" class="java.math.BigDecimal"/>
+	<field name="InvoiceAmount" class="java.math.BigDecimal"/>
+	<field name="CustCode" class="java.math.BigDecimal"/>
+	<field name="InvoiceDate" class="java.lang.String"/>
+	<field name="TotalPaidAmount" class="java.math.BigDecimal"/>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="1" y="0" width="30" height="14" uuid="59664ee9-ae69-48c4-933b-05f9096fd256">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="31" y="0" width="89" height="14" uuid="97b5a6b8-f076-4ebb-91a8-217830eeeab8"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvoiceDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="120" y="0" width="100" height="14" uuid="a8706359-145c-47ab-b517-7b3955f1b194">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvoiceReferenceNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="220" y="0" width="470" height="14" uuid="90ea74fb-0dfc-48f0-a16f-92a20624c7d3">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[TRIM($F{CustName})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="220" y="16" width="470" height="14" uuid="c5af561a-59e4-4685-853e-838091c5bebb">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[TRIM($F{CustCity}) + "\n\n"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="690" y="0" width="100" height="14" uuid="18a83e3e-47cb-4c6b-ad3c-9263035d9355">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvoiceAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

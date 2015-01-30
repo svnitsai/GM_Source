@@ -31,7 +31,9 @@ public class ReportGeneratorServlet extends HttpServlet {
 				"CreditSales.pdf"), CollectionsEvening("Collections Report",
 				"Daily_Collection_Evening.jasper", "DailyCollections.pdf"), LedgerReport(
 				"Ledger Report", "Payment_Collection_Main.jasper",
-				"LedgerReport.pdf");
+				"LedgerReport.pdf"), AgencyMonthlyReport(
+						"Agency Monthly Report", "Monthly_Agency_Report.jasper",
+						"AgencyMonthlyReport.pdf");
 
 		String displayName;
 		String jasperName;
@@ -67,6 +69,8 @@ public class ReportGeneratorServlet extends HttpServlet {
 				return CollectionsEvening;
 			} else if (LedgerReport.name().equals(type)) {
 				return LedgerReport;
+			}	else if (AgencyMonthlyReport.name().equals(type)) {
+					return AgencyMonthlyReport;
 			} else {
 				System.out.println("Unknown Report: " + type);
 				return null;

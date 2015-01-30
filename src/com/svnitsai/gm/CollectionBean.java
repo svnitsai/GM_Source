@@ -168,7 +168,7 @@ public class CollectionBean implements Serializable
 	{
 		String str = getDueDateStr();
 		String defStr = getDeferredDateStr();
-		if(defStr.length() > 0)
+		if(!"closed".equalsIgnoreCase(getStatus()) && defStr.length() > 0)
 		{
 			str += "<br> DEFERRED To <br>" + defStr;
 		}

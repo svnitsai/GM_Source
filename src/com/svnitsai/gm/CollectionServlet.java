@@ -73,6 +73,7 @@ public class CollectionServlet extends HttpServlet
 		
 		// iterate through parameters to get the supplier data
 		Enumeration<String> paramNames = request.getParameterNames();
+		boolean isAgentCollection = false;
 		while(paramNames.hasMoreElements())
 		{
 			String name = paramNames.nextElement();
@@ -88,9 +89,14 @@ public class CollectionServlet extends HttpServlet
 			{
 				bean.setInvoiceAmount(Util.convertToDouble(request.getParameter(name)));
 			}
-			else if(name.equals("agentCode"))
+			else if(name.equals("agentId"))
 			{
 				bean.setAgentCode(Util.convertToLong(request.getParameter(name)));
+			}
+			else if(name.equals("agentName"))
+			{
+				isAgentCollection = true;
+				bean.setAgentName(request.getParameter(name));
 			}
 			else if(name.equals("formNumber"))
 			{
@@ -140,7 +146,14 @@ public class CollectionServlet extends HttpServlet
 				
 		}
 		
-		DBHandler.updateCollectionInfo(bean);
+		if(isAgentCollection)
+		{
+			DBHandler.updateAgentPayments(bean);
+		}
+		else
+		{
+			DBHandler.updateCollectionInfo(bean);
+		}
 		request.setAttribute("action", "save");
 		//handleGetCollection(request, response);
 		

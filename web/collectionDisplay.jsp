@@ -9,6 +9,17 @@
 <%@ page import="com.svnitsai.gm.CollectionDetailBean" %>
 <%@ page import="com.svnitsai.gm.util.display.DisplayUtil"%>
 <jsp:include page="header.jsp?hideHeader=true" />
+<script>
+	$(function() 
+	{
+		$( ".editAgentButton" ).button({
+			icons: {
+				primary: "ui-icon-pencil"
+			},
+			label: "&nbsp;&nbsp;Edit Agent"
+		});
+	});
+</script>
 <%
 	Collection<CollectionBean> collectionBeanList = (Collection<CollectionBean>) request.getAttribute("collectionData");
 	String action = (String) request.getAttribute("action");
@@ -59,6 +70,11 @@
 		agentId = "";
 	}
 
+	if(agentName == null)
+	{
+		agentName = "";
+	}
+
 %>
 <script>
 $( document ).ready(function() {
@@ -98,8 +114,6 @@ var popUpObj;
         
 	function editCurrentRow(invoiceId) 
 	{
-
-
 		popUpObj=window.open("/gm/web/editCollection.jsp?id=" + invoiceId + "&date=<%=selectedDate%>&merchantId=<%= merchantId %>",
 		    "Edit Collection Details",
 		    "toolbar=no," +
@@ -117,6 +131,26 @@ var popUpObj;
 	    	popUpObj.focus(); 
 		loadModalDiv();
 
+	}
+	
+	function editAgent()
+	{
+		popUpObj=window.open("/gm/web/editCollection.jsp?agentName=<%=agentName%>&agentId=<%=agentId%>",
+			    "Change Agent Payments",
+			    "toolbar=no," +
+			    "scrollbars=no," +
+			    "location=no," +
+			    "statusbar=no," +
+			    "menubar=no," +
+			    "status=no," + 
+			    "resizable=0," +
+			    "width=800," +
+			    "height=550," +
+			    "left = 490," +
+			    "top=300"
+			    );
+		    	popUpObj.focus(); 
+			loadModalDiv();
 	}
 	
 	function loadModalDiv()
@@ -163,7 +197,7 @@ var popUpObj;
       <form action="/gm/servlet/collection" id="editForm">
       	<input type="hidden" name="action" value="getCollections" /> 
       	<input type="hidden" name="merchantName" id="merchantName"/>
-      	<input type="hidden" name="agentName" id="agentName"/>
+      	<input type="hidden" name="agentName" id="agentName" value="<%=agentName%>"/>
       	<table cellspacing="5" cellpadding="5">
       		<tr>
       			<td>
@@ -231,7 +265,16 @@ var popUpObj;
 <% if(collectionBeanList != null) { %>
   <div id="one">
   	<% if(collectionBeanList.size() > 0) { %>
-  		<h3><%= displayStr %></h3>
+  		<h3>
+  			<%= displayStr %>
+  			<% if(isAgentSelected) { %>
+  				<img src="/gm/web/css/images/blank.gif" width="530" height="1">
+  				<button class="editAgentButton"
+  						onclick="editAgent()"
+  						>Edit Agent Payment
+  				</button>
+  			<% } %>
+  		</h3>
 		<table id="borderTable">
 			<thead>
 			<tr>

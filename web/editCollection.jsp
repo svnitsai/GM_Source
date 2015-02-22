@@ -3,6 +3,8 @@
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.Collection" %>
+<%@ page import="java.util.Iterator" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Map.Entry" %>
 <%@ page import="java.util.LinkedList" %>
@@ -19,13 +21,47 @@
 	String invoiceId = (String) request.getParameter("id");
 	String selectedDate = (String) request.getParameter("date");
 	String merchantId = (String) request.getParameter("merchantId");
-	String agentCode = (String) request.getParameter("agentCode");
+	String agentId = (String) request.getParameter("agentId");
+	String agentName = (String) request.getParameter("agentName");
+	boolean isAgent = (agentName != null);
 	
-	CollectionBean bean = DBHandler.getCollectionInfo(invoiceId);
-	if(bean != null)
+	Collection<CollectionDetailBean> detailsCol = new LinkedList<CollectionDetailBean>();
+	CollectionBean bean = null;
+	double invoiceAmt = 0;
+	Collection<CollectionBean> beansCol = null;
+	if(isAgent)
+	{
+		beansCol = DBHandler.getAgentCollections(agentId);
+	}
+	else
+	{
+		beansCol = DBHandler.getCollectionInfo(invoiceId);
+	}
+	
+	if(beansCol != null)
 	{
 		// Add an empty bean to create fields that serve as template
-		bean.getDetailsList().add(0, new CollectionDetailBean());
+		detailsCol.add(new CollectionDetailBean());
+		for(CollectionBean beanObj : beansCol)
+		{
+			bean = beanObj;
+
+			if(!bean.isClosed())
+			{
+				invoiceAmt += (bean.getInvoiceAmount() - bean.getTotalPaidAmount());
+			}
+		}
+	}
+	
+	boolean showAddPayment = true;
+	if(!isAgent && bean != null)
+	{
+		invoiceAmt = bean.getInvoiceAmount();
+		detailsCol.addAll(bean.getDetailsList());
+	}
+	else if(isAgent && invoiceAmt == 0)
+	{
+		showAddPayment = false;
 	}
 	
 	LinkedHashMap<Long, CustomerBean> supplierMap = DBHandler.getSuppliers();
@@ -157,7 +193,7 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
       		}
 
      	// validate that the total paid amount did not exceed the invoice amount
-     	var invoiceAmt = <%= bean.getInvoiceAmount() %>
+     	var invoiceAmt = <%= invoiceAmt %>
      	var totalPaidAmt = 0;
 	var elem = document.getElementById('editForm').elements;
      	for(var i = 0; i < elem.length; i++)
@@ -205,36 +241,40 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 	{
 		formNumber = bean.getFormNumber();
 	}
+	System.out.println(formNumber);
+	System.out.println(bean.getFormNumber());
 %>
 	
 	<input type="hidden" name="action" value="saveCollection" /> 
 	<input type="hidden" name="collectionRefId" value="<%= bean.getCollectionId() %>"/>
 	<input type="hidden" name="selectedDate" value="<%= selectedDate %>"/>
 	<input type="hidden" name="merchantId" value="<%= merchantId %>"/>
-	<input type="hidden" name="invoiceAmt" value="<%= bean.getInvoiceAmount()  %>"/>
+	<input type="hidden" name="invoiceAmt" value="<%= invoiceAmt  %>"/>
 
  	<fieldset>
 	<legend>&nbsp;Invoice Details</legend>
 	<table  cellspacing="5" cellpadding="5">
-	<tr>
-		<td nowrap>Agent Name:</td>
-		<td nowrap colspan="2">
-			<select name="agentCode" 
-					id="agentCode">
-				<option value="" selected disabled>Select Agent</option>
-				<% for(Entry<Long, String> entry : agentMap.entrySet()) { %>
-				<option value="<%= entry.getKey() %>"
-							<%if(entry.getKey() == bean.getAgentCode()) {%> selected <%} %>>
-							<%= entry.getValue() %>
-				</option>
-				<% } %>
-			</select>
-		</td>
-		<td nowrap>Form Number:</td>
-		<td nowrap colspan="3">
-			<input type="text" name="formNumber" id="formNumber" value="<%= formNumber %>"/>
-		</td>
-	</tr>
+	<% if(!isAgent) { %>
+		<tr>
+			<td nowrap>Agent Name:</td>
+			<td nowrap>
+				<select name="agentId" 
+						id="agentId">
+					<option value="" selected disabled>Select Agent</option>
+					<% for(Entry<Long, String> entry : agentMap.entrySet()) { %>
+					<option value="<%= entry.getKey() %>"
+								<%if(entry.getKey() == bean.getAgentCode()) {%> selected <%} %>>
+								<%= entry.getValue() %>
+					</option>
+					<% } %>
+				</select>
+			</td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td nowrap>Form Number:</td>
+			<td nowrap>
+				<input type="text" name="formNumber" id="formNumber" value="<%= formNumber %>"/>
+			</td>
+		</tr>
 		<tr>
 			<td>Merchant Name:</td>
 			<td><%=bean.getCustName()%></td>
@@ -268,17 +308,42 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 			<td>Status:</td>
 			<td><%= bean.getStatus() %></td>
 		</tr>
+	<% } else { %>
+		<tr>
+			<td nowrap>Agent Name:</td>
+			<td colspan="2">
+				<%= agentName %>
+				<input type="hidden" name="agentId" id="agentId" value="<%= agentId %>">
+				<input type="hidden" name="agentName" id="agentName" value="<%= agentName %>">
+			</td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td nowrap>Form Number:</td>
+			<td nowrap>
+				<input type="text" name="formNumber" id="formNumber" value="<%= formNumber %>"/>
+			</td>
+		</tr>
+		<tr>
+			<td>Balance:</td>
+			<td colspan="3">
+				<span style="font-family: DejaVu Sans;">&#x20b9; </span> <%= DisplayUtil.getDisplayAmount(invoiceAmt)%>
+			</td>
+		</tr>
+	<% } %>
 	</table>
 	</fieldset>
 	<br>
-	<button type="button" class="addButton" onClick="addPayment();">&nbsp;&nbsp;Add Payment</button>
+	<% if(showAddPayment) { %>
+		<button type="button" class="addButton" onClick="addPayment();">&nbsp;&nbsp;Add Payment</button>
+		<br>
+	<%} %>
 	<br>
-	<br>
-<% for(int i=0; i< bean.getDetailsList().size(); i++)
-   { 
-		CollectionDetailBean detailBean = bean.getDetailsList().get(i);
-		
-		
+<% 
+	Iterator<CollectionDetailBean> iter = detailsCol.iterator();
+	int i = -1;
+	while(iter.hasNext())
+    { 
+		i++;
+		CollectionDetailBean detailBean = iter.next();
 		String supplierName = "";
 		String supplierBankInfo = "";
 		boolean paidToSupplier = false;
@@ -305,7 +370,7 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 			}
 		}
 		
-   
+  
 %>
 <div id="detailPanel_<%=i %>">
 	<input type="hidden" name="detailRefID_<%= i %>" value="<%= detailBean.getCollectionDetailId() %>" />
@@ -321,8 +386,7 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 						id="paymentType_<%=i %>" 
 						value="0" 
 						onChange="enableSupplierFields('_<%= i %>', false);"
-						checked> Cash &nbsp;&nbsp;
-						
+						checked> Cash/Cheque &nbsp;&nbsp;
 				<input 	type="radio" 
 						name="paymentType_<%=i %>" 
 						id="paymentType_<%=i %>" 
@@ -469,8 +533,10 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
   <% } %>
 </div>
 <div style="position:absolute; width:100%; padding:10px;">
-	<button type="button" class="saveButton" onClick="saveChanges();">&nbsp;&nbsp;Save</button> 
-	&nbsp;&nbsp;
+	<% if(showAddPayment) { %>
+		<button type="button" class="saveButton" onClick="saveChanges();">&nbsp;&nbsp;Save</button> 
+		&nbsp;&nbsp;
+	<% } %>
 	<button type="button" class="cancelButton" onClick="window.close();">&nbsp;&nbsp;Cancel</button> 
 </div>
 </form>

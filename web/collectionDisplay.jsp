@@ -268,7 +268,7 @@ var popUpObj;
   		<h3>
   			<%= displayStr %>
   			<% if(isAgentSelected) { %>
-  				<img src="/gm/web/css/images/blank.gif" width="530" height="1">
+  				<img src="/gm/web/css/images/blank.gif" width="50" height="1">
   				<button class="editAgentButton"
   						onclick="editAgent()"
   						>Edit Agent Payment

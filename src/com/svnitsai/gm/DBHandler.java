@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Date;
@@ -153,12 +154,14 @@ public class DBHandler {
 		return resultMap;
 	}
 
-	public static CollectionBean getCollectionInfo(String invoiceNumber) {
-		Collection<CollectionBean> list = getCollections(null, null, invoiceNumber, null, false);
-		if (list != null && list.size() > 0) {
-			return (CollectionBean) list.iterator().next();
-		}
-		return null;
+	public static Collection getCollectionInfo(String invoiceNumber) 
+	{
+		return getCollections(null, null, invoiceNumber, null, false);
+	}
+	
+	public static Collection getAgentCollections(String agentId) 
+	{ 
+		return getCollections(null, null, null, agentId, false); 
 	}
 
 	public static Collection<CollectionBean> getCollections(
@@ -440,7 +443,61 @@ public class DBHandler {
 			closeDBObjects(conn, stmt, rs);
 		}
 	}
+	
+	public static void updateAgentPayments(CollectionBean bean) 
+	{ 
+		try
+		{
+			double agentBalance = bean.getInvoiceAmount(); 
+			System.out.println("Updating payments for Agent " + bean.getAgentName());
+			System.out.println("Current balance: " + agentBalance); 
+			Iterator iterator = bean.getDetailsList().iterator(); 
+			while(iterator.hasNext())
+			{
+				CollectionDetailBean detailBean = (CollectionDetailBean)iterator.next(); 
+				double paidAmt = detailBean.getPaidAmount(); 
+				System.out.println("Entry for amount " + paidAmt); 
+				Collection agentCol = getAgentCollections(String.valueOf(bean.getAgentCode())); 
+				Iterator iterator1 = agentCol.iterator(); 
+				while(iterator1.hasNext())
+				{
+					CollectionBean agentBean =  (CollectionBean)iterator1.next();
+					if(!agentBean.isClosed())
+					{
+						double balanceAmt = agentBean.getInvoiceAmount() - agentBean.getTotalPaidAmount(); 
+						double amtToDeduct = 0; 
+						if(paidAmt >= balanceAmt) 
+							amtToDeduct = balanceAmt; 
+						else 
+							amtToDeduct = paidAmt; 
+						System.out.println("Collection " + agentBean.getCollectionId() + ". Amt to deduct " + amtToDeduct); 
+						CollectionDetailBean detailBeanToAdd = new CollectionDetailBean(); 
+						detailBeanToAdd.setCollectionDetailId(0L); 
+						detailBeanToAdd.setPaidAmount(amtToDeduct); 
+						detailBeanToAdd.setPaymentRemarks(detailBean.getPaymentRemarks()); 
+						detailBeanToAdd.setCompanyCode(detailBean.getCompanyCode()); 
+						detailBeanToAdd.setLedgerNumber(detailBean.getLedgerNumber()); 
+						detailBeanToAdd.setSupplierCode(detailBean.getSupplierCode()); 
+						detailBeanToAdd.setSupplierBankId(detailBean.getSupplierBankId()); 
+						detailBeanToAdd.setCollectionDateStr(detailBean.getCollectionDateStr()); 
+						agentBean.getDetailsList().add(detailBeanToAdd);
+						updateCollectionInfo(agentBean); 
+						paidAmt -= amtToDeduct; 
+						
+						if(paidAmt <= 0)
+						{
+							break;
+						}
+					} 
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
 
+	
 	public static LinkedList<DailyPayableBean> getDailyPayables(Date payableDate)
 	   {
 		   Connection conn = null;

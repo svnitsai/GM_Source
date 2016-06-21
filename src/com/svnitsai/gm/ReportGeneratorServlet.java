@@ -24,16 +24,12 @@ import net.sf.jasperreports.engine.JasperFillManager;
 public class ReportGeneratorServlet extends HttpServlet {
 	public static enum ReportType {
 		// Add new enum to getReportEnum and in reports.jsp
-		PayableMorning("Daily Payables", "SP_M_Final.jasper",
-				"DailyPayables.pdf"), SupplierEvening("Supplier Payments",
-				"SP_Evening_Final.jasper", "DailySupplierPayments.pdf"), CollectionsMorning(
-				"Credit Sales Report", "Daily_Collection_Morning.jasper",
-				"CreditSales.pdf"), CollectionsEvening("Collections Report",
-				"Daily_Collection_Evening.jasper", "DailyCollections.pdf"), LedgerReport(
-				"Ledger Report", "Payment_Collection_Main.jasper",
-				"LedgerReport.pdf"), AgencyMonthlyReport(
-						"Agency Monthly Report", "Monthly_Agency_Report.jasper",
-						"AgencyMonthlyReport.pdf");
+		CollectionsMorningAll("Credit Sales Morning Report", "New_Daily_morning_collection_all.jasper", "CreditSalesMorningAll.pdf"),
+		CollectionsMorningAM("Credit Sales (A-M) Morning Report", "New_Daily_morning_collection_am.jasper", "CreditSalesMorning_A_M.pdf"),
+		CollectionsMorningNZ("Credit Sales (N-Z) Morning Report", "New_Daily_morning_collection_nz.jasper", "CreditSalesMorning_N_Z.pdf"),
+		CollectionsEveningAll("Credit Sales Evening Report", "New_Daily_evening_collection_all.jasper", "CreditSalesEveningAll.pdf"), 
+		CollectionsEveningAM("Credit Sales (A-M) Evening Report", "New_Daily_evening_collection_am.jasper", "CreditSalesEvening_A_M.pdf"), 
+		CollectionsEveningNZ("Credit Sales (N-Z) Evening Report", "New_Daily_evening_collection_nz.jasper", "CreditSalesEvening_N_Z.pdf");
 
 		String displayName;
 		String jasperName;
@@ -59,18 +55,18 @@ public class ReportGeneratorServlet extends HttpServlet {
 
 		public static ReportType getReportEnum(String type) {
 
-			if (PayableMorning.name().equals(type)) {
-				return PayableMorning;
-			} else if (SupplierEvening.name().equals(type)) {
-				return SupplierEvening;
-			} else if (CollectionsMorning.name().equals(type)) {
-				return CollectionsMorning;
-			} else if (CollectionsEvening.name().equals(type)) {
-				return CollectionsEvening;
-			} else if (LedgerReport.name().equals(type)) {
-				return LedgerReport;
-			}	else if (AgencyMonthlyReport.name().equals(type)) {
-					return AgencyMonthlyReport;
+			if (CollectionsMorningAll.name().equals(type)) {
+				return CollectionsMorningAll;
+			} else if (CollectionsMorningAM.name().equals(type)) {
+				return CollectionsMorningAM;
+			} else if (CollectionsMorningNZ.name().equals(type)) {
+				return CollectionsMorningNZ;
+			} else if (CollectionsEveningAll.name().equals(type)) {
+				return CollectionsEveningAll;
+			} else if (CollectionsEveningAM.name().equals(type)) {
+				return CollectionsEveningAM;
+			}	else if (CollectionsEveningNZ.name().equals(type)) {
+					return CollectionsEveningNZ;
 			} else {
 				System.out.println("Unknown Report: " + type);
 				return null;
@@ -109,7 +105,8 @@ public class ReportGeneratorServlet extends HttpServlet {
 				parameters.put("selectedDate", displayDate);
 			}
 
-			String basePath = request.getRealPath("/") + "\\";
+			System.out.println(parameters);
+			String basePath = request.getRealPath("/");
 			String jasperName = basePath + "jrxml\\"
 					+ reportTypeEnum.getJasperFileName();
 			String pdfName = basePath + reportTypeEnum.getPdfFileName();
@@ -118,7 +115,8 @@ public class ReportGeneratorServlet extends HttpServlet {
 
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/"
 					+ reportTypeEnum.getPdfFileName());
-			dispatcher.forward(request, response);
+			//dispatcher.sen(request, response);
+			response.sendRedirect("/gm/" + reportTypeEnum.getPdfFileName());
 		} else {
 			RequestDispatcher dispatcher = request
 					.getRequestDispatcher("/web/reports.jsp?status=failed");

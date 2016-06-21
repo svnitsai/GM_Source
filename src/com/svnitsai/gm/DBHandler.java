@@ -17,6 +17,7 @@ import com.svnitsai.gm.CollectionBean;
 import com.svnitsai.gm.CustomerBankBean;
 import com.svnitsai.gm.CustomerBean;
 import com.svnitsai.gm.util.date.DateUtil;
+import com.svnitsai.gm.util.hibernate.HibernateUtil;
 import com.svnitsai.gm.util.log.LogUtil;
 
 public class DBHandler {
@@ -156,16 +157,16 @@ public class DBHandler {
 
 	public static Collection getCollectionInfo(String invoiceNumber) 
 	{
-		return getCollections(null, null, invoiceNumber, null, false);
+		return getCollections(null, null, null, invoiceNumber, null, false);
 	}
 	
 	public static Collection getAgentCollections(String agentId) 
 	{ 
-		return getCollections(null, null, null, agentId, false); 
+		return getCollections(null, null, null, null, agentId, false); 
 	}
 
 	public static Collection<CollectionBean> getCollections(
-			String collectionDate, String merchantId, String invoiceNumber, String agentCode,
+			String collectionDate, String customerGroup, String merchantId, String invoiceNumber, String agentCode,
 			boolean showDeleted) {
 		Connection conn = null;
 		Statement stmt = null;
@@ -179,9 +180,9 @@ public class DBHandler {
 			// select and read collection data
 			// added agentname
 			String sql = "SELECT DC.PayCReferenceNumber, DC.PayCDueDate, DC.CustCode, DC.InvoiceAmount, "
-					+ "DC.PayCStatus, DC.InvoiceReferenceNumber, DC.InvoiceDate, DCD.PayCReferenceSubNumber, "
-					+ "DC.DeferredDate, DCD.PayCDate, DCD.SupplierCode, DCD.SupplierBankId, "
-					+ "DCD.PaidAmount, DCD.AccountLocationCode, DCD.LedgerPageNumber, DCD.Comments, "
+					+ "DC.PayCStatus, DC.InvoiceReferenceNumber, DC.InvoiceDate, DC.LedgerPageNumber as ledgerNo, DC.Remarks, "
+					+ "DC.DeferredDate, DC.DeferredReason, DCD.PayCDate, DCD.SupplierCode, DCD.SupplierBankId, "
+					+ "DCD.PaidAmount, DCD.AccountLocationCode, DCD.LedgerPageNumber, DCD.Comments, DCD.PayCReferenceSubNumber, "
 					+ "C.CustName, RTRIM(PCD.PHONE1) AS CustContactNumber, C.CustCity, "
 					+ "CO.CustName AS CompanyName, s.CustName AS SupplierName, CB1.CustBank AS SupplierBank, "
 					+ " DC.AgentCode AS AgentCode, a.CustName AS AgentName, DC.FormNumber AS FormNumber, "
@@ -247,6 +248,16 @@ public class DBHandler {
 				sql += "DC.InvoiceReferenceNumber = " + invoiceNumber;
 				whereClauseAdded = true;
 			}
+			
+			if (customerGroup != null && !customerGroup.contains("All")) {
+				if (whereClauseAdded) {
+					sql += " AND ";
+				} else {
+					sql += " WHERE ";
+				}
+				sql += "C.CustName LIKE '[" + customerGroup + "]%'";
+				whereClauseAdded = true;
+			}
 
 			sql += " ORDER BY PayCDueDate";
 
@@ -264,6 +275,8 @@ public class DBHandler {
 					bean.setCollectionId(rs.getLong("PayCReferenceNumber"));
 					bean.setDueDate(rs.getDate("PayCDueDate"));
 					bean.setDeferredDate(rs.getDate("DeferredDate"));
+					bean.setDeferredReason(rs.getString("DeferredReason"));
+					bean.updateDeferredReason();
 					bean.setInvoiceAmount(rs.getDouble("InvoiceAmount"));
 					bean.setInvoiceNumber(id);
 					bean.setInvoiceDate(rs.getDate("InvoiceDate"));
@@ -276,6 +289,8 @@ public class DBHandler {
 					bean.setAgentCode(rs.getLong("AgentCode"));
 					bean.setAgentName(rs.getString("AgentName"));
 					bean.setFormNumber(rs.getString("FormNumber"));
+					bean.setLedgerNumber(rs.getString("ledgerNo"));
+					bean.setRemarks(rs.getString("Remarks"));
 					resultMap.put(id, bean);
 				}
 				bean = resultMap.get(id);
@@ -389,7 +404,10 @@ public class DBHandler {
 							+ detailBean.getLedgerNumber()
 							+ ", Comments='"
 							+ detailBean.getPaymentRemarks()
-							+ "' WHERE PayCReferenceNumber="
+							+ "', UpdatedDate='"
+							+ Util.getFormattedDateForDB(Calendar.getInstance().getTime())
+							+ "', UpdatedBy='admin'"
+							+ " WHERE PayCReferenceNumber="
 							+ bean.getCollectionId()
 							+ " AND PayCReferenceSubNumber=" + detailID;
 					System.out.println(updateDetailSql);
@@ -404,6 +422,8 @@ public class DBHandler {
 					// entry not found in modified list. Must have been deleted
 					// on the UI
 					String deleteDetailSql = "UPDATE DailyPayCDetails SET Deleted=1"
+							+ ", UpdatedDate='" + Util.getFormattedDateForDB(Calendar.getInstance().getTime())
+							+ "', UpdatedBy='admin'"
 							+ " WHERE PayCReferenceNumber="
 							+ bean.getCollectionId()
 							+ " AND PayCReferenceSubNumber=" + id;
@@ -416,22 +436,43 @@ public class DBHandler {
 			// Update parent entry
 
 			String status = "OPEN";
-			if (balanceAmount > 0) {
-				if (!"".equals(bean.getDeferredDateStr())) {
-					status = "DEFERRED";
+			if(bean.getStatus() == null)
+			{
+				if (balanceAmount > 0) {
+					if (!"".equals(bean.getDeferredDateStr())) {
+						status = "DEFERRED";
+					}
+				} else {
+					status = "CLOSED";
 				}
-			} else {
-				status = "CLOSED";
 			}
+			else
+			{
+				// check if order has been deferred
+				if(bean.getStatus().equalsIgnoreCase("Open") && !"".equals(bean.getDeferredDateStr())) {
+						status = "DEFERRED";
+				}
+				else
+				{
+					status = bean.getStatus();
+				}
+			}
+			
 			if (agentCode == 0) {
 				agentCode = 0;
 			}
 			System.out.println("Setting status to " + status);
-			String updateCollectionSql = "UPDATE DailyPayC SET PayCStatus='" + status + "', FormNumber='" + bean.getFormNumber() +"', AgentCode= " + bean.getAgentCode();
+			String updateCollectionSql = "UPDATE DailyPayC SET PayCStatus='" + status + "', " +
+											"FormNumber='" + bean.getFormNumber() + "', " +
+											"AgentCode= " + bean.getAgentCode() + ", " +
+											"LedgerPageNumber='" + bean.getLedgerNumber() + "', " +
+											"Remarks='" + bean.getRemarks() + "', " +
+											"UpdatedDate='" + Util.getFormattedDateForDB(Calendar.getInstance().getTime()) + "', " +
+											"UpdatedBy='admin'";
 			if (!"".equals(bean.getDeferredDateStr())) {
 				updateCollectionSql += ", DeferredDate='"
 						+ Util.getFormattedDateForDB(bean.getDeferredDateStr())
-						+ "'";
+						+ "', DeferredReason='" + bean.getDeferredReason() + "'";
 			}
 			updateCollectionSql += " WHERE PayCReferenceNumber=" + bean.getCollectionId();
 			System.out.println(updateCollectionSql);
@@ -611,13 +652,21 @@ public class DBHandler {
 		LogUtil.log(LogUtil.Message_Type.Information, " About to get database connection using JDBC @ "
 			+ DateUtil.getCurrentTimestamp().toString());
 		try {
+			/*
 			String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-			String username = "admin";
+	 //		String username = "admin";
+			String username = "sa";
 			String password = "svnadmin";
 			Class.forName(driver).newInstance();
-	 		String dbURL = "jdbc:sqlserver://ADMIN-PC:49168;databaseName=PayC;instanceName=SQL2008R2;";
-	//		String dbURL = "jdbc:sqlserver://VANAVPR-PC:52471;databaseName=PayC;instanceName=SQLEXPRESS;";
+	 //		String dbURL = "jdbc:sqlserver://ADMIN-PC:49225;databaseName=PayC;instanceName=SQL2008R2;";
+			String dbURL = "jdbc:sqlserver://DESKTOP-FHTMT1C:49225;databaseName=PayC;instanceName=SQLEXPRESS;";
 			conn = DriverManager.getConnection(dbURL, username, password);
+			*/
+			String driver = HibernateUtil.getDbDriver();
+			Class.forName(driver).newInstance();
+			conn = DriverManager.getConnection(	HibernateUtil.getDbURL(),
+												HibernateUtil.getDbUsername(),
+												HibernateUtil.getDbPassword());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

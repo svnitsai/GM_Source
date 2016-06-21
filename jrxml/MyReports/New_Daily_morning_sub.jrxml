@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-06-04T01:10:22 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="New_Daily_morning_sub" pageWidth="150" pageHeight="35" columnWidth="150" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b5705693-6ab5-4b9e-b4bd-9d02e7cb0bc8">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="jrxml\MyReports\GarmentMantraDB.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="dateSelector" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="dateFrom" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT distinct DC.PayCDueDate as rpt_date
+FROM DailyPayC DC
+WHERE 
+(CONVERT(varchar,DC.PayCDueDate,112) = CONVERT(varchar, $P{dateSelector} , 112))
+union 
+SELECT distinct DC.DeferredDate as rpt_date
+FROM DailyPayC DC
+WHERE 
+(CONVERT(varchar,DC.DeferredDate,112) = CONVERT(varchar, $P{dateSelector} , 112))
+]]>
+	</queryString>
+	<field name="rpt_date" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="150" height="35" uuid="2a07b217-9f59-4e19-9bcb-e684aff9174d">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="24"/>
+				</textElement>
+				<textFieldExpression><![CDATA[TRIM((new SimpleDateFormat("MMM d, YY").format($F{rpt_date})))]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

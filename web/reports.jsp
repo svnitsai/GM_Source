@@ -36,23 +36,23 @@ function saveChanges()
       			<td>
       				<select name="type" id="type" required>
       					<option value="" selected disabled>Select Report</option>
-      					<option value="<%= ReportType.PayableMorning.name()%>">
-      						<%= ReportType.PayableMorning.getDisplayName() %>
+      					<option value="<%= ReportType.CollectionsMorningAll.name()%>">
+      						<%= ReportType.CollectionsMorningAll.getDisplayName() %>
       					</option>
-      					<option value="<%= ReportType.CollectionsMorning.name()%>">
-      						<%= ReportType.CollectionsMorning.getDisplayName() %>
+      					<option value="<%= ReportType.CollectionsMorningAM.name()%>">
+      						<%= ReportType.CollectionsMorningAM.getDisplayName() %>
       					</option>
-      					<option value="<%= ReportType.CollectionsEvening.name()%>">
-      						<%= ReportType.CollectionsEvening.getDisplayName() %>
+      					<option value="<%= ReportType.CollectionsMorningNZ.name()%>">
+      						<%= ReportType.CollectionsMorningNZ.getDisplayName() %>
       					</option>
-      					<option value="<%= ReportType.SupplierEvening.name()%>">
-      						<%= ReportType.SupplierEvening.getDisplayName() %>
+      					<option value="<%= ReportType.CollectionsEveningAll.name()%>">
+      						<%= ReportType.CollectionsEveningAll.getDisplayName() %>
       					</option>
-      					<option value="<%= ReportType.LedgerReport.name()%>">
-      						<%= ReportType.LedgerReport.getDisplayName() %>
+      					<option value="<%= ReportType.CollectionsEveningAM.name()%>">
+      						<%= ReportType.CollectionsEveningAM.getDisplayName() %>
       					</option>
-      					<option value="<%= ReportType.AgencyMonthlyReport.name()%>">
-      						<%= ReportType.AgencyMonthlyReport.getDisplayName() %>
+      					<option value="<%= ReportType.CollectionsEveningNZ.name()%>">
+      						<%= ReportType.CollectionsEveningNZ.getDisplayName() %>
       					</option>
       				</select>
       			</td>

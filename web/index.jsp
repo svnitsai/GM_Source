@@ -65,14 +65,8 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 	}
 
 	$(document).ready(function() {
-		$('#scrollBalanceDueTable').dataTable({
-			"scrollY" : "125px",
-			"scrollCollapse" : true,
-			"paging" : false
-		});
-
 		$('#scrollCreditSalesTable').dataTable({
-			"scrollY" : "200px",
+			"scrollY" : "250px",
 			"scrollCollapse" : true,
 			"paging" : false,
 			"aoColumns": [
@@ -85,103 +79,10 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 	});
 
 </script>
-<!-- Begin Column One-->
-<!-- Balance Payable Window - Begin -->
-<div id="one" style="width: 460px">
-	<div class="item" style="height: 360px">
-		<h2><%=balancePaymentDue%></h2>
-		<table id="scrollBalanceDueTable" class="display" cellspacing="0"
-			width="100%">
-			<thead>
-				<tr>
-					<th style="width: 120px">Supplier Name</th>
-					<th style="width: 75px">Payable Amount</th>
-					<th style="width: 90px">Balance Due</th>
-				</tr>
-			</thead>
-			<tbody style="height: 125px">
-				<%
-					if ((resultBalancePayable != null)
-							&& (resultBalancePayable.size() > 0)) {
-				%>
-				<%
-					for (Object object : resultBalancePayable) {
-							Map row = (Map) object;
-							String dispPayableAmount = " "
-									+ DisplayUtil.getDisplayAmount(row.get(
-											"PayableAmount").toString());
-							String dispBalanceDue = " "
-									+ DisplayUtil.getDisplayAmount(row
-											.get("BalanceDue").toString());
-				%>
-				<tr>
-					<td style="width: 160px" align="left"><%=row.get("SupplierName")%>
-					</td>
-					<!--
-					<td style="width: 110px" align="right">&#8377;<%=dispPayableAmount%>
-					</td> 
-					<td style="width: 110px" align="right">&#8377;<%=dispBalanceDue%>
-					</td> -->
-					<td style="width: 110px" align="right"><span style="font-family: DejaVu Sans;">&#x20b9; </span><%=dispPayableAmount%>
-					</td> 
-					<td style="width: 110px" align="right"><span style="font-family: DejaVu Sans;">&#x20b9; </span><%=dispBalanceDue%>
-				</tr>
-				<%
-					}
-					} else { /* If no BalanceDue Record Found */
-				%>
-				<%
-					}
-				%>
-			</tbody>
-		</table>
-		<br>
-		<!-- <button class="addButton" onclick="loadPage('suppliers.jsp');">&nbsp;&nbsp;Add Payables</button> -->
-
-		<!-- Customer aka Party information refresh -->
-		<div>
-			<!-- TODO: Cater action button -->
-			<form action="/gm/web/DataRefreshServlet" method="post">
-				<table style="border-collapse: collapse;">
-					<tr style="background-color: rgba(241, 245, 235, 0.61);">
-						<td style="width: 375px;"><%=partyDataRefreshMesgDue %></td>
-						<% if (partyDataRefresh) { %>
-						<td><button type="submit" class="refreshButton" name="action"
-								value="customerDataRefresh">&nbsp;&nbsp;</button></td>
-						<% } else { %>
-						<td title="Data being loaded"><button type="button"
-								class="refreshButton" onClick="dummy();" disabled>&nbsp;&nbsp;</button></td>
-						<% } %>
-					</tr>
-
-					<tr>
-						<td>&nbsp;&nbsp;&nbsp;</td>
-						<td>&nbsp;</td>
-					</tr>
-					<!-- Receivable information refresh -->
-					<tr>
-						<td><%=creditSalesDataRefreshMesgDue %></td>
-						<% if (creditSalesDataRefresh) { %>
-						<td><button type="submit" class="refreshButton" name="action"
-								value="creditSalesDataRefresh">&nbsp;&nbsp;</button></td>
-						<% } else { %>
-						<td title="Data being loaded"><button type="button"
-								class="refreshButton" onClick="dummy();" disabled>&nbsp;&nbsp;</button></td>
-						<% } %>
-					</tr>
-				</table>
-			</form>
-		</div>
-	</div>
-</div>
-<!-- Balance Payable Window - End -->
-
-<!-- Credit Sales Window - Begin -->
-<div id="two" style="width: 450px;">
-	<div class="item" style="height: 360px">
+<div id="one" style="width: 75%">
+	<div class="item" style="height: 430px">
 		<h2><%=creditSalesPaymentDue%></h2>
-		<table id="scrollCreditSalesTable" class="display" cellspacing="0"
-			width="100%">
+		<table id="scrollCreditSalesTable" class="display" cellspacing="0" width="100%">
 			<thead>
 				<tr>
 					<th>Merchant Name</th>
@@ -221,7 +122,37 @@ if ((resultDataRefresh != null) && (resultDataRefresh.size() > 0)) {
 				%>
 			</tbody>
 		</table>
+		<br>
+		<!-- <button class="addButton" onclick="loadPage('suppliers.jsp');">&nbsp;&nbsp;Add Payables</button> -->
+
+		<!-- Customer aka Party information refresh -->
+		<div>
+			<!-- TODO: Cater action button -->
+			<form action="/gm/web/DataRefreshServlet" method="post">
+				<table style="border-collapse: collapse;">
+					<tr>
+						<td><%=partyDataRefreshMesgDue %></td>
+						<% if (partyDataRefresh) { %>
+						<td>&nbsp;<button type="submit" class="refreshButton" name="action"
+								value="customerDataRefresh">&nbsp;&nbsp;</button></td>
+						<% } else { %>
+						<td title="Data being loaded">&nbsp;<button type="button"
+								class="refreshButton" onClick="dummy();" disabled>&nbsp;&nbsp;</button></td>
+						<% } %>
+						<td style="width:50px">&nbsp;&nbsp;&nbsp;</td>
+						<td><%=creditSalesDataRefreshMesgDue %></td>
+						<% if (creditSalesDataRefresh) { %>
+						<td>&nbsp;<button type="submit" class="refreshButton" name="action"
+								value="creditSalesDataRefresh">&nbsp;&nbsp;</button></td>
+						<% } else { %>
+						<td title="Data being loaded">&nbsp;<button type="button"
+								class="refreshButton" onClick="dummy();" disabled>&nbsp;&nbsp;</button></td>
+						<% } %>
+					</tr>
+				</table>
+			</form>
+		</div>
 	</div>
 </div>
-<!-- Credit Sales Window - End -->
+
 <%@include file="web/footer.jsp"%>

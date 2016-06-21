@@ -26,6 +26,9 @@
         <property name="deferredDate" type="timestamp">
             <column name="DeferredDate" length="23" />
         </property>
+        <property name="deferredReason" type="string">
+            <column name="DeferredReason" length="250" />
+        </property>
         <property name="createdDate" type="timestamp">
             <column name="CreatedDate" length="23" not-null="true" />
         </property>

@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
+import com.svnitsai.gm.util.hibernate.HibernateUtil;
+
 public class TestDBHandler {
 	public static LinkedHashMap<Long, String> getMerchants() {
 		return getCustomerIdMap("Merchant");
@@ -153,7 +155,7 @@ public class TestDBHandler {
 			// select and read collection data
 			String sql = "SELECT DC.PayCReferenceNumber, DC.PayCDueDate, DC.CustCode, DC.InvoiceAmount, "
 					+ "DC.PayCStatus, DC.InvoiceReferenceNumber, DCD.PayCReferenceSubNumber, "
-					+ "DC.DeferredDate, DCD.PayCDate, DCD.SupplierCode, DCD.SupplierBankId, "
+					+ "DC.DeferredDate, DC.DeferredReason, DCD.PayCDate, DCD.SupplierCode, DCD.SupplierBankId, "
 					+ "DCD.PaidAmount, DCD.AccountLocationCode, DCD.LedgerPageNumber, "
 					+ "C.CustName, C.CustContactNumber, C.CustCity, "
 					+ "CO.CustName AS CompanyName, s.CustName AS SupplierName, CB1.CustBank AS SupplierBank, "
@@ -223,6 +225,9 @@ public class TestDBHandler {
 					bean = new CollectionBean();
 					bean.setCollectionId(rs.getLong("PayCReferenceNumber"));
 					bean.setDueDate(rs.getDate("PayCDueDate"));
+					bean.setDeferredDate(rs.getDate("DeferredDate"));
+					bean.setDeferredReason(rs.getString("DeferredReason"));
+					bean.updateDeferredReason();
 					bean.setInvoiceAmount(rs.getDouble("InvoiceAmount"));
 					bean.setInvoiceNumber(id);
 					bean.setCustCity(rs.getString("CustCity"));
@@ -374,13 +379,13 @@ public class TestDBHandler {
 			}
 			System.out.println("Setting status to " + status);
 			String updateCollectionSql = "UPDATE DailyPayC SET PayCStatus='"
-					+ status + "' ";
+					+ status + "'";
 			if (!"".equals(bean.getDeferredDateStr())) {
 				updateCollectionSql += ", PayCDueDate='"
 						+ Util.getFormattedDateForDB(bean.getDeferredDateStr())
-						+ "' ";
+						+ "', DeferredReason='" + bean.getDeferredReason() + "'";
 			}
-			updateCollectionSql += "WHERE PayCReferenceNumber="
+			updateCollectionSql += " WHERE PayCReferenceNumber="
 					+ bean.getCollectionId();
 			System.out.println(updateCollectionSql);
 			stmt.executeUpdate(updateCollectionSql);
@@ -504,12 +509,11 @@ public class TestDBHandler {
 		Connection conn = null;
 
 		try {
-			String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-			String username = "admin";
-			String password = "svnadmin";
+			String driver = HibernateUtil.getDbDriver();
 			Class.forName(driver).newInstance();
-			String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=ProdPayC";
-			conn = DriverManager.getConnection(dbURL, username, password);
+			conn = DriverManager.getConnection(	HibernateUtil.getDbURL(),
+												HibernateUtil.getDbUsername(),
+												HibernateUtil.getDbPassword());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.svnitsai.gm.util.hibernate.HibernateUtil;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -16,13 +18,11 @@ public class InvoiceReportFill {
 		Connection conn = null;
 
 		try {
-			String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-			String username = "admin";
-			String password = "svnadmin";
+			String driver = HibernateUtil.getDbDriver();
 			Class.forName(driver).newInstance();
-			String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=Local1";
-			conn = DriverManager.getConnection(dbURL, username, password);
-
+			conn = DriverManager.getConnection(	HibernateUtil.getDbURL(),
+												HibernateUtil.getDbUsername(),
+												HibernateUtil.getDbPassword());
 			Map parameters = new HashMap();
 			String printFileName = JasperFillManager.fillReportToFile(
 					sourceFileName, parameters, conn);

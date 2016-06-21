@@ -47,13 +47,13 @@ a:hover {
 #wrapper {
 	margin: 15px auto;
 	padding: 10px;
-	width: 950px;
+	width: 90%;
 	background: #FFF;
 }
 
 #header {
 	color: #333;
-	width: 930px;
+	/*width: 930px;*/
 	padding: 10px;
 	height: 50px;
 	margin: 0px;
@@ -63,7 +63,7 @@ a:hover {
 
 #navigation {
 	float: left;
-	width: 950px;
+	/*width: 950px;*/
 	color: #333;
 	padding: 5px 0 5px 0;
 	margin: 0;
@@ -119,7 +119,7 @@ navigation ul li a.hoover, #navigation ul li a.active{
 
 #one {
 	color: #333;
-	width: 930px;
+	/*width: 930px;*/
 	padding: 10px;
 	margin: 0px;
 	float: left;
@@ -315,7 +315,7 @@ navigation ul li a.hoover, #navigation ul li a.active{
 }
 
 #scrollSMSSelectedRecipientTable_wrapper {
-	width: 550px;
+	: 550px;
 	margin-left: 30px;
 	border-radius: 5px;
 }
@@ -395,7 +395,7 @@ p {
 #footer {
 	clear: both;
 	background: #607A00;
-	width: 950px;
+	/*width: 950px;*/
 	color: #333;
 	padding: 5px 0 5px 0;
 	margin: 0;

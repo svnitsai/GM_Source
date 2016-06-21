@@ -1,4 +1,4 @@
-<project name="GM" default="all" basedir=".">
+<project name="GM" default="dist" basedir=".">
 
 	<property name="srcPath" value="src" />
 	<property name="webPath" value="web" />

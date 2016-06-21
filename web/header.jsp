@@ -156,6 +156,17 @@ label.error {
 input.error {
 	border: 1px solid red;
 }
+
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.loadingImage {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url('/gm/images/ajax-loader.gif') center no-repeat #fff;
+}
 </style>
 
 <% 
@@ -278,7 +289,7 @@ else if (request.getRequestURL().indexOf("help") > 0) activePage = "Help";
 				<%  if (activePage.equalsIgnoreCase("Home")) {  %>
 				<li class="active"><a href="/gm">Home</a></li>
 				<li class="navMenu"><a href="/gm/web/collectionDisplay.jsp">Collections</a></li>
-				<li class="navMenu"><a href="/gm/web/invoiceReport.jsp">Reports</a></li>
+				<li class="navMenu"><a href="/gm/web/reports.jsp">Reports</a></li>
 				<li><a href="/gm/web/Files/GM_Help.pdf"
 					onClick="window.open('/gm/web/Files/GM_Help.pdf', 'newwindow', 'width=700, height=500').focus(); return false;")>Help</a></li>
 				<% } else if (activePage.equalsIgnoreCase("Collections")) {%>

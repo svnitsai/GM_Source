@@ -24,16 +24,21 @@ public class CollectionServlet extends HttpServlet
 		{
 			handleGetCollection(request, response);
 		}
+		else if("saveCollectionFromList".equals(action))
+		{
+			handleSaveCollection(request, response, true);
+		}
 		else if("saveCollection".equals(action))
 		{
-			handleSaveCollection(request, response);
+			handleSaveCollection(request, response, false);
 		}
 	}
-
+	
 	private void handleGetCollection(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
 		String selectedDate = request.getParameter("selectedDate");
+		String selectedCustGroup = request.getParameter("selectedCustGroup");
 		String selectedMerchantId = request.getParameter("merchantId");
 		String selectedMerchantName = request.getParameter("merchantName");
 		String selectedAgentCode = request.getParameter("agentId");
@@ -42,11 +47,13 @@ public class CollectionServlet extends HttpServlet
 		if("merchant".equals(filterBy))
 		{
 			selectedDate = "";
+			selectedCustGroup = "All";
 			selectedAgentCode = "";
 		}
 		else if("agent".equals(filterBy)) 
 		{
 			selectedDate = "";
+			selectedCustGroup = "All";
 			selectedMerchantId = "";
 		}
 		else 
@@ -55,9 +62,10 @@ public class CollectionServlet extends HttpServlet
 			selectedAgentCode = "";
 		}
 		
-		Collection<CollectionBean> bean = DBHandler.getCollections(selectedDate, selectedMerchantId, null, selectedAgentCode, false);
+		Collection<CollectionBean> bean = DBHandler.getCollections(selectedDate, selectedCustGroup, selectedMerchantId, null, selectedAgentCode, false);
 		request.setAttribute("collectionData", bean);
 		request.setAttribute("selectedDate", selectedDate);
+		request.setAttribute("selectedCustGroup", selectedCustGroup);
 		request.setAttribute("merchantId", selectedMerchantId);
 		request.setAttribute("merchantName", selectedMerchantName);
 		request.setAttribute("agentId", selectedAgentCode);
@@ -67,7 +75,7 @@ public class CollectionServlet extends HttpServlet
 		dispatcher.forward(request, response);
 	}
 
-	private void handleSaveCollection(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	private void handleSaveCollection(HttpServletRequest request, HttpServletResponse response, boolean redirect) throws ServletException, IOException 
 	{
 		CollectionBean bean = new CollectionBean();
 		
@@ -77,30 +85,55 @@ public class CollectionServlet extends HttpServlet
 		while(paramNames.hasMoreElements())
 		{
 			String name = paramNames.nextElement();
-			if(name.equals("collectionRefId"))
+			
+			if(name.startsWith("collectionRefId"))
 			{
 				bean.setCollectionId( Util.convertToLong(request.getParameter(name)));
 			}
-			else if(name.equals("deferredDate"))
+			else if(name.startsWith("deferredDate"))
 			{
 				bean.setDeferredDateStr(request.getParameter(name));
 			}
-			else if(name.equals("invoiceAmt"))
+			else if(name.startsWith("deferredReasonChoice"))
+			{
+				bean.setDeferredReasonChoiceStr(request.getParameter(name));
+			}
+			else if(name.startsWith("deferredReason"))
+			{
+				bean.setDeferredReason(request.getParameter(name));
+			}
+			else if(name.startsWith("invoiceAmt"))
 			{
 				bean.setInvoiceAmount(Util.convertToDouble(request.getParameter(name)));
 			}
-			else if(name.equals("agentId"))
+			else if(name.startsWith("agentId"))
 			{
 				bean.setAgentCode(Util.convertToLong(request.getParameter(name)));
 			}
-			else if(name.equals("agentName"))
+			else if(name.startsWith("agentName"))
 			{
 				isAgentCollection = true;
 				bean.setAgentName(request.getParameter(name));
 			}
-			else if(name.equals("formNumber"))
+			else if(name.startsWith("formNumber"))
 			{
 				bean.setFormNumber(request.getParameter(name));
+			}
+			else if(name.startsWith("colLedgerNo"))
+			{
+				bean.setLedgerNumber(request.getParameter(name));
+			}
+			else if(name.startsWith("remarks"))
+			{
+				bean.setRemarks(request.getParameter(name));
+			}
+			else if(name.startsWith("status"))
+			{
+				String statusStr = request.getParameter(name);
+				if(statusStr.equalsIgnoreCase("CLOSED"))
+				{
+					bean.setStatus(statusStr);
+				}
 			}
 			else if(name.startsWith("detailRefID_") && !name.equals("detailRefID_0"))
 			{
@@ -143,10 +176,12 @@ public class CollectionServlet extends HttpServlet
 				}
 				bean.getDetailsList().add(detailBean);
 			}
-				
+			
 		}
 		
-		if(isAgentCollection)
+		bean.updateDeferredReason();
+		
+		if(isAgentCollection && !redirect)
 		{
 			DBHandler.updateAgentPayments(bean);
 		}
@@ -154,15 +189,22 @@ public class CollectionServlet extends HttpServlet
 		{
 			DBHandler.updateCollectionInfo(bean);
 		}
-		request.setAttribute("action", "save");
-		//handleGetCollection(request, response);
 		
-		String responseStr = "<html><head><script>window.close();</script></head><body>Done</body></html>";
-		response.setContentLength(responseStr.length());
-	    //And write the string to output.
-		response.getOutputStream().write(responseStr.getBytes());
-		response.getOutputStream().flush();
-		response.getOutputStream().close();
+		
+		if(redirect)
+		{
+			handleGetCollection(request, response);
+		}
+		else
+		{
+			request.setAttribute("action", "save");
+			String responseStr = "<html><head><script>window.close();</script></head><body>Done</body></html>";
+			response.setContentLength(responseStr.length());
+		    //And write the string to output.
+			response.getOutputStream().write(responseStr.getBytes());
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+		}
 	}
 	
 }

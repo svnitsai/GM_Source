@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2015-01-06T14:02:07 -->
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-05-16T00:00:54 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Daily_Collection_Evening" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="71e4abbb-2429-45da-8447-f8cda65ba808">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="47"/>
 	<property name="ireport.y" value="451"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TestGarmentMantraDB"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="jrxml\MyReports\GarmentMantraDB.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -25,7 +26,7 @@
 	<queryString language="SQL">
 		<![CDATA[SELECT distinct DC.PayCDueDate, DC.PayCStatus, C.CustName, C.CustCity, 
 DC.InvoiceReferenceNumber, C.CustContactNumber, DC.InvoiceAmount, DC.DeferredDate, 
-DCD.PayCDate, 
+DCD.PayCDate, DC.DeferredReason,
 DC.PayCReferenceNumber, DC.CustCode, 
 (select SUM(PaidAmount) From DailyPayCDetails 
 	WHERE PayCReferenceNumber=DC.PayCReferenceNumber AND Deleted <> 1 and SupplierCode <> -1
@@ -54,6 +55,7 @@ ORDER BY PayCDueDate]]>
 	<field name="InvoiceAmount" class="java.math.BigDecimal"/>
 	<field name="DeferredDate" class="java.sql.Timestamp"/>
 	<field name="PayCDate" class="java.sql.Timestamp"/>
+	<field name="DeferredReason" class="java.lang.String"/>
 	<field name="PayCReferenceNumber" class="java.lang.Integer"/>
 	<field name="CustCode" class="java.math.BigDecimal"/>
 	<field name="TotalPaidAmount" class="java.math.BigDecimal"/>
@@ -386,7 +388,7 @@ ORDER BY PayCDueDate]]>
 					<textElement>
 						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
 					</textElement>
-					<textFieldExpression><![CDATA[TRIM($F{CustCity}) + "\n"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[TRIM($F{CustCity}) + "   "]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="490" y="31" width="101" height="20" forecolor="#615E5E" uuid="179c4f6a-99e4-4ec1-ad11-2c1a0b3f38b4">
@@ -402,6 +404,15 @@ ORDER BY PayCDueDate]]>
 					</textElement>
 					<text><![CDATA[Remarks]]></text>
 				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="311" y="14" width="490" height="14" uuid="cb2923c9-892e-47c3-a576-dc3ea8d3a941">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[TRIM($F{DeferredReason}) + "\n"]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</detail>

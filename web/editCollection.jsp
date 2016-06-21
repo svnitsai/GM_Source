@@ -11,6 +11,7 @@
 <%@ page import="java.util.LinkedHashMap" %>
 <%@ page import="com.svnitsai.gm.DBHandler" %>
 <%@ page import="com.svnitsai.gm.CollectionBean" %>
+<%@ page import="com.svnitsai.gm.CollectionBean.DeferredReasonEnum" %>
 <%@ page import="com.svnitsai.gm.CollectionDetailBean" %>
 <%@ page import="com.svnitsai.gm.CustomerBean" %>
 <%@ page import="com.svnitsai.gm.CustomerBankBean" %>
@@ -78,6 +79,7 @@
 		nidsEnableControl('supplierBankId_0', false);
 		nidsEnableControl('paidAmt_0', false);
 		nidsEnableControl('collectionDate_0', false);
+		deferredReasonSet();
 		$.datepicker.setDefaults({dateFormat:"dd/mm/yy"});
 		<%  Calendar dueDateCalendar = null;
 			if(bean != null) { 
@@ -225,6 +227,19 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 	    	nidsSubmitDocumentForm(true);
 	}
 
+	function deferredReasonSet()
+	{
+		var selectedReason = nidsGetSelectedOptionValue('deferredReasonChoice');
+		if(selectedReason == '<%= DeferredReasonEnum.OTHER.getId()%>')
+		{
+			// show the text field to type the reason
+			nidsShowElement('deferredReason');
+		}
+		else
+		{
+			nidsHideElement('deferredReason');
+		}
+	}
 </script>
 <form action="/gm/servlet/collection" id="editForm">
        
@@ -304,6 +319,35 @@ dueDateCalendar.get(Calendar.MONTH)%>, <%= dueDateCalendar.get(Calendar.DAY_OF_M
 			<td><input type="text" name="deferredDate" id="deferredDate" value="<%= deferredDate %>" readonly="true">
 			</td>
 		</tr>
+		<tr>
+			<td>Deferred Reason:</td>
+			<td>
+				<select name="deferredReasonChoice" id="deferredReasonChoice" onchange="deferredReasonSet()">
+					<option value="0" selected disabled>Select</option>
+					<option value="<%= DeferredReasonEnum.NO_REPLY.getId() %>" 
+						<% if(bean.getDeferredReasonChoice() == DeferredReasonEnum.NO_REPLY.getId()) { %> selected <%} %>>
+							<%= DeferredReasonEnum.NO_REPLY.getReason() %>
+					</option>
+					<option value="<%= DeferredReasonEnum.NO_CONTACT.getId() %>"
+						<% if(bean.getDeferredReasonChoice() == DeferredReasonEnum.NO_CONTACT.getId()) { %> selected <%} %>>
+							<%= DeferredReasonEnum.NO_CONTACT.getReason() %>
+					</option>
+					<option value="<%= DeferredReasonEnum.NEXT_DAY.getId() %>"
+						<% if(bean.getDeferredReasonChoice() == DeferredReasonEnum.NEXT_DAY.getId()) { %> selected <%} %>>
+							<%= DeferredReasonEnum.NEXT_DAY.getReason() %>
+					</option>
+					<option value="<%= DeferredReasonEnum.NOT_REACHABLE.getId() %>"
+						<% if(bean.getDeferredReasonChoice() == DeferredReasonEnum.NOT_REACHABLE.getId()) { %> selected <%} %>>
+							<%= DeferredReasonEnum.NOT_REACHABLE.getReason() %>
+					</option>
+					<option value="<%= DeferredReasonEnum.OTHER.getId() %>"
+						<% if(bean.getDeferredReasonChoice() == DeferredReasonEnum.OTHER.getId()) { %> selected <%} %>>
+							<%= DeferredReasonEnum.OTHER.getReason() %>
+					</option>
+				</select>
+				&nbsp;
+				<input type="text" name="deferredReason" id="deferredReason" value="<%= bean.getDeferredReason() %>">
+			</td>
 		<tr>
 			<td>Status:</td>
 			<td><%= bean.getStatus() %></td>

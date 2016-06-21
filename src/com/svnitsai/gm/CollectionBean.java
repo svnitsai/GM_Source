@@ -7,6 +7,84 @@ import java.util.Date;
 
 public class CollectionBean implements Serializable 
 {
+	public static enum DeferredReasonEnum
+	{
+		NO_REPLY(1, "No Reply"),
+		NO_CONTACT(2, "Unable to contact"),
+		NEXT_DAY(3, "Daily Next Day"),
+		NOT_REACHABLE(4, "Not Reachable"),
+		OTHER(5, "Other");
+		
+		private int id;
+		private String reason;
+		
+		DeferredReasonEnum(int id, String reason)
+		{
+			this.id = id;
+			this.reason = reason;
+		}
+		
+		public static String getReason(int id)
+		{
+			if(id == NO_REPLY.id)
+			{
+				return NO_REPLY.reason;
+			}
+			else if(id == NO_CONTACT.id)
+			{
+				return NO_CONTACT.reason;
+			}
+			else if(id == NEXT_DAY.id)
+			{
+				return NEXT_DAY.reason;
+			}
+			else if(id == NOT_REACHABLE.id)
+			{
+				return NOT_REACHABLE.reason;
+			}
+			else 
+			{
+				return OTHER.reason;
+			}
+			
+		}
+		
+		public int getId()
+		{
+			return id;
+		}
+		
+		public String getReason()
+		{
+			return reason;
+		}
+		
+		public static int getId(String reason)
+		{
+			if(NO_REPLY.reason.equals(reason))
+			{
+				return NO_REPLY.id;
+			}
+			else if(NO_CONTACT.reason.equals(reason))
+			{
+				return NO_CONTACT.id;
+			}
+			else if(NEXT_DAY.reason.equals(reason))
+			{
+				return NEXT_DAY.id;
+			}
+			else if(NOT_REACHABLE.reason.equals(reason))
+			{
+				return NOT_REACHABLE.id;
+			}
+			else 
+			{
+				return OTHER.id;
+			}
+			
+		}
+	}
+	
 	private long custCode;
 	private long agentCode;
 	private long collectionId;
@@ -22,6 +100,15 @@ public class CollectionBean implements Serializable
 	private String formNumber;
 	private Date deferredDate;
 	private String deferredDateStr;
+	private String deferredReason;
+	private int deferredReasonChoice;
+	/** Introducing the ledger number and the remarks field to the DailyPayC table,
+	 * 	as Garment Mantra wants to edit directly on the listing page and remove the edit option.
+	 * 	If we wanted to edit directly on the page and have the advanced edit button,
+	 * 	then refactor this to obtain these two fields from DailyPayCDetails tables.
+	 */
+	private String ledgerNumber;
+	private String remarks;
 	private String updatedBy;
 	private Date updatedDate;
 	
@@ -143,6 +230,47 @@ public class CollectionBean implements Serializable
 	public void setDeferredDateStr(String dateStr) {
 		this.deferredDateStr = dateStr;
 	}
+	public String getDeferredReason() {
+		return deferredReason;
+	}
+	public void setDeferredReason(String deferredReason) {
+		this.deferredReason = deferredReason;
+	}
+	public int getDeferredReasonChoice() {
+		return deferredReasonChoice;
+	}
+	public void setDeferredReasonChoice(int deferredReasonChoice) {
+		this.deferredReasonChoice = deferredReasonChoice;
+	}
+	public void setDeferredReasonChoiceStr(String deferredReasonChoice) {
+		try
+		{
+			this.deferredReasonChoice = Integer.parseInt(deferredReasonChoice);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			this.deferredReasonChoice = 0;
+		}
+	}
+	public void updateDeferredReason() 
+	{
+		// check if deferred choice is set. If yes, this bean was created from UI request
+		if(getDeferredReasonChoice() > 0)
+		{
+			// if any of the standard reasons were chosen, set the predefined reason
+			if(getDeferredReasonChoice() != DeferredReasonEnum.OTHER.id)
+			{
+				setDeferredReason(DeferredReasonEnum.getReason(getDeferredReasonChoice()));
+			}
+		}
+		else if(getDeferredReason() != null)
+		{
+			//set the choice so that it can be displayed on the UI.
+			setDeferredReasonChoice(DeferredReasonEnum.getId(getDeferredReason()));
+		}
+		
+		
+	}
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
@@ -168,19 +296,38 @@ public class CollectionBean implements Serializable
 	{
 		String str = getDueDateStr();
 		String defStr = getDeferredDateStr();
-		if(!isClosed() && defStr.length() > 0)
-		{
-			str += "<br> DEFERRED To <br>" + defStr;
-		}
-		else
-		{
-			str += "<br>" + getStatus();
-		}
+//		if(!isClosed() && defStr.length() > 0)
+//		{
+//			str += "<br> DEFERRED To <br>" + defStr;
+//		}
+//		else
+//		{
+//			str += "<br>" + getStatus();
+//		}
+		str += "<br>" + getStatus();
 		return str;
 	}
 	public boolean isClosed()
 	{
 		return "closed".equalsIgnoreCase(getStatus());
 	}
+
+	public String getLedgerNumber() {
+		return (ledgerNumber != null) ? ledgerNumber : "";
+	}
+
+	public void setLedgerNumber(String ledgerNumber) {
+		this.ledgerNumber = ledgerNumber;
+	}
+
+	public String getRemarks() {
+		return (remarks != null) ? remarks : "";
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	
 	
 }

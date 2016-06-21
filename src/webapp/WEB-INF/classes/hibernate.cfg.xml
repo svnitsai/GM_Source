@@ -5,7 +5,14 @@
  <session-factory name="">
   <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
   <property name="hibernate.connection.password">svnadmin</property>
+  <!--  Production Settings
+  <property name="hibernate.connection.url">jdbc:sqlserver://ADMIN-PC:49225;DatabaseName=PayC;instanceName=SQL2008R2;</property>
+  <property name="hibernate.connection.username">admin</property>
+  -->
+  <!-- Test settings -->
   <property name="hibernate.connection.url">jdbc:sqlserver://DESKTOP-FHTMT1C:49225;DatabaseName=PayC;instanceName=SQLEXPRESS;</property>
+  <property name="hibernate.connection.username">sa</property>
+  
   <property name="hibernate.default_schema">dbo</property>
   <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
   <property name="hibernate.show_sql">true</property>
@@ -15,7 +22,6 @@
   <property name="hibernate.default_batch_fetch_size">10</property>
   <property name="hibernate.jdbc.fetch_size">100</property>
   <property name="hibernate.connection.pool_size">5</property>
-  <property name="hibernate.connection.username">sa</property>
   <mapping resource="com/svnitsai/gm/database/generated/Customer.hbm.xml"/>
   <mapping resource="com/svnitsai/gm/database/generated/CustomerBanks.hbm.xml"/>
   <mapping resource="com/svnitsai/gm/database/generated/DailyPayable.hbm.xml"/>

@@ -17,6 +17,7 @@ public class DailyPayC implements java.io.Serializable {
 	private String payCstatus;
 	private int invoiceReferenceNumber;
 	private Date deferredDate;
+	private String deferredReason;
 	private Date createdDate;
 	private String createdBy;
 	private Date updatedDate;
@@ -40,7 +41,7 @@ public class DailyPayC implements java.io.Serializable {
 
 	public DailyPayC(int payCreferenceNumber, Date payCdueDate, int custCode,
 			BigDecimal invoiceAmount, String payCstatus,
-			int invoiceReferenceNumber, Date deferredDate, Date createdDate,
+			int invoiceReferenceNumber, Date deferredDate, String deferredReason, Date createdDate,
 			String createdBy, Date updatedDate, String updatedBy) {
 		this.payCreferenceNumber = payCreferenceNumber;
 		this.payCdueDate = payCdueDate;
@@ -49,6 +50,7 @@ public class DailyPayC implements java.io.Serializable {
 		this.payCstatus = payCstatus;
 		this.invoiceReferenceNumber = invoiceReferenceNumber;
 		this.deferredDate = deferredDate;
+		this.deferredReason = deferredReason;
 		this.createdDate = createdDate;
 		this.createdBy = createdBy;
 		this.updatedDate = updatedDate;
@@ -109,6 +111,14 @@ public class DailyPayC implements java.io.Serializable {
 
 	public void setDeferredDate(Date deferredDate) {
 		this.deferredDate = deferredDate;
+	}
+
+	public String getDeferredReason() {
+		return deferredReason;
+	}
+
+	public void setDeferredReason(String deferredReason) {
+		this.deferredReason = deferredReason;
 	}
 
 	public Date getCreatedDate() {

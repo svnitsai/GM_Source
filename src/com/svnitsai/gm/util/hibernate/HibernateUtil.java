@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.Environment;
 
 import com.svnitsai.gm.util.date.DateUtil;
 
@@ -22,7 +23,11 @@ public class HibernateUtil {
 	private static SessionFactory sessionFactory;
 	private static Session session;
 	private static boolean sessionFactoryAvailable = false; //Indicates if SessionFactory is created
-
+	private static String dbDriver;
+	private static String dbUsername;
+	private static String dbPassword;
+	private static String dbURL;
+	
 	/**
 	 * @return the sessionFactoryAvailable
 	 */
@@ -47,6 +52,12 @@ public class HibernateUtil {
 			try {
 				Configuration configuration = new Configuration()
 						.configure("hibernate.cfg.xml");
+				// Get connection settings so that it can be used by non-hibernate JDBC queries as well
+				setDbDriver(configuration.getProperty(Environment.DRIVER));
+				setDbUsername(configuration.getProperty(Environment.USER));
+				setDbPassword(configuration.getProperty(Environment.PASS));
+				setDbURL(configuration.getProperty(Environment.URL));
+				
 				StandardServiceRegistryBuilder standardSRB = new StandardServiceRegistryBuilder();
 				standardSRB.applySettings(configuration.getProperties());
 				StandardServiceRegistry standardServiceRegistry = standardSRB
@@ -101,4 +112,38 @@ public class HibernateUtil {
 		getSessionFactory().close();
 		setSessionFactoryAvailable(false);
 	}
+
+	public static String getDbDriver() {
+		return dbDriver;
+	}
+
+	public static void setDbDriver(String dbDriver) {
+		HibernateUtil.dbDriver = dbDriver;
+	}
+
+	public static String getDbUsername() {
+		return dbUsername;
+	}
+
+	public static void setDbUsername(String dbUsername) {
+		HibernateUtil.dbUsername = dbUsername;
+	}
+
+	public static String getDbPassword() {
+		return dbPassword;
+	}
+
+	public static void setDbPassword(String dbPassword) {
+		HibernateUtil.dbPassword = dbPassword;
+	}
+
+	public static String getDbURL() {
+		return dbURL;
+	}
+
+	public static void setDbURL(String dbURL) {
+		HibernateUtil.dbURL = dbURL;
+	}
+	
+	
 }
